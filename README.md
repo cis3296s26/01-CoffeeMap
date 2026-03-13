@@ -6,7 +6,37 @@ Adding an screenshot or a mockup of your application in action would be nice.
 https://github.com/aidanross430/CIS3296-coffeemap-proofofconcept/tree/main 
 
 ![This is a screenshot.](images.png)
-# How to run
+
+## Setup
+### Development Environment
+
+For MacOS:
+Create a virtual environment for this project. Navigate to the root directory folder of the project in terminal and activate your created virtual environment:
+```
+source .venv/bin/activate
+```
+Install homebrew:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" 
+```
+Install node and check that it worked by checking the version:
+```
+brew install node
+node -v
+npm -v
+```
+Navigate to client and install packages from npm:
+```
+cd client
+npm install
+```
+Run the program:
+```
+npm run dev
+```
+To open the webpage in an external browser, press: o + ENTER
+
+### How to run
 Provide here instructions on how to use your application.   
 - Download the latest binary from the Release section on the right on GitHub.  
 - On the command line uncompress using
