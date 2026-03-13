@@ -2,6 +2,9 @@
 Put here a short paragraph describing your project. 
 Adding an screenshot or a mockup of your application in action would be nice.  
 
+## Vision Statement
+FOR amateur to experienced enjoyers of coffee WHO want to learn about coffee bean sources, the COFFEE MAP is a web-based service THAT maps and tracks bean sources alongside useful tasting metrics and harvesting schedules for users to reference when purchasing coffee. UNLIKE existing databases or harvest calendars, OUR PRODUCT will combine the overwhelming amount of available information into a single, easy-to-use resource catered to the user. 
+
 ## Proof of Concept
 https://github.com/aidanross430/CIS3296-coffeemap-proofofconcept/tree/main 
 
