@@ -40,6 +40,6 @@ npm run dev
 ```
 To open the webpage in an external browser, press: o + ENTER
 
-# How to contribute
+## How to contribute
 Follow this project board to know the latest status of the project: https://github.com/orgs/cis3296s26/projects/34/views/1
 
