@@ -32,6 +32,7 @@ Navigate to client and install packages from npm:
 ```
 cd client
 npm install
+npm install react-router-dom
 ```
 Run the program:
 ```
