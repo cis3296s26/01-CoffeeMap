@@ -1,8 +1,5 @@
 # Coffee Map
-Put here a short paragraph describing your project. 
-Adding an screenshot or a mockup of your application in action would be nice.  
-
-Coffee Map is...
+Coffee Map is a website that serves as a centralized resource hub for coffee drinkers interested in making personalized and educated coffee bean purchases. Users can access the service as an informational guide on sources and flavor profiles by searching for beans by branded bag using the search bar or by country using the interactive map. Users can become members of the Coffee Map community by creating an account while enables additional personalized features, allowing individuals to log coffee beans they've already tried and bookmark ones that are of interest. 
 
 ## Vision Statement
 FOR enjoyers of coffee WHO want to learn about coffee bean sources, the COFFEE MAP is a web-based service THAT maps and tracks bean sources alongside useful tasting metrics and harvesting schedules for users to reference when purchasing coffee. UNLIKE existing databases or harvest calendars, OUR PRODUCT will combine the overwhelming amount of available information into a single, easy-to-use resource catered to the user. 
