@@ -9,10 +9,10 @@ export default function LogIn(){
     
     const handleLogin = async() => {
         try{
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            await signInWithEmailAndPassword(auth, email, password);
         } catch (e) {
             if(e.code === 'auth/invalid-credential') {
-                setError('No account found with this email.');
+                setError('Invalid email or password.');
             }
             else{
                 setError(e.message);

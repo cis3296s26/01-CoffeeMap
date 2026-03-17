@@ -12,6 +12,7 @@ import NavigationBar from "./NavigationBar.jsx";
 import About from "./About.jsx"
 import SignUp from "./SignUp.jsx"
 import LogIn from "./LogIn.jsx"
+import EditAccount from './EditAccount.jsx';
 
 createRoot(document.getElementById('root')).render(
   
@@ -39,6 +40,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path="/about" element={<About />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<LogIn />} />
+                    <Route path="/editaccount" element={<EditAccount />} />
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
