@@ -1,8 +1,10 @@
 import {useState} from 'react';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
 import {auth} from './firebase';
 
 export default function SignUp() {
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -11,6 +13,7 @@ export default function SignUp() {
     const handleAccountCreation = async() => {
         try{
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            await updateProfile(userCredential.user, {displayName: firstName});
         }catch(e){
             if(e.code === 'auth/email-already-in-use'){
                 setError('An account with this email already exists.');
@@ -25,6 +28,22 @@ export default function SignUp() {
     return (
         <section id='signup'>
             <h2>Sign Up</h2>
+            <p>
+                First Name:{' '}
+                <input
+                    type='text'
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                />
+            </p>
+            <p>
+                Last Name:{' '}
+                <input
+                    type='text'
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                />
+            </p>
             <p>
                 Email:{' '}
                 <input
