@@ -30,6 +30,7 @@ Navigate to client and install packages from npm:
 cd client
 npm install
 npm install react-router-dom
+npm install firebase
 ```
 Run the program:
 ```
