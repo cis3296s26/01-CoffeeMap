@@ -10,6 +10,7 @@ import PrintJson from "./ParseJson.jsx";
 import NavigationBar from "./NavigationBar.jsx";
 import About from "./About.jsx"
 import SignUp from "./SignUp.jsx"
+import LogIn from "./LogIn.jsx"
 
 createRoot(document.getElementById('root')).render(
   
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')).render(
                 }/>
                 <Route path="/about" element={<About />} />
                 <Route path="/signup" element={<SignUp />} />
+                <Route path="/login" element={<LogIn />} />
             </Routes>
         </BrowserRouter>
     </StrictMode>,

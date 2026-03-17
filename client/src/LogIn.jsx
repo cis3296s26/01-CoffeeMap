@@ -1,30 +1,28 @@
 import {useState} from 'react';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from './firebase';
 
-export default function SignUp() {
+export default function LogIn(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-
-    //async and await wait for operation to complete before continuing 
-    const handleAccountCreation = async() => {
+    
+    const handleLogin = async() => {
         try{
-            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        }catch(e){
-            if(e.code === 'auth/email-already-in-use'){
-                setError('An account with this email already exists.');
-            }else if(e.code === 'auth/weak-password'){
-                setError('Password must be at least 6 characters.');
-            }else{
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        } catch (e) {
+            if(e.code === 'auth/invalid-credential') {
+                setError('No account found with this email.');
+            }
+            else{
                 setError(e.message);
             }
         }
     };
 
-    return (
-        <section id='signup'>
-            <h2>Sign Up</h2>
+    return(
+        <section id='login'>
+            <h2>Log In</h2>
             <p>
                 Email:{' '}
                 <input
@@ -41,7 +39,7 @@ export default function SignUp() {
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </p>
-            <button onClick={handleAccountCreation}>Create Account</button>
+            <button onClick={handleLogin}>Log in</button>
             {error && <p>{error}</p>}
         </section>
     )
