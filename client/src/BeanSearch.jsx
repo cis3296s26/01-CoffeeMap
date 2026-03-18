@@ -18,9 +18,6 @@ export default function BeanSearch() {
                     complete: function(results) {
                         // compile database using extracted data
                         const database = results.data
-                        console.log("database loaded:", database)
-                        console.log("first row:", database[0])
-                        console.log("row number:", database.length)
                         setBeans(database)
                     }
                 })
@@ -39,7 +36,7 @@ export default function BeanSearch() {
 
     // frontend design
     return (
-        <div style={{padding:"20px"}}>
+        <div style={{padding:"10px"}}>
             <h1>Bean Search</h1>
             <input  
                 type="text"
@@ -49,7 +46,7 @@ export default function BeanSearch() {
             />
 
             {filtered.slice(0,15).map((bean, index)=>(
-                <div key={index} style={{border:"1px solid lightgray", margin:"10px", padding:"10px"}}>
+                <div key={index} style={{border:"1px solid black", margin:"15px", padding:"15px"}}>
                     <p><b>Country:</b> {bean["Country.of.Origin"]}</p>
                     <p><b>Region:</b> {bean["Region"]}</p>
                     <p><b>Variety:</b> {bean["Variety"]}</p>
@@ -62,6 +59,11 @@ export default function BeanSearch() {
     )
 
     // troubleshooting stuff
-    // <p>Beans loaded: {beans.length}</p>
-    // <p>results: {filtered.length}</p>
+        // in useEffect
+            //  console.log("database loaded:", database)
+            //  console.log("first row:", database[0])
+            //  console.log("row number:", database.length)
+        // in frontenddesign
+            // <p>Beans loaded: {beans.length}</p>
+            // <p>results: {filtered.length}</p>
 }
