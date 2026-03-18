@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function NavigationBar() {
 
     //Add horizontal navigation bar
-    //Navigation bar have link to home, about and sign up page
+    //Navigation bar have link to home, about and sign up page.
     return (
     
             <nav style={{backgroundColor: "#000000", color: "FFFFFF", padding: "25px", position: "sticky", top: 0, zIndex: 1000}}>
