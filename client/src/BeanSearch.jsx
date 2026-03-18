@@ -21,8 +21,6 @@ export default function BeanSearch() {
                         setBeans(database)
                     }
                 })
-
-
     }, [])
 
     // search through database using search bar input
