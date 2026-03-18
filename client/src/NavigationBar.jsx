@@ -27,6 +27,7 @@ export default function NavigationBar() {
                     <li><Link to="/about" style={{color: "white", textDecoration: "none"}}>About</Link></li>
                     <li><Link to="/signup" style={{color: "white", textDecoration: "none"}}>Sign Up</Link></li>
                     <li><Link to="/login" style={{color: "white", textDecoration: "none"}}>Log In</Link></li>
+                    <li><Link to="/search" style={{color: "white", textDecoration: "none"}}>Search</Link></li>
                     {isAuthenticated && userData && (
                         <>
                             <li style={{color: "white", marginLeft: "auto"}}>Welcome, {userData.firstName}</li>

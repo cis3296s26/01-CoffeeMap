@@ -13,6 +13,7 @@ import About from "./About.jsx"
 import SignUp from "./SignUp.jsx"
 import LogIn from "./LogIn.jsx"
 import EditAccount from './EditAccount.jsx';
+import BeanSearch from './BeanSearch.jsx';
 
 createRoot(document.getElementById('root')).render(
   
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<LogIn />} />
                     <Route path="/editaccount" element={<EditAccount />} />
+                    <Route path="/search" element={<BeanSearch />} /> 
                 </Routes>
             </BrowserRouter>
         </AuthProvider>
