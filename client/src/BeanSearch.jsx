@@ -24,6 +24,24 @@ export default function BeanSearch() {
     }, [])
 
     // search through database using search bar input
+    const filtered = beans.filter((bean) => {
+        return (
+            
+        )
+    })
 
     // frontend design
+    return (
+        <div style={{padding:"20px"}}>
+            <h1>Bean Search</h1>
+            <input  
+                type="text"
+                placeholder="Search"
+                value={query}
+                onChange={(e)=>setQuery(e.target.value)}
+            />
+
+            
+        </div>
+    )
 }
