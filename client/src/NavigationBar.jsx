@@ -17,7 +17,7 @@ export default function NavigationBar() {
     };
 
     //Add horizontal navigation bar
-    //Navigation bar have link to home, about and sign up page
+    //Navigation bar have link to home, about and sign up page.
     return (
         //... merges conditional object into style object
             <nav style={{backgroundColor: "#000000", color: "#FFFFFF", padding: "25px", position: "sticky", top: 0, zIndex: 1000}}>
