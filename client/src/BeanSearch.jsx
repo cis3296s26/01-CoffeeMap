@@ -41,8 +41,6 @@ export default function BeanSearch() {
     return (
         <div style={{padding:"20px"}}>
             <h1>Bean Search</h1>
-            <p>Beans loaded: {beans.length}</p>
-            <p>results: {filtered.length}</p>
             <input  
                 type="text"
                 placeholder="Search"
@@ -62,4 +60,8 @@ export default function BeanSearch() {
 
         </div>
     )
+
+    // troubleshooting stuff
+    // <p>Beans loaded: {beans.length}</p>
+    // <p>results: {filtered.length}</p>
 }
