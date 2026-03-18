@@ -11,7 +11,7 @@ https://github.com/aidanross430/CIS3296-coffeemap-proofofconcept/tree/main
 ### Development Environment
 
 For MacOS:
-Create a virtual environment for this project. Navigate to the root directory folder of the project in terminal and activate your created virtual environment:
+Create a virtual environment for this project. Navigate to the root directory folder of the project in terminal and activate your created virtual environment if not active already:
 ```
 source .venv/bin/activate
 ```
