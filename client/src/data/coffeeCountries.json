@@ -1,0 +1,224 @@
+{
+  "countries": [
+    {
+      "name": "Brazil",
+      "coordinates": [-14.235, -51.925],
+      "harvestMonths": [5, 6, 7, 8, 9],
+      "region": "South America",
+      "primaryVarieties": ["Bourbon", "Typica", "Caturra", "Catuai"],
+      "flavorNotes": ["nutty", "chocolatey", "caramel", "low acidity"],
+      "processingMethods": ["natural", "pulped natural"],
+      "altitude": "800-1200m",
+      "description": "World's largest coffee producer with diverse microclimates"
+    },
+    {
+      "name": "Colombia",
+      "coordinates": [4.571, -74.297],
+      "harvestMonths": [9, 10, 11, 12, 1, 2],
+      "region": "South America",
+      "primaryVarieties": ["Colombian", "Caturra", "Castillo", "Typica"],
+      "flavorNotes": ["balanced", "caramel", "nutty", "citrus"],
+      "processingMethods": ["washed"],
+      "altitude": "1200-2000m",
+      "description": "Known for consistent quality and balanced flavor profiles"
+    },
+    {
+      "name": "Ethiopia",
+      "coordinates": [9.145, 40.489],
+      "harvestMonths": [10, 11, 12, 1],
+      "region": "Africa",
+      "primaryVarieties": ["Heirloom varieties", "Yirgacheffe", "Sidamo"],
+      "flavorNotes": ["floral", "fruity", "wine-like", "bergamot", "blueberry"],
+      "processingMethods": ["natural", "washed"],
+      "altitude": "1500-2200m",
+      "description": "Birthplace of coffee with incredible diversity and complexity"
+    },
+    {
+      "name": "Kenya",
+      "coordinates": [-0.023, 37.906],
+      "harvestMonths": [10, 11, 12, 1, 2, 3],
+      "region": "Africa",
+      "primaryVarieties": ["SL28", "SL34", "Ruiru 11", "Batian"],
+      "flavorNotes": ["bright acidity", "blackcurrant", "citrus", "complex"],
+      "processingMethods": ["washed"],
+      "altitude": "1400-2000m",
+      "description": "Renowned for bright, complex coffees with distinctive acidity"
+    },
+    {
+      "name": "Guatemala",
+      "coordinates": [15.783, -90.230],
+      "harvestMonths": [11, 12, 1, 2, 3, 4],
+      "region": "Central America",
+      "primaryVarieties": ["Bourbon", "Typica", "Caturra", "Catuai"],
+      "flavorNotes": ["chocolate", "spice", "floral", "apple"],
+      "processingMethods": ["washed"],
+      "altitude": "1300-2000m",
+      "description": "Eight distinct growing regions with volcanic soil"
+    },
+    {
+      "name": "Costa Rica",
+      "coordinates": [9.748, -83.753],
+      "harvestMonths": [11, 12, 1, 2, 3],
+      "region": "Central America",
+      "primaryVarieties": ["Caturra", "Catuai", "Villa Sarchi", "Geisha"],
+      "flavorNotes": ["bright", "clean", "honey", "citrus"],
+      "processingMethods": ["washed", "honey processed"],
+      "altitude": "1200-1700m",
+      "description": "Pioneering quality and sustainable practices"
+    },
+    {
+      "name": "Honduras",
+      "coordinates": [15.200, -86.241],
+      "harvestMonths": [11, 12, 1, 2, 3, 4],
+      "region": "Central America",
+      "primaryVarieties": ["Bourbon", "Caturra", "Catuai", "Typica"],
+      "flavorNotes": ["sweet", "fruity", "balanced", "chocolate"],
+      "processingMethods": ["washed"],
+      "altitude": "1000-1700m",
+      "description": "Central America's largest coffee producer"
+    },
+    {
+      "name": "Peru",
+      "coordinates": [-9.190, -75.015],
+      "harvestMonths": [3, 4, 5, 6, 7, 8, 9],
+      "region": "South America",
+      "primaryVarieties": ["Typica", "Bourbon", "Caturra", "Catimor"],
+      "flavorNotes": ["mild", "nutty", "chocolate", "bright"],
+      "processingMethods": ["washed"],
+      "altitude": "1200-2000m",
+      "description": "Growing specialty coffee sector with organic focus"
+    },
+    {
+      "name": "Mexico",
+      "coordinates": [23.634, -102.552],
+      "harvestMonths": [11, 12, 1, 2, 3],
+      "region": "Central America",
+      "primaryVarieties": ["Bourbon", "Typica", "Caturra", "Mundo Novo"],
+      "flavorNotes": ["chocolate", "nutty", "delicate", "light body"],
+      "processingMethods": ["washed"],
+      "altitude": "900-1700m",
+      "description": "Diverse microclimates producing mild, aromatic coffees"
+    },
+    {
+      "name": "Indonesia",
+      "coordinates": [-0.789, 113.921],
+      "harvestMonths": [5, 6, 7, 8, 9, 10],
+      "region": "Asia-Pacific",
+      "primaryVarieties": ["Typica", "Catimor", "Lini S"],
+      "flavorNotes": ["earthy", "herbal", "full-bodied", "low acidity"],
+      "processingMethods": ["wet-hulled (Giling Basah)", "washed"],
+      "altitude": "1000-1800m",
+      "description": "Known for Sumatra's distinctive processing method"
+    },
+    {
+      "name": "Vietnam",
+      "coordinates": [14.058, 108.277],
+      "harvestMonths": [10, 11, 12, 1, 2],
+      "region": "Asia-Pacific",
+      "primaryVarieties": ["Robusta", "Arabica"],
+      "flavorNotes": ["bold", "bitter", "earthy", "strong"],
+      "processingMethods": ["natural", "wet-hulled"],
+      "altitude": "500-1500m",
+      "description": "World's second largest producer, primarily Robusta"
+    },
+    {
+      "name": "India",
+      "coordinates": [20.593, 78.962],
+      "harvestMonths": [11, 12, 1, 2],
+      "region": "Asia-Pacific",
+      "primaryVarieties": ["Kent", "S795", "Cauvery", "SLN 9"],
+      "flavorNotes": ["spice", "low acidity", "full-bodied", "chocolate"],
+      "processingMethods": ["washed", "natural", "monsooned"],
+      "altitude": "1000-1500m",
+      "description": "Unique monsoon processing creates distinctive flavors"
+    },
+    {
+      "name": "Uganda",
+      "coordinates": [1.373, 32.290],
+      "harvestMonths": [10, 11, 12, 1, 2, 3],
+      "region": "Africa",
+      "primaryVarieties": ["Robusta", "SL14", "SL28"],
+      "flavorNotes": ["fruity", "winey", "complex"],
+      "processingMethods": ["washed", "natural"],
+      "altitude": "1200-2300m",
+      "description": "Major Robusta producer with growing Arabica sector"
+    },
+    {
+      "name": "Tanzania",
+      "coordinates": [-6.369, 34.888],
+      "harvestMonths": [10, 11, 12, 1, 2],
+      "region": "Africa",
+      "primaryVarieties": ["Bourbon", "Kent", "Nyara"],
+      "flavorNotes": ["wine-like", "fruity", "bright", "complex"],
+      "processingMethods": ["washed"],
+      "altitude": "1400-2000m",
+      "description": "High-grown coffees with bright acidity"
+    },
+    {
+      "name": "Nicaragua",
+      "coordinates": [12.865, -85.207],
+      "harvestMonths": [11, 12, 1, 2, 3],
+      "region": "Central America",
+      "primaryVarieties": ["Bourbon", "Caturra", "Catuai", "Maragogype"],
+      "flavorNotes": ["balanced", "chocolate", "vanilla", "fruity"],
+      "processingMethods": ["washed"],
+      "altitude": "1000-1500m",
+      "description": "Emerging specialty coffee origin with quality focus"
+    },
+    {
+      "name": "El Salvador",
+      "coordinates": [13.794, -88.896],
+      "harvestMonths": [11, 12, 1, 2, 3],
+      "region": "Central America",
+      "primaryVarieties": ["Bourbon", "Pacas", "Pacamara"],
+      "flavorNotes": ["balanced", "sweet", "chocolate", "mild"],
+      "processingMethods": ["washed", "honey"],
+      "altitude": "1200-1800m",
+      "description": "Small but quality-focused with unique Pacamara variety"
+    },
+    {
+      "name": "Papua New Guinea",
+      "coordinates": [-6.314, 143.955],
+      "harvestMonths": [4, 5, 6, 7, 8, 9],
+      "region": "Asia-Pacific",
+      "primaryVarieties": ["Typica", "Bourbon", "Arusha"],
+      "flavorNotes": ["fruity", "complex", "bright", "full-bodied"],
+      "processingMethods": ["washed"],
+      "altitude": "1300-1900m",
+      "description": "High-altitude coffees with unique flavor profiles"
+    },
+    {
+      "name": "Rwanda",
+      "coordinates": [-1.940, 29.873],
+      "harvestMonths": [3, 4, 5, 6],
+      "region": "Africa",
+      "primaryVarieties": ["Bourbon", "Mibirizi", "Jackson"],
+      "flavorNotes": ["fruity", "floral", "citrus", "complex"],
+      "processingMethods": ["washed"],
+      "altitude": "1700-2000m",
+      "description": "Rapidly improving quality and international recognition"
+    },
+    {
+      "name": "Burundi",
+      "coordinates": [-3.373, 29.918],
+      "harvestMonths": [3, 4, 5, 6],
+      "region": "Africa",
+      "primaryVarieties": ["Bourbon", "Jackson", "Mibirizi"],
+      "flavorNotes": ["bright", "fruity", "complex", "floral"],
+      "processingMethods": ["washed"],
+      "altitude": "1250-2000m",
+      "description": "Small producer with exceptional quality potential"
+    },
+    {
+      "name": "Yemen",
+      "coordinates": [15.552, 48.516],
+      "harvestMonths": [10, 11, 12],
+      "region": "Middle East",
+      "primaryVarieties": ["Typica", "Bourbon", "Mokha"],
+      "flavorNotes": ["winey", "fruity", "chocolate", "spice"],
+      "processingMethods": ["natural"],
+      "altitude": "1000-2400m",
+      "description": "Historic coffee origin with ancient cultivation methods"
+    }
+  ]
+}

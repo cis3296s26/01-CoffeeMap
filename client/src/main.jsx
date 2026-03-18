@@ -24,18 +24,16 @@ createRoot(document.getElementById('root')).render(
                 <NavigationBar />
                 <Routes>
                     <Route path="/" element={
-                        <section id="home">
-                            <h1>Proof Of Concept</h1>
-                            <h2>ReactJS</h2>
-                            <App />
-                            <h2>CoffeeAPI Image</h2>
-                            <FetchCoffeeImage />
-                            <h2>Example Leaflet Map</h2>
+                        <section id="home" style={{ padding: '20px' }}>
+                            <h1>Coffee Harvest Tracker</h1>
+                            <p style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 30px' }}>
+                                Explore coffee-producing countries and their quality data from the Coffee Quality Institute database
+                            </p>
                             <LeafletMap />
-                            <h2>CQI Database has been printed to console</h2>
-                            <PullCSV />
-                            <h2>Json data held client-side has been printed to console</h2>
-                            <PrintJson />
+                            <div style={{ marginTop: '40px' }}>
+                                <h2>Random Coffee Image</h2>
+                                <FetchCoffeeImage />
+                            </div>
                         </section>
                     }/>
                     <Route path="/about" element={<About />} />
