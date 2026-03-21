@@ -37,7 +37,8 @@ Run the program:
 ```
 npm run dev
 ```
-To open the webpage in an external browser, press: o + ENTER
+To open the webpage in an external browser, press: o + 
+We recommend creating a .gitignore file for the installations.
 
 ## How to contribute
 Follow this project board to know the latest status of the project: https://github.com/orgs/cis3296s26/projects/34/views/1
