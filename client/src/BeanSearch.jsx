@@ -27,19 +27,11 @@ export default function BeanSearch() {
         });
 
 
-    // extract data 
+    // extract data og method
     useEffect(() => {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
         const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
-
-        // might try to use or just ignore this block lol
-        Promise.all([
-            readFile('arabica_csv'),
-            readFile('robusta_csv'),
-        ]).then((results) => {
-            
-        })
-        //
+        
                 Papa.parse(arabica_csv, {
                     download: true,
                     header: true,
