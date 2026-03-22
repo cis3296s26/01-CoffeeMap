@@ -1,11 +1,31 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import Papa from 'papaparse'
+import { data } from 'react-router-dom'
 
 export default function BeanSearch() {
     // initialize variables
     const [beans, setBeans] = useState([])
     const [query, setQuery] = useState("")
+
+    // extract data method 2 using Promises aka parallel fetching
+    const datasets_url = [
+        'https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv',
+        'https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv'
+    ];
+
+        // creates array of fetch promises
+    const fetchPromises = datasets_url.map(url => fetch(url).then(res => res.json()));
+
+        // promise.all waits for all files to be parsed
+    Promise.all(fetchPromises)
+        .then(results => {
+            console.log(results);
+        })
+        .catch(error => {
+            console.error('file fetch error:', error);
+        });
+
 
     // extract data 
     useEffect(() => {
