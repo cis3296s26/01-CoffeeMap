@@ -8,7 +8,7 @@ export default function BeanSearch() {
     const [beans, setBeans] = useState([])
     const [query, setQuery] = useState("")
 
-    // extract data method 2 using Promises aka parallel fetching
+    // extract data METHOD 2 using Promises aka parallel fetching
     const datasets_url = [
         'https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv',
         'https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv'
@@ -27,11 +27,11 @@ export default function BeanSearch() {
         });
 
 
-    // extract data og method
+    // extract data og METHOD 1
     useEffect(() => {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
         const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
-        
+
                 Papa.parse(arabica_csv, {
                     download: true,
                     header: true,
