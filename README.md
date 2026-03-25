@@ -43,3 +43,5 @@ We recommend creating a .gitignore file for the installations.
 ## How to contribute
 Follow this project board to know the latest status of the project: https://github.com/orgs/cis3296s26/projects/34/views/1
 
+##Link to the website
+https://cis3296s26.github.io/01-CoffeeMap/
