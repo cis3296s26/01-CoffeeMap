@@ -38,7 +38,7 @@ export default function BeanSearch() {
                     complete: function(results) {
                         // compile database using extracted data
                         const database = results.data
-                        setBeans(database)
+                        setBeans(((previousBeans) => [...previousBeans, ...database]))
                     }
                 })
                 Papa.parse(robusta_csv, {
@@ -47,7 +47,7 @@ export default function BeanSearch() {
                     complete: function(results) {
                         // compile database using extracted data
                         const database = results.data
-                        setBeans(database)
+                        setBeans((previousBeans) => [...previousBeans, ...database])
                     }
                 })
     }, [])
