@@ -8,7 +8,6 @@ export default function BeanSearch() {
     const [beans, setBeans] = useState([])
     const [query, setQuery] = useState("")
 
-    // extract data og METHOD 1
     useEffect(() => {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
         const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
@@ -65,13 +64,4 @@ export default function BeanSearch() {
 
         </div>
     )
-
-    // troubleshooting stuff
-        // in useEffect
-            //  console.log("database loaded:", database)
-            //  console.log("first row:", database[0])
-            //  console.log("row number:", database.length)
-        // in frontenddesign
-            // <p>Beans loaded: {beans.length}</p>
-            // <p>results: {filtered.length}</p>
 }
