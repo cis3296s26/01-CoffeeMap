@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useAuth } from './AuthContext';
-import { updateEmail, updatePassword } from 'firebase/auth';
+import { updateEmail, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 export default function EditAccount(){
-    const {userData, user} = useAuth();
+    const {userData, user, refreshUserData} = useAuth();
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [currentPassword, setCurrentPassword] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
@@ -20,11 +21,19 @@ export default function EditAccount(){
                 lastName: lastName || userData.lastName,
             });
 
+            // re-authenticate before email/password changes
+            if (email || password) {
+                const credential = EmailAuthProvider.credential(user.email, currentPassword);
+                await reauthenticateWithCredential(user, credential);
+            }
+
             //update email
             if (email) await updateEmail(user, email);
 
             //update password
             if (password) await updatePassword(user, password);
+
+            await refreshUserData();
 
         } catch (e) {
             setError(e.message);
@@ -58,6 +67,14 @@ export default function EditAccount(){
                     type='text'
                     defaultValue={userData.email}
                     onChange={(e) => setEmail(e.target.value)}
+                />
+            </p>
+            <p>
+                Current Password:{' '}
+                <input
+                    type='password'
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
                 />
             </p>
             <p>
