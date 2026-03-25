@@ -15,7 +15,7 @@ export function useCoffeeData() {
       complete: (results) => {
         console.log('CQI Data loaded:', results.data.length, 'records');
         
-        // Process the data
+        //process the data
         const processed = processData(results.data);
         setCountryData(processed);
         setLoading(false);
@@ -31,7 +31,7 @@ export function useCoffeeData() {
   return { loading, error, countryData };
 }
 
-// Country coordinates mapping
+//country coordinates mapping
 const COUNTRY_COORDS = {
   "Brazil": [-14.235, -51.925],
   "Colombia": [4.571, -74.297],
@@ -73,7 +73,7 @@ const COUNTRY_COORDS = {
 function processData(data) {
   const countries = {};
   
-  // Group samples by country
+  //group samples by country
   data.forEach(row => {
     const country = row['Country.of.Origin'];
     if (!country) return;
@@ -88,13 +88,13 @@ function processData(data) {
       };
     }
     
-    // Add score if valid
+    //add score if valid
     const score = parseFloat(row['Total.Cup.Points']);
     if (!isNaN(score)) {
       countries[country].scores.push(score);
     }
     
-    // Track varieties and processing methods
+    //track varieties/processing methods
     if (row.Variety) {
       countries[country].varieties.add(row.Variety);
     }
@@ -105,18 +105,18 @@ function processData(data) {
     countries[country].samples.push(row);
   });
   
-  // Convert to array and add coordinates
+  //convert to array and add coordinates
   const countryArray = Object.keys(countries).map(countryName => {
     const country = countries[countryName];
     const coords = COUNTRY_COORDS[countryName];
     
-    // Skip countries without coordinates
+    //skip countries without coordinates
     if (!coords) {
       console.log('No coordinates for:', countryName);
       return null;
     }
     
-    // Calculate average score
+    //calculate average score
     let avgScore = null;
     if (country.scores.length > 0) {
       avgScore = (country.scores.reduce((a, b) => a + b, 0) / country.scores.length).toFixed(2);
@@ -130,103 +130,8 @@ function processData(data) {
       varieties: Array.from(country.varieties),
       processingMethods: Array.from(country.processingMethods)
     };
-  }).filter(country => country !== null); // Remove countries without coords
+  }).filter(country => country !== null); //remove countries without coords
   
   console.log('Processed countries:', countryArray.length);
   return countryArray;
 }
-
-
-// import { useState, useEffect } from 'react';
-// import Papa from 'papaparse';
-
-// export function useCoffeeData() {
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const [cqiData, setCqiData] = useState([]);
-//   const [processedData, setProcessedData] = useState({});
-
-//   useEffect(() => {
-//     async function fetchCQIData() {
-//       try {
-//         setLoading(true);
-//         const cqiUrl = 'https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/arabica_data_cleaned.csv';
-        
-//         Papa.parse(cqiUrl, {
-//           download: true,
-//           header: true,
-//           complete: (results) => {
-//             console.log('CQI Data loaded:', results.data.length, 'records');
-//             setCqiData(results.data);
-            
-//             // Process data by country
-//             const byCountry = processByCountry(results.data);
-//             setProcessedData(byCountry);
-//             setLoading(false);
-//           },
-//           error: (err) => {
-//             setError(err.message);
-//             setLoading(false);
-//           }
-//         });
-//       } catch (err) {
-//         setError(err.message);
-//         setLoading(false);
-//       }
-//     }
-
-//     fetchCQIData();
-//   }, []);
-
-//   return { loading, error, cqiData, processedData };
-// }
-
-// function processByCountry(data) {
-//   const countries = {};
-  
-//   data.forEach(row => {
-//     const country = row['Country.of.Origin'];
-//     if (!country) return;
-    
-//     if (!countries[country]) {
-//       countries[country] = {
-//         name: country,
-//         samples: [],
-//         varieties: new Set(),
-//         processingMethods: new Set(),
-//         scores: []
-//       };
-//     }
-    
-//     const score = parseFloat(row['Total.Cup.Points']);
-//     if (!isNaN(score)) {
-//       countries[country].scores.push(score);
-//     }
-    
-//     countries[country].samples.push({
-//       variety: row.Variety,
-//       processing: row['Processing.Method'],
-//       aroma: parseFloat(row.Aroma),
-//       flavor: parseFloat(row.Flavor),
-//       acidity: parseFloat(row.Acidity),
-//       body: parseFloat(row.Body),
-//       totalScore: score
-//     });
-    
-//     if (row.Variety) countries[country].varieties.add(row.Variety);
-//     if (row['Processing.Method']) countries[country].processingMethods.add(row['Processing.Method']);
-//   });
-  
-//   // Calculate averages
-//   Object.keys(countries).forEach(country => {
-//     const data = countries[country];
-//     data.varieties = Array.from(data.varieties);
-//     data.processingMethods = Array.from(data.processingMethods);
-    
-//     if (data.scores.length > 0) {
-//       data.avgScore = (data.scores.reduce((a, b) => a + b, 0) / data.scores.length).toFixed(2);
-//     }
-//   });
-  
-//   return countries;
-// }
