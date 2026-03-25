@@ -19,7 +19,7 @@ export default function BeanSearch() {
     // extract data 
     useEffect(() => {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
-        // add robusta later
+        const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
 
                 Papa.parse(arabica_csv, {
                     download: true,
@@ -27,7 +27,16 @@ export default function BeanSearch() {
                     complete: function(results) {
                         // compile database using extracted data
                         const database = results.data
-                        setBeans(database)
+                        setBeans(((previousBeans) => [...previousBeans, ...database]))
+                    }
+                })
+                Papa.parse(robusta_csv, {
+                    download: true,
+                    header: true,
+                    complete: function(results) {
+                        // compile database using extracted data
+                        const database = results.data
+                        setBeans(((previousBeans) => [...previousBeans, ...database]))
                     }
                 })
     }, [])
