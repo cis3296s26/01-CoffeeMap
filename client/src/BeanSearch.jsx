@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import Papa from 'papaparse'
+import { data } from 'react-router-dom'
 
 export default function BeanSearch() {
     // initialize variables
@@ -16,10 +17,9 @@ export default function BeanSearch() {
     const [page, setPage] = useState(1)
     const itemsPerPage = 10
 
-    // extract data 
     useEffect(() => {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
-        // add robusta later
+        const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
 
                 Papa.parse(arabica_csv, {
                     download: true,
@@ -27,7 +27,16 @@ export default function BeanSearch() {
                     complete: function(results) {
                         // compile database using extracted data
                         const database = results.data
-                        setBeans(database)
+                        setBeans(((previousBeans) => [...previousBeans, ...database]))
+                    }
+                })
+                Papa.parse(robusta_csv, {
+                    download: true,
+                    header: true,
+                    complete: function(results) {
+                        // compile database using extracted data
+                        const database = results.data
+                        setBeans((previousBeans) => [...previousBeans, ...database])
                     }
                 })
     }, [])
@@ -58,6 +67,8 @@ export default function BeanSearch() {
         <div style={{padding:"10px"}}>
             <h1>Bean Search</h1>
 
+            {filtered.slice(0,15).map((bean, index)=>(
+                <div key={index} style={{border:"1px solid brown", margin:"15px", padding:"15px"}}>
             {/* search bar and filters */}
             <div style={{backgroundColor: "#000000", padding: "12px", display: "flex", gap: "10px", alignItems: "center"}}>
                     {/* search bar */}
@@ -140,13 +151,4 @@ export default function BeanSearch() {
             </div>
         </div>
     )
-
-    // troubleshooting stuff
-        // in useEffect
-            //  console.log("database loaded:", database)
-            //  console.log("first row:", database[0])
-            //  console.log("row number:", database.length)
-        // in frontenddesign
-            // <p>Beans loaded: {beans.length}</p>
-            // <p>results: {filtered.length}</p>
 }
