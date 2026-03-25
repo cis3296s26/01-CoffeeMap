@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import Papa from 'papaparse'
-import { searchBeans } from './logic'
 
 export default function BeanSearch() {
     // initialize variables
@@ -32,29 +31,24 @@ export default function BeanSearch() {
                     }
                 })
     }, [])
-
-
-    //Filter and search through database
-    const filtered = searchBeans(beans, query, filters)
-
     //Filter function
-    /*const applyFilters = (bean) => {
+    const applyFilters = (bean) => {
         const matchCounty = !filters.country || bean["Country.of.Origin"] === filters.country
         const matchRegion = !filters.region || bean["Region"] === filters.region
         const matchAroma = !filters.aroma || bean["Aroma"] === filters.aroma
         const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
 
         return matchCounty && matchRegion && matchAroma && matchScore
-    }*/
+    }
 
     // search through database using search bar input
-    /*const filtered = beans.filter((bean) => {
+    const filtered = beans.filter((bean) => {
         const matchSearch = 
             bean["Country.of.Origin"]?.includes(query) ||
             bean["Region"]?.includes(query) ||
             bean["Variety"]?.includes(query)
         return matchSearch && applyFilters(bean)
-    })*/
+    })
 
     const totalPages = Math.ceil(filtered.length / itemsPerPage)
     const currentItems = filtered.slice((page - 1) * itemsPerPage, page * itemsPerPage)
