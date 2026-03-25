@@ -1,10 +1,14 @@
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useCoffeeData } from './useCoffeeData';
+import { useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 
 function LeafletMap() {
     const { loading, error, countryData } = useCoffeeData();
-
+    const [search, setSearch] = useState('');
+    const filtered = countryData.filter(country =>
+        country.name.toLowerCase().includes(search.toLowerCase())
+    );
     if (loading) {
         return (
             <div style={{ textAlign: 'center', padding: '50px' }}>
@@ -23,8 +27,18 @@ function LeafletMap() {
 
     return (
         <div>
+            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+                <input
+                    type='text'
+                    placeholder='Search country...'
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    style={{ padding: '8px 12px', fontSize: '16px', width: '300px', borderRadius: '4px', border: '1px solid #ccc' }}
+                />
+            </div>
+
             <p style={{ textAlign: 'center', marginBottom: '10px' }}>
-                Showing {countryData.length} coffee-producing countries from CQI database
+                Showing {filtered.length} of {countryData.length} coffee-producing countries from CQI database
             </p>
             <MapContainer
                 center={[10, -20]}
@@ -36,7 +50,7 @@ function LeafletMap() {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 
-                {countryData.map((country, index) => (
+                {filtered.map((country, index) => (
                     <CircleMarker
                         key={index}
                         center={country.coords}
