@@ -1,4 +1,4 @@
-<img width="468" height="127" alt="image" src="https://github.com/user-attachments/assets/433b0c21-280c-458c-bb76-7f52a272473a" /># Coffee Map
+# Coffee Map
 Coffee Map is a website that serves as a centralized resource hub for coffee drinkers interested in making personalized and educated coffee bean purchases. Users can access the service as an informational guide on sources and flavor profiles by searching for beans by branded bag using the search bar or by country using the interactive map. Users can become members of the Coffee Map community by creating an account while enables additional personalized features, allowing individuals to log coffee beans they've already tried and bookmark ones that are of interest. 
 
 ## Vision Statement
@@ -43,3 +43,5 @@ We recommend creating a .gitignore file for the installations.
 ## How to contribute
 Follow this project board to know the latest status of the project: https://github.com/orgs/cis3296s26/projects/34/views/1
 
+##Link to the website
+https://cis3296s26.github.io/01-CoffeeMap/
