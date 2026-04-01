@@ -13,14 +13,15 @@ import About from "./About.jsx"
 import SignUp from "./SignUp.jsx"
 import LogIn from "./LogIn.jsx"
 import EditAccount from './EditAccount.jsx';
-import BeanSearch from './BeanSearch.jsx'; 
+import BeanSearch from './BeanSearch.jsx';
+import EditAccount from './EditAccount.jsx';
 
 createRoot(document.getElementById('root')).render(
   
-    //Body of the page.
+    //Body of the page
     <StrictMode>
         <AuthProvider>
-            <HashRouter>
+            <BrowserRouter>
                 <NavigationBar />
                 <Routes>
                     <Route path="/" element={
@@ -40,9 +41,10 @@ createRoot(document.getElementById('root')).render(
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<LogIn />} />
                     <Route path="/editaccount" element={<EditAccount />} />
-                    <Route path="/search" element={<BeanSearch />} /> 
+                    <Route path="/search" element={<BeanSearch />} />
+                    <Route path="/favorites" element={<Favorites />} /> 
                 </Routes>
-            </HashRouter>
+            </BrowserRouter>
         </AuthProvider>
     </StrictMode>,
 )
