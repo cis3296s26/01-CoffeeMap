@@ -16,6 +16,7 @@ export default function BeanSearch() {
         minScore: 0,
         minFlavor: 0,
         minAcidity: 0,
+        minSweetness: 0,
     })
     const { user } = useAuth()
 
@@ -47,7 +48,9 @@ export default function BeanSearch() {
                         // compile database using extracted data
                         const database = results.data.map(bean => ({
                             ...bean,
-                            Species: "Robusta"
+                            Species: "Robusta",
+                            Acidity: bean["Salt...Acid"],
+                            Sweetness: bean["Bitter...Sweet"]
                         }))
                         setBeans(((previousBeans) => [...previousBeans, ...database]))
                     }
