@@ -12,7 +12,11 @@ export default function BeanSearch() {
         country: "",
         region: "",
         aroma: "",
+        species: "",
         minScore: 0,
+        minFlavor: 0,
+        minAcidity: 0,
+        minSweetness: 0,
     })
     const { user } = useAuth()
 
@@ -30,7 +34,10 @@ export default function BeanSearch() {
                     header: true,
                     complete: function(results) {
                         // compile database using extracted data
-                        const database = results.data
+                        const database = results.data.map(bean => ({
+                            ...bean,
+                            Species: "Arabica"
+                        }))
                         setBeans(((previousBeans) => [...previousBeans, ...database]))
                     }
                 })
@@ -39,7 +46,12 @@ export default function BeanSearch() {
                     header: true,
                     complete: function(results) {
                         // compile database using extracted data
-                        const database = results.data
+                        const database = results.data.map(bean => ({
+                            ...bean,
+                            Species: "Robusta",
+                            Acidity: bean["Salt...Acid"],
+                            Sweetness: bean["Bitter...Sweet"]
+                        }))
                         setBeans(((previousBeans) => [...previousBeans, ...database]))
                     }
                 })
@@ -76,8 +88,12 @@ export default function BeanSearch() {
         const matchRegion = !filters.region || bean["Region"] === filters.region
         const matchAroma = !filters.aroma || bean["Aroma"] === filters.aroma
         const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
+        const matchSpecies = !filters.species || bean["Species"] === filters.species
+        const matchFlavor = !filters.minFlavor || parseFloat(bean["Flavor"]) >= parseFloat(filters.minFlavor)
+        const matchAcidity = !filters.minAcidity || parseFloat(bean["Acidity"]) >= parseFloat(filters.minAcidity)
+        const matchSweetness = !filters.minSweetness || parseFloat(bean["Sweetness"]) >= parseFloat(filters.minSweetness)
 
-        return matchCounty && matchRegion && matchAroma && matchScore
+        return matchCounty && matchRegion && matchAroma && matchScore && matchSpecies && matchFlavor && matchAcidity && matchSweetness
     }
 
     // search through database using search bar input
@@ -137,9 +153,19 @@ export default function BeanSearch() {
                         <option key={i} value={a}>{a}</option>
                     ))}
                     </select>
+
+                <select 
+                    value={filters.species}
+                    onChange={(e) => setFilters({...filters, species: e.target.value})}
+                    >
+                    <option value = ''>All Species</option>
+                    {[...new Set(beans.map(bean => bean["Species"]).filter(Boolean))].sort().map((s, i) => (
+                        <option key={i} value={s}>{s}</option>
+                    ))}
+                    </select>
                 
                 {/*Clear filters button*/}
-                <button onClick={() => {setQuery(""); setFilters({country: "", region:"", aroma: "", minScore: 0})}}>
+                <button onClick={() => {setQuery(""); setFilters({country: "", region:"", aroma: "", species: "", minScore: 0, minFlavor: 0, minAcidity: 0, minSweetness: 0})}}>
                     Clear Filters
                 </button>
             </div>
@@ -165,9 +191,12 @@ export default function BeanSearch() {
                     </div>
                     <p><b>Country:</b> {bean["Country.of.Origin"]}</p>
                     <p><b>Region:</b> {bean["Region"]}</p>
-                    <p><b>Variety:</b> {bean["Variety"]}</p>
+                    <p><b>Species:</b> {bean["Species"]}</p>
                     <p><b>Aroma:</b> {bean["Aroma"]}</p>
                     <p><b>Flavor:</b> {bean["Flavor"]}</p>
+                    <p><b>Acidity:</b> {bean["Acidity"]}</p>
+                    <p><b>Sweetness:</b> {bean["Sweetness"]}</p>
+                    <p><b>Aftertaste:</b> {bean["Aftertaste"]}</p>
                 </div>
             ))}
 
@@ -196,13 +225,4 @@ export default function BeanSearch() {
             </div>
         </div>
     )
-
-    // troubleshooting stuff
-        // in useEffect
-            //  console.log("database loaded:", database)
-            //  console.log("first row:", database[0])
-            //  console.log("row number:", database.length)
-        // in frontenddesign
-            // <p>Beans loaded: {beans.length}</p>
-            // <p>results: {filtered.length}</p>
 }
