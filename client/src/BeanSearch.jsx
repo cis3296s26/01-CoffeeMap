@@ -83,7 +83,7 @@ export default function BeanSearch() {
         const matchRegion = !filters.region || bean["Region"] === filters.region
         const matchAroma = !filters.aroma || bean["Aroma"] === filters.aroma
         const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
-        const matchSpecies = !filters.species || bean["Variety"] === filters.species
+        const matchSpecies = !filters.species || bean["Species"] === filters.species
 
         return matchCounty && matchRegion && matchAroma && matchScore && matchSpecies
     }
