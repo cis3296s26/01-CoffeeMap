@@ -89,9 +89,9 @@ export default function BeanSearch() {
         const matchAroma = !filters.aroma || bean["Aroma"] === filters.aroma
         const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
         const matchSpecies = !filters.species || bean["Species"] === filters.species
-        const matchFlavor = !filters.minFlavor || bean["Flavor"] === filters.minFlavor
-        const matchAcidity = !filters.minAcidity || bean["Acidity"] === filters.minAcidity
-        const matchSweetness = !filters.minSweetness || bean["Sweetness"] === filters.minSweetness
+        const matchFlavor = !filters.minFlavor || parseFloat(bean["Flavor"]) >= parseFloat(filters.minFlavor)
+        const matchAcidity = !filters.minAcidity || parseFloat(bean["Acidity"]) >= parseFloat(filters.minAcidity)
+        const matchSweetness = !filters.minSweetness || parseFloat(bean["Sweetness"]) >= parseFloat(filters.minSweetness)
 
         return matchCounty && matchRegion && matchAroma && matchScore && matchSpecies && matchFlavor && matchAcidity && matchSweetness
     }
@@ -165,7 +165,7 @@ export default function BeanSearch() {
                     </select>
                 
                 {/*Clear filters button*/}
-                <button onClick={() => {setQuery(""); setFilters({country: "", region:"", aroma: "", species: "", minScore: 0})}}>
+                <button onClick={() => {setQuery(""); setFilters({country: "", region:"", aroma: "", species: "", minScore: 0, minFlavor: 0, minAcidity: 0, minSweetness: 0})}}>
                     Clear Filters
                 </button>
             </div>
