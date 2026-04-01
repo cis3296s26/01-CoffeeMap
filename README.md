@@ -41,11 +41,19 @@ To open the webpage in an external browser, press: o +
 We recommend creating a .gitignore file for the installations.
 
 For Windows:
+Install dependencies npm install
 ```
-Install dependencies with npm install
-Run npm run dev
-Open http://localhost:5173/
+npm install
+npm install react-router-dom
+npm install firebase
+npm install papaparse
 ```
+Run the program:
+```
+npm run dev
+```
+Open: http://localhost:5173/
+
 
 
 ## How to contribute
