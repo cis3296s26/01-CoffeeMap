@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useEffect } from 'react'
 import Papa from 'papaparse'
+import { useAuth } from './AuthContext'
+import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
 
 export default function BeanSearch() {
     // initialize variables
@@ -12,9 +14,11 @@ export default function BeanSearch() {
         aroma: "",
         minScore: 0,
     })
+    const { user } = useAuth()
 
     const [page, setPage] = useState(1)
     const itemsPerPage = 10
+    const [favorites, setFavorites] = useState([])
 
     // extract data 
     useEffect(() => {
@@ -40,6 +44,32 @@ export default function BeanSearch() {
                     }
                 })
     }, [])
+
+    //subscribe to user's favorites in firestore (updates in real time)
+    useEffect(() => {
+        if (!user) return
+        const unsub = getFavorites(user.uid, (favs) => {
+            setFavorites(favs.map(f => `${f.country}_${f.region}`.replace(/\s+/g, '_')))
+        })
+        return () => unsub()
+    }, [user])
+
+    const getBeanId = (bean) => `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_')
+
+    const isFavorited = (bean) => favorites.includes(getBeanId(bean))
+
+    const toggleFavorite = async (bean) => {
+        if (!user) return
+        if (isFavorited(bean)) {
+            await removeFromFavorites(user.uid, {
+                country: bean["Country.of.Origin"],
+                region: bean["Region"]
+            })
+        } else {
+            await saveFavorite(user.uid, bean)
+        }
+    }
+
     //Filter function
     const applyFilters = (bean) => {
         const matchCounty = !filters.country || bean["Country.of.Origin"] === filters.country
@@ -62,6 +92,7 @@ export default function BeanSearch() {
     const totalPages = Math.ceil(filtered.length / itemsPerPage)
     const currentItems = filtered.slice((page - 1) * itemsPerPage, page * itemsPerPage)
     
+    console.log("user:", user)
     // frontend design
     return (
         <div style={{padding:"10px"}}>
@@ -116,6 +147,22 @@ export default function BeanSearch() {
             {/* display search results */}
             {currentItems.map((bean, index)=>(
                 <div key={index} style={{border:"1px solid black", margin:"15px", padding:"15px"}}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <b></b>
+                        {user && (
+                            <span
+                                onClick={() => toggleFavorite(bean)}
+                                title={isFavorited(bean) ? "Remove from favorites" : "Add to favorites"}
+                                style={{
+                                    cursor: "pointer",
+                                    fontSize: "20px",
+                                    color: isFavorited(bean) ? "#f5a623" : "#ccc"
+                                }}
+                            >
+                                ★
+                            </span>
+                        )}
+                    </div>
                     <p><b>Country:</b> {bean["Country.of.Origin"]}</p>
                     <p><b>Region:</b> {bean["Region"]}</p>
                     <p><b>Variety:</b> {bean["Variety"]}</p>
