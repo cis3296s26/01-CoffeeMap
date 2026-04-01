@@ -215,13 +215,4 @@ export default function BeanSearch() {
             </div>
         </div>
     )
-
-    // troubleshooting stuff
-        // in useEffect
-            //  console.log("database loaded:", database)
-            //  console.log("first row:", database[0])
-            //  console.log("row number:", database.length)
-        // in frontenddesign
-            // <p>Beans loaded: {beans.length}</p>
-            // <p>results: {filtered.length}</p>
 }
