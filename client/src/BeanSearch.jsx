@@ -31,7 +31,10 @@ export default function BeanSearch() {
                     header: true,
                     complete: function(results) {
                         // compile database using extracted data
-                        const database = results.data
+                        const database = results.data.map(bean => ({
+                            ...bean,
+                            Species: "Arabica"
+                        }))
                         setBeans(((previousBeans) => [...previousBeans, ...database]))
                     }
                 })
@@ -40,7 +43,10 @@ export default function BeanSearch() {
                     header: true,
                     complete: function(results) {
                         // compile database using extracted data
-                        const database = results.data
+                        const database = results.data.map(bean => ({
+                            ...bean,
+                            Species: "Robusta"
+                        }))
                         setBeans(((previousBeans) => [...previousBeans, ...database]))
                     }
                 })
@@ -177,6 +183,7 @@ export default function BeanSearch() {
                     </div>
                     <p><b>Country:</b> {bean["Country.of.Origin"]}</p>
                     <p><b>Region:</b> {bean["Region"]}</p>
+                    <p><b>Species:</b> {bean["Species"]}</p>
                     <p><b>Variety:</b> {bean["Variety"]}</p>
                     <p><b>Aroma:</b> {bean["Aroma"]}</p>
                     <p><b>Flavor:</b> {bean["Flavor"]}</p>
