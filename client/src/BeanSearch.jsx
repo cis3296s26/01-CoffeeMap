@@ -14,6 +14,8 @@ export default function BeanSearch() {
         aroma: "",
         species: "",
         minScore: 0,
+        minFlavor: 0,
+        minAcidity: 0,
     })
     const { user } = useAuth()
 
@@ -84,8 +86,11 @@ export default function BeanSearch() {
         const matchAroma = !filters.aroma || bean["Aroma"] === filters.aroma
         const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
         const matchSpecies = !filters.species || bean["Species"] === filters.species
+        const matchFlavor = !filters.minFlavor || bean["Flavor"] === filters.minFlavor
+        const matchAcidity = !filters.minAcidity || bean["Acidity"] === filters.minAcidity
+        const matchSweetness = !filters.minSweetness || bean["Sweetness"] === filters.minSweetness
 
-        return matchCounty && matchRegion && matchAroma && matchScore && matchSpecies
+        return matchCounty && matchRegion && matchAroma && matchScore && matchSpecies && matchFlavor && matchAcidity && matchSweetness
     }
 
     // search through database using search bar input
@@ -184,9 +189,11 @@ export default function BeanSearch() {
                     <p><b>Country:</b> {bean["Country.of.Origin"]}</p>
                     <p><b>Region:</b> {bean["Region"]}</p>
                     <p><b>Species:</b> {bean["Species"]}</p>
-                    <p><b>Variety:</b> {bean["Variety"]}</p>
                     <p><b>Aroma:</b> {bean["Aroma"]}</p>
                     <p><b>Flavor:</b> {bean["Flavor"]}</p>
+                    <p><b>Acidity:</b> {bean["Acidity"]}</p>
+                    <p><b>Sweetness:</b> {bean["Sweetness"]}</p>
+                    <p><b>Aftertaste:</b> {bean["Aftertaste"]}</p>
                 </div>
             ))}
 
