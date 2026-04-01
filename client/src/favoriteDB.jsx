@@ -5,11 +5,11 @@ import {doc, setDoc, deleteDoc, collection, onSnapshot} from "firebase/firestore
 //Save favorite options
 export async function saveFavorite(userId, bean){
     const beanData = {
-        country: bean["Country.of.Origin"],
-        region: bean["Region"],
-        variety: bean["Variety"],
-        aroma: bean["Aroma"],
-        score: bean["Total.Cup.Points"]
+        country: bean["Country.of.Origin"] ?? '',
+        region: bean["Region"] ?? '',
+        variety: bean["Variety"] ?? '',
+        aroma: bean["Aroma"] ?? '',
+        score: bean["Total.Cup.Points"] ?? ''
     }
     const beanId = `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_');
     await setDoc(doc(db, "users", userId, "favorites", beanId), beanData);
