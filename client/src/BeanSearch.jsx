@@ -12,6 +12,7 @@ export default function BeanSearch() {
         country: "",
         region: "",
         aroma: "",
+        species: "",
         minScore: 0,
     })
     const { user } = useAuth()
