@@ -160,6 +160,26 @@ export default function BeanSearch() {
                         <option key={i} value={s}>{s}</option>
                     ))}
                     </select>
+
+                <select 
+                    value={filters.sweetness}
+                    onChange={(e) => setFilters({...filters, sweetness: e.target.value})}
+                    >
+                    <option value = ''>All Aromas</option>
+                    {[...new Set(beans.map(bean => bean["Aroma"]).filter(Boolean))].sort().map((a, i) => (
+                        <option key={i} value={a}>{a}</option>
+                    ))}
+                    </select>
+                
+                <select 
+                    value={filters.acidity}
+                    onChange={(e) => setFilters({...filters, aroma: e.target.value})}
+                    >
+                    <option value = ''>All Aromas</option>
+                    {[...new Set(beans.map(bean => bean["Aroma"]).filter(Boolean))].sort().map((a, i) => (
+                        <option key={i} value={a}>{a}</option>
+                    ))}
+                    </select>
                 
                 {/*Clear filters button*/}
                 <button onClick={() => {setQuery(""); setFilters({country: "", region:"", aroma: "", species: "", minScore: 0})}}>
