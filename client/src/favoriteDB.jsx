@@ -12,6 +12,7 @@ export async function saveFavorite(userId, bean){
         flavor: bean["Flavor"] ?? '',
         acidity: bean["Acidity"] ?? '',
         sweetness: bean["Sweetness"] ?? '',
+        aftertaste: bean["Aftertaste"] ?? '',
         score: bean["Total.Cup.Points"] ?? ''
     }
     const beanId = `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_');

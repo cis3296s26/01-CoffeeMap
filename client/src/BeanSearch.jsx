@@ -14,7 +14,7 @@ export default function BeanSearch() {
         country: [],
         region: [],
         aroma: [],
-        species: [],
+        species: [], 
         sortBy: '',
         minScore: 0,
         minFlavor: 0,
