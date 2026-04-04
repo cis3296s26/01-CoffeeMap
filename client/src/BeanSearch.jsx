@@ -14,7 +14,7 @@ export default function BeanSearch() {
         country: [],
         region: [],
         aroma: [],
-        species: [], 
+        species: [],
         sortBy: '',
         minScore: 0,
         minFlavor: 0,
@@ -167,20 +167,21 @@ export default function BeanSearch() {
 
             {/* Side filter panel */}
             {showFilters && (
-                <div style={{position: "fixed", right: 0, top: 0, height: "100%", width: "300px", backgroundColor: "white", boxShadow: "-2px 0 5px rgba(0,0,0,0.3)", padding: "20px", overflowY: "auto", zIndex: 1000}}>
+                //Side panel style
+                <div style={{position: "fixed", right: 0, top: 0, height: "100%", width: "350px", backgroundColor: "#ffffff", boxShadow: "-2px 0 5px #0000004d", padding: "20px", overflowY: "auto", zIndex: 1000}}>
                     <h3>Filters</h3>
 
                     {/* Sort */}
                     <label><b>Sort by Country:</b></label>
-                    <select value={filters.sortBy} onChange={(e) => setFilters({...filters, sortBy: e.target.value})} style={{width: "100%", marginBottom: "15px"}}>
-                        <option value="">No Sort</option>
-                        <option value="az">A → Z</option>
-                        <option value="za">Z → A</option>
+                    <select value={filters.sortBy} onChange={(e) => setFilters({...filters, sortBy: e.target.value})} style={{width: "100%", marginBottom: "20px"}}>
+                        <option value="">Sort Filter</option>
+                        <option value="az">A to Z</option>
+                        <option value="za">Z to A</option>
                     </select>
 
                     {/* Country */}
                     <label><b>Country:</b></label>
-                    <div style={{maxHeight: "150px", overflowY: "auto", border: "1px solid #ccc", marginBottom: "15px"}}>
+                    <div style={{maxHeight: "150px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
                         {availableCountries.map((c, i) => (
                             <div key={i}
                                 onClick={() => {
@@ -189,7 +190,8 @@ export default function BeanSearch() {
                                         : [...filters.country, c]
                                     setFilters({...filters, country: updated})
                                 }}
-                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.country.includes(c) ? "#1a73e8" : "white", color: filters.country.includes(c) ? "white" : "black"}}>
+                                //Inside style of country filter options
+                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.country.includes(c) ? "#1a73e8" : "#ffffff", color: filters.country.includes(c) ? "white" : "black"}}>
                                 {filters.country.includes(c) ? "✓ " : "☐ "}{c}
                             </div>
                         ))}
@@ -197,7 +199,7 @@ export default function BeanSearch() {
 
                     {/* Region */}
                     <label><b>Region:</b></label>
-                    <div style={{maxHeight: "150px", overflowY: "auto", border: "1px solid #ccc", marginBottom: "15px"}}>
+                    <div style={{maxHeight: "150px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
                         {availableRegions.map((r, i) => (
                             <div key={i}
                                 onClick={() => {
@@ -214,7 +216,7 @@ export default function BeanSearch() {
 
                     {/* Species */}
                     <label><b>Species:</b></label>
-                    <div style={{maxHeight: "100px", overflowY: "auto", border: "1px solid #ccc", marginBottom: "15px"}}>
+                    <div style={{maxHeight: "100px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
                         {availableSpecies.map((s, i) => (
                             <div key={i}
                                 onClick={() => {
@@ -229,7 +231,7 @@ export default function BeanSearch() {
                         ))}
                     </div>
 
-                    <button onClick={() => setShowFilters(false)} style={{width: "100%", padding: "8px", marginTop: "10px"}}>
+                    <button onClick={() => setShowFilters(false)} style={{width: "100%", padding: "5px", marginTop: "20px"}}>
                         Close
                     </button>
                 </div>
@@ -239,7 +241,7 @@ export default function BeanSearch() {
 
             {/* display search results */}
             {currentItems.map((bean, index)=>(
-                <div key={index} style={{border:"1px solid black", margin:"15px", padding:"15px"}}>
+                <div key={index} style={{border:"2px solid black", margin:"15px", padding:"15px"}}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <b></b>
                         {user && (
