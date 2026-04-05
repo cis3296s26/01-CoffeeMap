@@ -8,11 +8,14 @@ export default function BeanSearch() {
     // initialize variables
     const [beans, setBeans] = useState([])
     const [query, setQuery] = useState("")
+    const [showFilters, setShowFilters] = useState(false)
+
     const[filters, setFilters] = useState({
-        country: "",
-        region: "",
-        aroma: "",
-        species: "",
+        country: [],
+        region: [],
+        aroma: [],
+        species: [],
+        sortBy: '',
         minScore: 0,
         minFlavor: 0,
         minAcidity: 0,
@@ -84,16 +87,15 @@ export default function BeanSearch() {
 
     //Filter function
     const applyFilters = (bean) => {
-        const matchCounty = !filters.country || bean["Country.of.Origin"] === filters.country
-        const matchRegion = !filters.region || bean["Region"] === filters.region
-        const matchAroma = !filters.aroma || bean["Aroma"] === filters.aroma
+        const matchCountry = filters.country.length === 0 || filters.country.includes(bean["Country.of.Origin"])
+        const matchRegion = filters.region.length === 0 || filters.region.includes(bean["Region"])
+        const matchAroma = filters.aroma.length === 0 || filters.aroma.includes(bean["Aroma"])
+        const matchSpecies = filters.species.length === 0 || filters.species.includes(bean["Species"])
         const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
-        const matchSpecies = !filters.species || bean["Species"] === filters.species
         const matchFlavor = !filters.minFlavor || parseFloat(bean["Flavor"]) >= parseFloat(filters.minFlavor)
         const matchAcidity = !filters.minAcidity || parseFloat(bean["Acidity"]) >= parseFloat(filters.minAcidity)
         const matchSweetness = !filters.minSweetness || parseFloat(bean["Sweetness"]) >= parseFloat(filters.minSweetness)
-
-        return matchCounty && matchRegion && matchAroma && matchScore && matchSpecies && matchFlavor && matchAcidity && matchSweetness
+        return matchCountry && matchRegion && matchAroma && matchSpecies && matchScore && matchFlavor && matchAcidity && matchSweetness
     }
 
     // search through database using search bar input
@@ -105,10 +107,41 @@ export default function BeanSearch() {
         return matchSearch && applyFilters(bean)
     })
 
-    const totalPages = Math.ceil(filtered.length / itemsPerPage)
-    const currentItems = filtered.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+    //sort function
+    const sorted = [...filtered].sort((a,b) => {
+        if(filters.sortBy === "az") return a["Country.of.Origin"].localeCompare(b["Country.of.Origin"])
+        if(filters.sortBy === "za") return b["Country.of.Origin"].localeCompare(a["Country.of.Origin"])
+        return 0
+    })    
+    const totalPages = Math.ceil(sorted.length / itemsPerPage)
+    const currentItems = sorted.slice((page - 1) * itemsPerPage, page * itemsPerPage)
     
-    console.log("user:", user)
+    //Available region based on selected country and species filters
+    const availableRegions = [...new Set(
+        beans
+            .filter(b => filters.country.length === 0 || filters.country.includes(b["Country.of.Origin"]))
+            .filter(b => filters.species.length === 0 || filters.species.includes(b["Species"]))
+            .map(b => b["Region"])
+            .filter(Boolean)
+    )].sort()
+    
+    //Available countries based on selected species filters  
+    const availableCountries = [...new Set(
+        beans
+            .filter(b => filters.species.length === 0 || filters.species.includes(b["Species"]))
+            .map(b => b["Country.of.Origin"])
+            .filter(Boolean)
+    )].sort()
+
+    //Available species based on selected country and region filters 
+    const availableSpecies = [...new Set(
+        beans
+            .filter(b => filters.country.length === 0 || filters.country.includes(b["Country.of.Origin"]))
+            .filter(b => filters.region.length === 0 || filters.region.includes(b["Region"]))
+            .map(b => b["Species"])
+            .filter(Boolean)
+    )].sort()
+
     // frontend design
     return (
         <div style={{padding:"10px"}}>
@@ -124,55 +157,91 @@ export default function BeanSearch() {
                     onChange={(e)=>setQuery(e.target.value)}
                     style={{padding: "2px", width: "500px"}}
                 />
-                <select 
-                    value={filters.country}
-                    onChange={(e) => setFilters({...filters, country: e.target.value})}
-                    >
-                    <option value = ''>All Countries</option>
-                    {[...new Set(beans.map(bean => bean["Country.of.Origin"]).filter(Boolean))].sort().map((c, i) => (
-                        <option key={i} value={c}>{c}</option>
-                    ))}
-                    </select>
-                
-                <select 
-                    value={filters.region}
-                    onChange={(e) => setFilters({...filters, region: e.target.value})}
-                    >
-                    <option value = ''>All Regions</option>
-                    {[...new Set(beans.map(bean => bean["Region"]).filter(Boolean))].sort().map((r, i) => (
-                        <option key={i} value={r}>{r}</option>
-                    ))}
-                    </select>
-
-                <select 
-                    value={filters.aroma}
-                    onChange={(e) => setFilters({...filters, aroma: e.target.value})}
-                    >
-                    <option value = ''>All Aromas</option>
-                    {[...new Set(beans.map(bean => bean["Aroma"]).filter(Boolean))].sort().map((a, i) => (
-                        <option key={i} value={a}>{a}</option>
-                    ))}
-                    </select>
-
-                <select 
-                    value={filters.species}
-                    onChange={(e) => setFilters({...filters, species: e.target.value})}
-                    >
-                    <option value = ''>All Species</option>
-                    {[...new Set(beans.map(bean => bean["Species"]).filter(Boolean))].sort().map((s, i) => (
-                        <option key={i} value={s}>{s}</option>
-                    ))}
-                    </select>
-                
-                {/*Clear filters button*/}
-                <button onClick={() => {setQuery(""); setFilters({country: "", region:"", aroma: "", species: "", minScore: 0, minFlavor: 0, minAcidity: 0, minSweetness: 0})}}>
-                    Clear Filters
+                <button onClick={() => setShowFilters(!showFilters)} style={{color: "white", backgroundColor: "transparent", border: "1px solid white", padding: "5px 10px", cursor: "pointer"}}>
+                    {showFilters ? "Close Filters" : "Filter"}
+                </button>
+                <button onClick={() => {setQuery(""); setFilters({country: [], region: [], aroma: [], species: [], sortBy: '', minScore: 0, minFlavor: 0, minAcidity: 0, minSweetness: 0})}}>
+                    Clear Search
                 </button>
             </div>
 
+            {/* Side filter panel */}
+            {showFilters && (
+                //Side panel style
+                <div style={{position: "fixed", right: 0, top: 0, height: "100%", width: "350px", backgroundColor: "#ffffff", boxShadow: "-2px 0 5px #0000004d", padding: "20px", overflowY: "auto", zIndex: 1000}}>
+                    <h3>Filters</h3>
+
+                    {/* Sort */}
+                    <label><b>Sort by Country:</b></label>
+                    <select value={filters.sortBy} onChange={(e) => setFilters({...filters, sortBy: e.target.value})} style={{width: "100%", marginBottom: "20px"}}>
+                        <option value="">Sort Filter</option>
+                        <option value="az">A to Z</option>
+                        <option value="za">Z to A</option>
+                    </select>
+
+                    {/* Country */}
+                    <label><b>Country:</b></label>
+                    <div style={{maxHeight: "150px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
+                        {availableCountries.map((c, i) => (
+                            <div key={i}
+                                onClick={() => {
+                                    const updated = filters.country.includes(c)
+                                        ? filters.country.filter(x => x !== c)
+                                        : [...filters.country, c]
+                                    setFilters({...filters, country: updated})
+                                }}
+                                //Inside style of country filter options
+                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.country.includes(c) ? "#1a73e8" : "#ffffff", color: filters.country.includes(c) ? "white" : "black"}}>
+                                {filters.country.includes(c) ? "✓ " : "☐ "}{c}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Region */}
+                    <label><b>Region:</b></label>
+                    <div style={{maxHeight: "150px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
+                        {availableRegions.map((r, i) => (
+                            <div key={i}
+                                onClick={() => {
+                                    const updated = filters.region.includes(r)
+                                        ? filters.region.filter(x => x !== r)
+                                        : [...filters.region, r]
+                                    setFilters({...filters, region: updated})
+                                }}
+                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.region.includes(r) ? "#1a73e8" : "white", color: filters.region.includes(r) ? "white" : "black"}}>
+                                {filters.region.includes(r) ? "✓ " : "☐ "}{r}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Species */}
+                    <label><b>Species:</b></label>
+                    <div style={{maxHeight: "100px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
+                        {availableSpecies.map((s, i) => (
+                            <div key={i}
+                                onClick={() => {
+                                    const updated = filters.species.includes(s)
+                                        ? filters.species.filter(x => x !== s)
+                                        : [...filters.species, s]
+                                    setFilters({...filters, species: updated})
+                                }}
+                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.species.includes(s) ? "#1a73e8" : "white", color: filters.species.includes(s) ? "white" : "black"}}>
+                                {filters.species.includes(s) ? "✓ " : "☐ "}{s}
+                            </div>
+                        ))}
+                    </div>
+
+                    <button onClick={() => setShowFilters(false)} style={{width: "100%", padding: "5px", marginTop: "20px"}}>
+                        Close
+                    </button>
+                </div>
+            )}
+
+            {/* display search results */}
+
             {/* display search results */}
             {currentItems.map((bean, index)=>(
-                <div key={index} style={{border:"1px solid black", margin:"15px", padding:"15px"}}>
+                <div key={index} style={{border:"2px solid black", margin:"15px", padding:"15px"}}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <b></b>
                         {user && (
