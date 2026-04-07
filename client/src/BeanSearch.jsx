@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import Papa from 'papaparse'
 import { useAuth } from './AuthContext'
 import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
+import { useNavigate } from 'react-router-dom'
 
 export default function BeanSearch() {
     // initialize variables
@@ -26,6 +27,7 @@ export default function BeanSearch() {
     const [page, setPage] = useState(1)
     const itemsPerPage = 10
     const [favorites, setFavorites] = useState([])
+    const navigate = useNavigate()
 
     // extract data 
     useEffect(() => {
@@ -72,10 +74,30 @@ export default function BeanSearch() {
     const getBeanId = (bean) => `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_')
 
     const isFavorited = (bean) => favorites.includes(getBeanId(bean))
+    const [isOpen, setIsOpen] = useState(false);
+
+    const Popup = ({ isOpen, onClose, children }) => {
+    if (!isOpen) return null;
+    //children is what's inside PopUp tags, &times creates X button to close popup
+    return (
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 2000 }}>
+            <div style={{ position: "relative", backgroundColor: "white", padding: "30px", borderRadius: "8px", minWidth: "300px", textAlign: "center" }}>
+                {children}
+                <button 
+                    onClick={onClose} 
+                    style={{ position: "absolute", top: "10px", right: "10px", background: "none", border: "none", fontSize: "20px", cursor: "pointer" }}
+                >
+                    &times;
+                </button>
+            </div>
+        </div>
+    );
+};
 
     const toggleFavorite = async (bean) => {
-        if (!user) return
-        if (isFavorited(bean)) {
+        if (!user){
+            setIsOpen(true);
+        } else if (isFavorited(bean)) {
             await removeFromFavorites(user.uid, {
                 country: bean["Country.of.Origin"],
                 region: bean["Region"]
@@ -244,19 +266,17 @@ export default function BeanSearch() {
                 <div key={index} style={{border:"2px solid black", margin:"15px", padding:"15px"}}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                         <b></b>
-                        {user && (
-                            <span
-                                onClick={() => toggleFavorite(bean)}
-                                title={isFavorited(bean) ? "Remove from favorites" : "Add to favorites"}
-                                style={{
-                                    cursor: "pointer",
-                                    fontSize: "20px",
-                                    color: isFavorited(bean) ? "#f5a623" : "#ccc"
-                                }}
-                            >
-                                ★
-                            </span>
-                        )}
+                        <span
+                            onClick={() => toggleFavorite(bean)}
+                            title={isFavorited(bean) ? "Remove from favorites" : "Add to favorites"}
+                            style={{
+                                cursor: "pointer",
+                                fontSize: "20px",
+                                color: isFavorited(bean) ? "#f5a623" : "#ccc"
+                            }}
+                        >
+                            ★
+                        </span>
                     </div>
                     <p><b>Country:</b> {bean["Country.of.Origin"]}</p>
                     <p><b>Region:</b> {bean["Region"]}</p>
@@ -292,6 +312,12 @@ export default function BeanSearch() {
                  {/*Right arrow button*/}
                 <button onClick={() => setPage(page + 1)} disabled={page >= totalPages}>&gt;</button>
             </div>
+
+            <Popup isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                <p>Please sign up or log in to save favorites.</p>
+                <button onClick={() => navigate('/signup')}>Sign Up</button>
+                <button style={{margin: "20px"}} onClick={() => navigate('/login')}>Log In</button>
+            </Popup>
         </div>
     )
 }
