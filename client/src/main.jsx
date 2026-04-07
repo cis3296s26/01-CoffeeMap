@@ -15,7 +15,7 @@ import LogIn from "./LogIn.jsx"
 import EditAccount from './EditAccount.jsx';
 import BeanSearch from './BeanSearch.jsx';
 import Favorites from './Favorites.jsx';
-
+import CountryDetail from './MapCountryDetail.jsx';
 
 createRoot(document.getElementById('root')).render(
   
