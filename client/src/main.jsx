@@ -44,7 +44,6 @@ createRoot(document.getElementById('root')).render(
                     <Route path="/editaccount" element={<EditAccount />} />
                     <Route path="/search" element={<BeanSearch />} />
                     <Route path="/favorites" element={<Favorites />} /> 
-                    <Route path="/country/:countryName" element={<CountryDetail />}/>
                 </Routes>
             </HashRouter>
         </AuthProvider>
