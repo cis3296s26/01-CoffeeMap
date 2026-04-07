@@ -37,7 +37,7 @@ export default function Favorites() {
     }
     if (loading) {
         return (
-            <section id="favorites" >
+            <section id="favorites">
                 <h2>My Favorites</h2>
                 <p>Loading your favorites...</p>
             </section>
@@ -46,8 +46,8 @@ export default function Favorites() {
 
     if (favorites.length === 0) {
         return (
-            <section id="favorites" >
-                <h2>My Favorites</h2>
+            <section id="favorites">
+                <h2>my Favorites</h2>
                 <p>you haven't added any favorite coffee beans yet...</p>
                 <p>go to the <a href="/#/search">Search</a> page to add some!</p>
             </section>
@@ -55,10 +55,10 @@ export default function Favorites() {
     }
 
     return (
-        <section id="favorites" >
-            <h1 >My Favorites</h1>
+        <section id="favorites">
+            <h2>My Favorites</h2>
             {currentItems.map((fav, index) => (
-                <div key={index} style={{border:"2px solid black", margin:"15px", padding:"15px"}}>
+                <div key={index} style={{ marginBottom: '15px' }}>
                     <p><b>Country:</b> {fav.country}</p>
                     <p><b>Region:</b> {fav.region}</p>
                     <p><b>Species:</b> {fav.species}</p>

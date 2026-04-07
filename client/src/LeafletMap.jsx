@@ -2,13 +2,10 @@ import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useCoffeeData } from './useCoffeeData';
 import { useState } from 'react';
 import 'leaflet/dist/leaflet.css';
-import { useNavigate } from 'react-router-dom';
 
 function LeafletMap() {
     const { loading, error, countryData } = useCoffeeData();
     const [search, setSearch] = useState('');
-    const navigate = useNavigate();
-
     const filtered = countryData.filter(country =>
         country.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -67,8 +64,7 @@ function LeafletMap() {
                         <Popup maxWidth={350}>
                             <div style={{ maxWidth: '330px' }}>
                                 <h3 style={{ margin: '0 0 10px 0', color: '#8B4513', borderBottom: '2px solid #8B4513', paddingBottom: '5px' }}>
-                                    {country.name} 
-
+                                    {country.name}
                                 </h3>
                                 
                                 <p><strong> Samples:</strong> {country.sampleCount}</p>
@@ -91,14 +87,6 @@ function LeafletMap() {
                                         </p>
                                     </div>
                                 )}
-
-                                {/*Button to navigate to country detail page with more information about the country and its coffee quality data*/}
-                                <button
-                                    onClick={() => navigate(`/country/${country.name}`)}
-                                    style={{ marginTop: '10px', padding: '8px 12px', backgroundColor: '#8B4513', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-                                >
-                                    View Details
-                                </button>
                             </div>
                         </Popup>
                     </CircleMarker>
