@@ -46,12 +46,18 @@ function HomePage() {
             </div>
 
             <div className="card shadow-sm border-0 mb-4">
+                <div style={{
+                    height: '4px',
+                    backgroundColor: '#8B4513',
+                    borderTopLeftRadius: '0.5rem',
+                    borderTopRightRadius: '0.5rem'
+                }} />
                 <div className="card-body">
                     <div className="d-flex justify-content-between align-items-center mb-3">
                         <h4 className="card-title mb-3">
                         Interactive Coffee Map
                         </h4>
-                        <span className="badge text-bg-dark">
+                        <span className="badge" style={{ backgroundColor: '#8B4513' }}>
                             CQI Data
                         </span>
                     </div>
@@ -78,7 +84,7 @@ function HomePage() {
 
                 <div className="col-lg-6">
                     <div className="card shadow-sm border-0 h-100">
-                        <div className="card -body">
+                        <div className="card-body">
                             <h5 className="card-title mb-3">
                                 Search & Favorites
                             </h5>

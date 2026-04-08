@@ -20,7 +20,7 @@ export default function NavigationBar() {
     // bootstrap
     return (
         //... merges conditional object into style object
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <nav className="navbar navbar-expand-lg navbar-dark sticky-top" style={{ backgroundColor: '#8B4513'}}>
             <div className = "container">
                 <Link className = "navbar-brand" to="/">
                     Coffee Map
