@@ -34,6 +34,62 @@ function HomePage() {
                 </p>
             </div>
 
+            <div className="card shadow-sm border-0 mb-4">
+                <div className="card-body text-center">
+                    <h5 className="card-title mb-3">
+                        Explore Countries
+                    </h5>
+                    <p className="text-muted mb-0">
+                        Browse regions on the interactive map and click to learn more!
+                    </p>
+                </div>
+            </div>
+
+            <div className="card shadow-sm border-0 mb-4">
+                <div className="card-body">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <h4 className="card-title mb-3">
+                        Interactive Coffee Map
+                        </h4>
+                        <span className="badge text-bg-dark">
+                            CQI Data
+                        </span>
+                    </div>
+
+                    <div style={{ height: '560px', width: '100% '}}>
+                        <LeafletMap />
+                    </div>
+                </div>
+            </div>
+
+            <div className="row g-4 mt-2">
+                <div className="col-lg-6">
+                    <div className="card shadow-sm border-0 h-100">
+                        <div className="card-body">
+                            <h5 className="card-title mb-3">
+                                Country Details
+                            </h5>
+                            <p className="text-muted mb-0">
+                                Click a country to learn more!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-lg-6">
+                    <div className="card shadow-sm border-0 h-100">
+                        <div className="card shadow-sm border-0 h-100">
+                            <h5 className="card-title">
+                                Search & Favorites
+                            </h5>
+                            <p className="text-muted mb-0">
+                                Search to explore and save your favorites!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </section>
     );
@@ -45,6 +101,7 @@ createRoot(document.getElementById('root')).render(
             <HashRouter>
                 <NavigationBar />
                 <Routes>
+                    <Route path="/" element={<HomePage />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<LogIn />} />
