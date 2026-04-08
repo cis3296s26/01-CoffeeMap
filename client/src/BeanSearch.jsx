@@ -34,32 +34,33 @@ export default function BeanSearch() {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
         const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
 
-                Papa.parse(arabica_csv, {
-                    download: true,
-                    header: true,
-                    complete: function(results) {
-                        // compile database using extracted data
-                        const database = results.data.map(bean => ({
-                            ...bean,
-                            Species: "Arabica"
-                        }))
-                        setBeans(((previousBeans) => [...previousBeans, ...database]))
-                    }
-                })
+        Papa.parse(arabica_csv, {
+            download: true,
+            header: true,
+            complete: function(aresults) {
+                // compile database using extracted data
+                const adatabase = aresults.data.map(bean => ({
+                    ...bean,
+                    Species: "Arabica"
+                }));
+
                 Papa.parse(robusta_csv, {
                     download: true,
                     header: true,
-                    complete: function(results) {
+                    complete: function(rresults) {
                         // compile database using extracted data
-                        const database = results.data.map(bean => ({
+                        const rdatabase = rresults.data.map(bean => ({
                             ...bean,
                             Species: "Robusta",
                             Acidity: bean["Salt...Acid"],
                             Sweetness: bean["Bitter...Sweet"]
-                        }))
-                        setBeans(((previousBeans) => [...previousBeans, ...database]))
+                        }));
+
+                        setBeans([...adatabase, ...rdatabase]);
                     }
-                })
+                });
+            }
+        });      
     }, [])
 
     //subscribe to user's favorites in firestore (updates in real time)

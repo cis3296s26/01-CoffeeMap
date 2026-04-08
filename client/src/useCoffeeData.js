@@ -7,21 +7,43 @@ export function useCoffeeData() {
   const [countryData, setCountryData] = useState([]);
 
   useEffect(() => {
-    const cqiUrl = 'https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/arabica_data_cleaned.csv';
-    
-    Papa.parse(cqiUrl, {
+    const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
+    const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
+
+    Papa.parse(arabica_csv, {
       download: true,
       header: true,
-      complete: (results) => {
-        console.log('CQI Data loaded:', results.data.length, 'records');
-        
-        //process the data
-        const processed = processData(results.data);
-        setCountryData(processed);
-        setLoading(false);
+      complete: function(aresults) {
+        // compile database using extracted data
+        const adatabase = aresults.data.map(bean => ({
+          ...bean,
+          Species: "Arabica"
+        }));
+        Papa.parse(robusta_csv, {
+          download: true,
+          header: true,
+          complete: function(rresults) {
+            // compile database using extracted data
+            const rdatabase = rresults.data.map(bean => ({
+              ...bean,
+              Species: "Robusta",
+              Acidity: bean["Salt...Acid"],
+              Sweetness: bean["Bitter...Sweet"]
+            }));
+
+            const mergedData = [...adatabase, ...rdatabase];
+            const processed = processData(mergedData);
+
+            setCountryData(processed);
+            setLoading(false);
+          },
+          error: function(err) {
+            setError(err.message);
+            setLoading(false);
+          }
+        });
       },
-      error: (err) => {
-        console.error('Error loading CQI data:', err);
+      error: function(err) {
         setError(err.message);
         setLoading(false);
       }
