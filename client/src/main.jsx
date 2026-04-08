@@ -35,17 +35,6 @@ function HomePage() {
             </div>
 
             <div className="card shadow-sm border-0 mb-4">
-                <div className="card-body text-center">
-                    <h5 className="card-title mb-3">
-                        Explore Countries
-                    </h5>
-                    <p className="text-muted mb-0">
-                        Browse regions on the interactive map and click to learn more!
-                    </p>
-                </div>
-            </div>
-
-            <div className="card shadow-sm border-0 mb-4">
                 <div style={{
                     height: '4px',
                     backgroundColor: '#8B4513',
