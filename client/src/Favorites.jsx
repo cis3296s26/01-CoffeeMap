@@ -29,7 +29,7 @@ export default function Favorites() {
     }, [user]);
     if (!user) {
         return (
-            <section id="favorites">
+            <section id="favorites"style={{ padding: '20px',  backgroundColor: '#e8e5da', minHeight: '100vh', boxSizing: 'border-box' , display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
                 <h2>My Favorites</h2>
                 <p>please log in to view your favorite coffee beans.</p>
             </section>
