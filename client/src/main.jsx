@@ -28,7 +28,7 @@ function HomePage() {
                 </h1>
                 <p 
                     className="lead text-muted mx-auto"
-                    style={{maxWidth: '850px'}}
+                    style={{maxWidth: '900px'}}
                 >
                     Explore coffee-producing countries and their quality data from the Coffee Quality Institute database
                 </p>

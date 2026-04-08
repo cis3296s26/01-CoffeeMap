@@ -43,7 +43,7 @@ export default function EditAccount(){
     if (!userData) return <p>Loading...</p>;
 
     return(
-        <section id='editaccount'>
+        <section id='editaccount'style={{ padding: '20px',  backgroundColor: '#e8e5da', minHeight: '100vh', boxSizing: 'border-box' , display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
             <h2>Edit Account</h2>
             <p>
                 First Name:{' '}
