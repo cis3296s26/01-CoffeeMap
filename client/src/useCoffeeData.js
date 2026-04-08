@@ -83,6 +83,11 @@ function processData(data) {
         name: country,
         samples: [],
         scores: [],
+        aromas: [],
+        flavors: [],
+        acidity: [],
+        sweetness: [],
+        aftertaste: [],
         varieties: new Set(),
         processingMethods: new Set()
       };
@@ -90,9 +95,23 @@ function processData(data) {
     
     //add score if valid
     const score = parseFloat(row['Total.Cup.Points']);
-    if (!isNaN(score)) {
-      countries[country].scores.push(score);
-    }
+    if (!isNaN(score)) countries[country].scores.push(score);
+
+    // parse and add flavor metrics
+    const aroma = parseFloat(row.Aroma);
+    if (!isNaN(aroma)) countries[country].aromas.push(aroma);
+
+    const flavor = parseFloat(row.Flavor);
+    if (!isNaN(flavor)) countries[country].flavors.push(flavor);
+
+    const acidity = parseFloat(row.Acidity);
+    if (!isNaN(acidity)) countries[country].acidity.push(acidity);
+
+    const sweetness = parseFloat(row.Sweetness);
+    if (!isNaN(sweetness)) countries[country].sweetness.push(sweetness);
+
+    const aftertaste = parseFloat(row.Aftertaste);
+    if (!isNaN(aftertaste)) countries[country].aftertaste.push(aftertaste);
     
     //track varieties/processing methods
     if (row.Variety) {
@@ -116,17 +135,22 @@ function processData(data) {
       return null;
     }
     
-    //calculate average score
-    let avgScore = null;
-    if (country.scores.length > 0) {
-      avgScore = (country.scores.reduce((a, b) => a + b, 0) / country.scores.length).toFixed(2);
-    }
+    // helper function to calculate averages
+    const calcAvg = (arr) => {
+      if (arr.length === 0) return 0;
+      return parseFloat((arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(2));
+    };
     
     return {
       name: countryName,
       coords: coords,
       sampleCount: country.samples.length,
-      avgScore: avgScore,
+      avgScore: calcAvg(country.scores),
+      avgAroma: calcAvg(country.aromas),
+      avgFlavor: calcAvg(country.flavors),
+      avgAcidity: calcAvg(country.acidity),
+      avgSweetness: calcAvg(country.sweetness),
+      avgAftertaste: calcAvg(country.aftertaste),
       varieties: Array.from(country.varieties),
       processingMethods: Array.from(country.processingMethods)
     };
