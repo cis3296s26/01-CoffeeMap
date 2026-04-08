@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { HashRouter, Routes, Route } from 'react-router-dom'; 
 import { AuthProvider } from './AuthContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './index.css'
 import App from './App.jsx'
 import FetchCoffeeImage from "./CoffeeAPI.jsx";
@@ -17,27 +19,32 @@ import BeanSearch from './BeanSearch.jsx';
 import Favorites from './Favorites.jsx';
 import CountryDetail from './MapCountryDetail.jsx';
 
+function HomePage() {
+    return (
+        <section className="container-xl py-4">
+            <div className="text-center py-4">
+                <h1 className="display-4 fw-bold mb-3">
+                    Explore coffee-producing countries and their quality data from the Coffee Quality Institute database
+                </h1>
+                <p 
+                    className="lead text-muted mx-auto"
+                    style={{maxWidth: '850px'}}
+                >
+                    Explore coffee beans!
+                </p>
+            </div>
+
+
+        </section>
+    );
+}
+
 createRoot(document.getElementById('root')).render(
-  
-    //Body of the page
     <StrictMode>
         <AuthProvider>
             <HashRouter>
                 <NavigationBar />
                 <Routes>
-                    <Route path="/" element={
-                        <section id="home" style={{ padding: '20px' }}>
-                            <h1>Coffee Harvest Tracker</h1>
-                            <p style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 30px' }}>
-                                Explore coffee-producing countries and their quality data from the Coffee Quality Institute database
-                            </p>
-                            <LeafletMap />
-                            <div style={{ marginTop: '40px' }}>
-                                <h2>Random Coffee Image</h2>
-                                <FetchCoffeeImage />
-                            </div>
-                        </section>
-                    }/>
                     <Route path="/about" element={<About />} />
                     <Route path="/signup" element={<SignUp />} />
                     <Route path="/login" element={<LogIn />} />
@@ -49,4 +56,4 @@ createRoot(document.getElementById('root')).render(
             </HashRouter>
         </AuthProvider>
     </StrictMode>,
-)
+);

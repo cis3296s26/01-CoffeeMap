@@ -16,28 +16,59 @@ export default function NavigationBar() {
         }
     };
 
-    //Add horizontal navigation bar
-    //Navigation bar have link to home, about and sign up page
+
+    // bootstrap
     return (
         //... merges conditional object into style object
-            <nav style={{backgroundColor: "#000000", color: "#FFFFFF", padding: "25px", position: "sticky", top: 0, zIndex: 1000}}>
-                <ul style={{listStyle: "none", display: "flex", gap: "20px", margin: 0, padding: 0, 
-                    ...(isAuthenticated && userData && {justifyContent: "space-between", width: "100%"})}}>
-                    <li><Link to="/" style={{color: "white", textDecoration: "none"}}>Home</Link></li>
-                    <li><Link to="/about" style={{color: "white", textDecoration: "none"}}>About</Link></li>
-                    <li><Link to="/search" style={{color: "white", textDecoration: "none"}}>Search</Link></li>
-                    <li><Link to="/favorites" style={{color: "white", textDecoration: "none"}}>Favorites</Link></li>
-                    <li><Link to="/signup" style={{color: "white", textDecoration: "none"}}>Sign Up</Link></li>
-                    <li><Link to="/login" style={{color: "white", textDecoration: "none"}}>Log In</Link></li>
-                    {isAuthenticated && userData && (
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+            <div className = "container">
+                <Link className = "navbar-brand" to="/">
+                    Coffee Map
+                </Link>
+
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+
+                <div className="collapse navbar-collapse" id="mainNavbar">
+                    <div className="navbar-nav me-auto">
+                        <Link className="nav-link" to="/">Home</Link>
+                        <Link className="nav-link" to="/about">About</Link>
+                        <Link className="nav-link" to="/search">Search</Link>
+                        <Link className="nav-link" to="/favorites">Favorites</Link>
+                    </div>
+                </div>
+
+                <div className="navbar-nav ms-auto">
+                    {!isAuthenticated ? (
                         <>
-                            <li style={{color: "white", marginLeft: "auto"}}>Welcome, {userData.firstName}</li>
-                            <li><button onClick={handleLogOut}>Log Out</button></li>
-                            <li><Link to="/editaccount"><button>Edit Account</button></Link></li>
-                            {error && <p>{error}</p>}
+                            <Link className="nav-link" to="/signup">Sign Up</Link>
+                            <Link className="nav-link" to="/login">Log In</Link>
+                        </>
+                    ) : (
+                        <>
+                            <span className="navbar-text text-white me-3">
+                                Welcome, {userData?.firstName}
+                            </span>
+                            <Link className="nav-link" to="/editaccount">Edit Account</Link>
+                            <button
+                                className="btn btn-outline-light ms-2"
+                                onClick={handleLogOut}
+                            >
+                                Log Out
+                            </button>
                         </>
                     )}
-                </ul>
-            </nav>
-    )
+                </div>
+            </div> 
+        </nav>
+    );
 }
