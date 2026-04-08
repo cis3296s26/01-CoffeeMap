@@ -23,11 +23,11 @@ export default function BeanSearch() {
         minSweetness: 0,
     })
     const { user } = useAuth()
-
     const [page, setPage] = useState(1)
     const itemsPerPage = 10
     const [favorites, setFavorites] = useState([])
     const navigate = useNavigate()
+    const [isOpen, setIsOpen] = useState(false);
 
     // extract data 
     useEffect(() => {
@@ -71,28 +71,34 @@ export default function BeanSearch() {
         return () => unsub()
     }, [user])
 
+    useEffect(() => {
+        setPage(1);
+    }, [query, filters]);
+
     const getBeanId = (bean) => `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_')
 
     const isFavorited = (bean) => favorites.includes(getBeanId(bean))
-    const [isOpen, setIsOpen] = useState(false);
 
     const Popup = ({ isOpen, onClose, children }) => {
-    if (!isOpen) return null;
-    //children is what's inside PopUp tags, &times creates X button to close popup
-    return (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 2000 }}>
-            <div style={{ position: "relative", backgroundColor: "white", padding: "30px", borderRadius: "8px", minWidth: "300px", textAlign: "center" }}>
-                {children}
-                <button 
-                    onClick={onClose} 
-                    style={{ position: "absolute", top: "10px", right: "10px", background: "none", border: "none", fontSize: "20px", cursor: "pointer" }}
-                >
-                    &times;
-                </button>
+        if (!isOpen) return null;
+        //children is what's inside PopUp tags, &times creates X button to close popup
+        return (
+            <div 
+                className="modal d-block"
+                tabIndex="-1"
+                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                <div style={{ position: "relative", backgroundColor: "white", padding: "30px", borderRadius: "8px", minWidth: "300px", textAlign: "center" }}>
+                    {children}
+                    <button 
+                        onClick={onClose} 
+                        style={{ position: "absolute", top: "10px", right: "10px", background: "none", border: "none", fontSize: "20px", cursor: "pointer" }}
+                    >
+                        &times;
+                    </button>
+                </div>
             </div>
-        </div>
-    );
-};
+        );
+    };
 
     const toggleFavorite = async (bean) => {
         if (!user){
