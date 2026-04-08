@@ -24,13 +24,13 @@ function HomePage() {
         <section className="container-xl py-4">
             <div className="text-center py-4">
                 <h1 className="display-4 fw-bold mb-3">
-                    Explore coffee-producing countries and their quality data from the Coffee Quality Institute database
+                    Coffee Map
                 </h1>
                 <p 
                     className="lead text-muted mx-auto"
                     style={{maxWidth: '850px'}}
                 >
-                    Explore coffee beans!
+                    Explore coffee-producing countries and their quality data from the Coffee Quality Institute database
                 </p>
             </div>
 
@@ -78,8 +78,8 @@ function HomePage() {
 
                 <div className="col-lg-6">
                     <div className="card shadow-sm border-0 h-100">
-                        <div className="card shadow-sm border-0 h-100">
-                            <h5 className="card-title">
+                        <div className="card -body">
+                            <h5 className="card-title mb-3">
                                 Search & Favorites
                             </h5>
                             <p className="text-muted mb-0">
