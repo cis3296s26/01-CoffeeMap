@@ -86,15 +86,23 @@ export default function BeanSearch() {
             <div 
                 className="modal d-block"
                 tabIndex="-1"
-                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                <div style={{ position: "relative", backgroundColor: "white", padding: "30px", borderRadius: "8px", minWidth: "300px", textAlign: "center" }}>
-                    {children}
-                    <button 
-                        onClick={onClose} 
-                        style={{ position: "absolute", top: "10px", right: "10px", background: "none", border: "none", fontSize: "20px", cursor: "pointer" }}
-                    >
-                        &times;
-                    </button>
+                style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}
+            >
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content border-0 shadow">
+                        <div className="modal-body text-center p-4">
+                            {children}
+                        </div>
+                        <div className="modal-footer border-0 pt-0 justify-content-center">
+                            <button 
+                                type="button"
+                                className="btn btn-outline-secondary"
+                                onClick={onClose}
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -128,12 +136,14 @@ export default function BeanSearch() {
 
     // search through database using search bar input
     const filtered = beans.filter((bean) => {
-        const matchSearch = 
-            bean["Country.of.Origin"]?.includes(query) ||
-            bean["Region"]?.includes(query) ||
-            bean["Variety"]?.includes(query)
-        return matchSearch && applyFilters(bean)
-    })
+        const lowquery = query.toLowerCase();
+        const matchSearch =
+            bean["Country.of.Origin"]?.toLowerCase().includes(lowquery) ||
+            bean["Region"]?.toLowerCase().includes(lowquery) ||
+            bean["Variety"]?.toLowerCase().includes(lowquery);
+
+        return matchSearch && applyFilters(bean);
+    });
 
     //sort function
     const sorted = [...filtered].sort((a,b) => {
@@ -141,7 +151,7 @@ export default function BeanSearch() {
         if(filters.sortBy === "za") return b["Country.of.Origin"].localeCompare(a["Country.of.Origin"])
         return 0
     })    
-    const totalPages = Math.ceil(sorted.length / itemsPerPage)
+    const totalPages = Math.max(1, Math.ceil(sorted.length / itemsPerPage));
     const currentItems = sorted.slice((page - 1) * itemsPerPage, page * itemsPerPage)
     
     //Available region based on selected country and species filters
@@ -170,160 +180,429 @@ export default function BeanSearch() {
             .filter(Boolean)
     )].sort()
 
+    const clearAll = () => {
+    setQuery('');
+    setFilters({
+        country: [],
+        region: [],
+        aroma: [],
+        species: [],
+        sortBy: '',
+        minScore: 0,
+        minFlavor: 0,
+        minAcidity: 0,
+        minSweetness: 0,
+    });
+    setPage(1);
+};
+
+const toggleArrayFilter = (key, value) => {
+    const updated = filters[key].includes(value)
+        ? filters[key].filter((x) => x !== value)
+        : [...filters[key], value];
+
+    setFilters({ ...filters, [key]: updated });
+};
+
     // frontend design
     return (
-        <div style={{padding:"10px"}}>
-            <h1>Bean Search</h1>
-
-            {/* search bar and filters */}
-            <div style={{backgroundColor: "#000000", padding: "12px", display: "flex", gap: "10px", alignItems: "center"}}>
-                    {/* search bar */}
-                    <input  
-                    type="text"
-                    placeholder="Search"
-                    value={query}
-                    onChange={(e)=>setQuery(e.target.value)}
-                    style={{padding: "2px", width: "500px"}}
-                />
-                <button onClick={() => setShowFilters(!showFilters)} style={{color: "white", backgroundColor: "transparent", border: "1px solid white", padding: "5px 10px", cursor: "pointer"}}>
-                    {showFilters ? "Close Filters" : "Filter"}
-                </button>
-                <button onClick={() => {setQuery(""); setFilters({country: [], region: [], aroma: [], species: [], sortBy: '', minScore: 0, minFlavor: 0, minAcidity: 0, minSweetness: 0})}}>
-                    Clear Search
-                </button>
+        <section className="container-xl py-4">
+            <div className="text-center mb-4">
+                <h1 className="display-5 fw-bold">Bean Search</h1>
+                <p className="lead text-muted">
+                    Explore beans by origin, species, etc.
+                </p>
             </div>
 
-            {/* Side filter panel */}
-            {showFilters && (
-                //Side panel style
-                <div style={{position: "fixed", right: 0, top: 0, height: "100%", width: "350px", backgroundColor: "#ffffff", boxShadow: "-2px 0 5px #0000004d", padding: "20px", overflowY: "auto", zIndex: 1000}}>
-                    <h3>Filters</h3>
+            <div className="card shadow-sm border-0 mb-4">
+                <div className="card-body">
+                    <div className="row g-3 align-items-end">
+                        <div className="col-lg-8">
+                            <label className="form-label">Search beans</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Search by country, region, variety"
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                            />
+                        </div>
 
-                    {/* Sort */}
-                    <label><b>Sort by Country:</b></label>
-                    <select value={filters.sortBy} onChange={(e) => setFilters({...filters, sortBy: e.target.value})} style={{width: "100%", marginBottom: "20px"}}>
-                        <option value="">Sort Filter</option>
-                        <option value="az">A to Z</option>
-                        <option value="za">Z to A</option>
-                    </select>
+                        <div className="col-sm-6 col-lg-2">
+                            <button
+                                type="button"
+                                className="btn btn-outline-secondary w-100"
+                                onClick={() => setShowFilters(true)}
+                            >
+                                Filters
+                            </button>
+                        </div>
 
-                    {/* Country */}
-                    <label><b>Country:</b></label>
-                    <div style={{maxHeight: "150px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
-                        {availableCountries.map((c, i) => (
-                            <div key={i}
-                                onClick={() => {
-                                    const updated = filters.country.includes(c)
-                                        ? filters.country.filter(x => x !== c)
-                                        : [...filters.country, c]
-                                    setFilters({...filters, country: updated})
-                                }}
-                                //Inside style of country filter options
-                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.country.includes(c) ? "#1a73e8" : "#ffffff", color: filters.country.includes(c) ? "white" : "black"}}>
-                                {filters.country.includes(c) ? "✓ " : "☐ "}{c}
-                            </div>
-                        ))}
+                        <div className="col-sm-6 col-lg-2">
+                            <button
+                                type="button"
+                                className="btn btn-outline-danger w-100"
+                                onClick={clearAll}
+                            >
+                                Clear
+                            </button>
+                        </div>
                     </div>
+                </div>
+            </div>
 
-                    {/* Region */}
-                    <label><b>Region:</b></label>
-                    <div style={{maxHeight: "150px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
-                        {availableRegions.map((r, i) => (
-                            <div key={i}
-                                onClick={() => {
-                                    const updated = filters.region.includes(r)
-                                        ? filters.region.filter(x => x !== r)
-                                        : [...filters.region, r]
-                                    setFilters({...filters, region: updated})
-                                }}
-                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.region.includes(r) ? "#1a73e8" : "white", color: filters.region.includes(r) ? "white" : "black"}}>
-                                {filters.region.includes(r) ? "✓ " : "☐ "}{r}
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <h4 className="mb-0">Results</h4>
+                <span className="text-muted">
+                    {sorted.length} bean{sorted.length !== 1 ? 's' : ''} found
+                </span>
+            </div>
+
+            {currentItems.length === 0 ? (
+                <div className="alert alert-warning">
+                    No beans matched your search and filter settings.
+                </div>
+            ) : (
+                <div className="row g-4">
+                    {currentItems.map((bean, index) => (
+                        <div className="col-md-6 col-xl-4" key={index}>
+                            <div className="card shadow-sm border-0 h-100">
+                                <div className="card-body d-flex flex-column">
+                                    <div className="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 className="card-title mb-1">
+                                                {bean['Country.of.Origin'] || 'Unknown Country'}
+                                            </h5>
+                                            <p className="text-muted mb-0">
+                                                {bean['Region'] || 'Unknown Region'}
+                                            </p>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            className={`btn btn-sm ${
+                                                isFavorited(bean)
+                                                    ? 'btn-warning'
+                                                    : 'btn-outline-secondary'
+                                            }`}
+                                            onClick={() => toggleFavorite(bean)}
+                                            title={
+                                                isFavorited(bean)
+                                                    ? 'Remove from favorites'
+                                                    : 'Add to favorites'
+                                            }
+                                        >
+                                            ★
+                                        </button>
+                                    </div>
+
+                                    <div className="mb-3">
+                                        <span className="badge text-bg-light me-2">
+                                            {bean['Species'] || 'Unknown Species'}
+                                        </span>
+                                        {bean['Variety'] && (
+                                            <span className="badge text-bg-secondary">
+                                                {bean['Variety']}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className="small">
+                                        <p className="mb-2">
+                                            <strong>Aroma:</strong> {bean['Aroma'] || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Flavor:</strong> {bean['Flavor'] || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Acidity:</strong> {bean['Acidity'] || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Sweetness:</strong> {bean['Sweetness'] || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Aftertaste:</strong> {bean['Aftertaste'] || 'N/A'}
+                                        </p>
+                                        <p className="mb-0">
+                                            <strong>Total Cup Points:</strong>{' '}
+                                            {bean['Total.Cup.Points'] || 'N/A'}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                        ))}
-                    </div>
-
-                    {/* Species */}
-                    <label><b>Species:</b></label>
-                    <div style={{maxHeight: "100px", overflowY: "auto", border: "2px solid #431e1e", marginBottom: "15px"}}>
-                        {availableSpecies.map((s, i) => (
-                            <div key={i}
-                                onClick={() => {
-                                    const updated = filters.species.includes(s)
-                                        ? filters.species.filter(x => x !== s)
-                                        : [...filters.species, s]
-                                    setFilters({...filters, species: updated})
-                                }}
-                                style={{padding: "4px 8px", cursor: "pointer", backgroundColor: filters.species.includes(s) ? "#1a73e8" : "white", color: filters.species.includes(s) ? "white" : "black"}}>
-                                {filters.species.includes(s) ? "✓ " : "☐ "}{s}
-                            </div>
-                        ))}
-                    </div>
-
-                    <button onClick={() => setShowFilters(false)} style={{width: "100%", padding: "5px", marginTop: "20px"}}>
-                        Close
-                    </button>
+                        </div>
+                    ))}
                 </div>
             )}
 
-            {/* display search results */}
-
-            {/* display search results */}
-            {currentItems.map((bean, index)=>(
-                <div key={index} style={{border:"2px solid black", margin:"15px", padding:"15px"}}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <b></b>
-                        <span
-                            onClick={() => toggleFavorite(bean)}
-                            title={isFavorited(bean) ? "Remove from favorites" : "Add to favorites"}
-                            style={{
-                                cursor: "pointer",
-                                fontSize: "20px",
-                                color: isFavorited(bean) ? "#f5a623" : "#ccc"
-                            }}
+            <nav className="mt-4">
+                <ul className="pagination justify-content-center flex-wrap">
+                    <li className={`page-item ${page <= 1 ? 'disabled' : ''}`}>
+                        <button
+                            className="page-link"
+                            onClick={() => setPage(page - 1)}
+                            disabled={page <= 1}
                         >
-                            ★
-                        </span>
+                            Previous
+                        </button>
+                    </li>
+
+                    {page - 2 > 0 && (
+                        <li className="page-item">
+                            <button className="page-link" onClick={() => setPage(page - 2)}>
+                                {page - 2}
+                            </button>
+                        </li>
+                    )}
+
+                    {page - 1 > 0 && (
+                        <li className="page-item">
+                            <button className="page-link" onClick={() => setPage(page - 1)}>
+                                {page - 1}
+                            </button>
+                        </li>
+                    )}
+
+                    <li className="page-item active">
+                        <span className="page-link">{page}</span>
+                    </li>
+
+                    {page + 1 <= totalPages && (
+                        <li className="page-item">
+                            <button className="page-link" onClick={() => setPage(page + 1)}>
+                                {page + 1}
+                            </button>
+                        </li>
+                    )}
+
+                    {page + 2 <= totalPages && (
+                        <li className="page-item">
+                            <button className="page-link" onClick={() => setPage(page + 2)}>
+                                {page + 2}
+                            </button>
+                        </li>
+                    )}
+
+                    <li className={`page-item ${page >= totalPages ? 'disabled' : ''}`}>
+                        <button
+                            className="page-link"
+                            onClick={() => setPage(page + 1)}
+                            disabled={page >= totalPages}
+                        >
+                            Next
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+
+            {showFilters && (
+                <>
+                    <div
+                        className="offcanvas offcanvas-end show"
+                        tabIndex="-1"
+                        style={{ visibility: 'visible', width: '360px' }}
+                    >
+                        <div className="offcanvas-header">
+                            <h5 className="offcanvas-title">Filters</h5>
+                            <button
+                                type="button"
+                                className="btn-close"
+                                onClick={() => setShowFilters(false)}
+                            ></button>
+                        </div>
+
+                        <div className="offcanvas-body">
+                            <div className="mb-4">
+                                <label className="form-label fw-semibold">
+                                    Sort by Country
+                                </label>
+                                <select
+                                    className="form-select"
+                                    value={filters.sortBy}
+                                    onChange={(e) =>
+                                        setFilters({ ...filters, sortBy: e.target.value })
+                                    }
+                                >
+                                    <option value="">Sort Filter</option>
+                                    <option value="az">A to Z</option>
+                                    <option value="za">Z to A</option>
+                                </select>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="form-label fw-semibold">Country</label>
+                                <div className="border rounded p-2" style={{ maxHeight: '160px', overflowY: 'auto' }}>
+                                    {availableCountries.map((c, i) => (
+                                        <div className="form-check" key={i}>
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                id={`country-${i}`}
+                                                checked={filters.country.includes(c)}
+                                                onChange={() => toggleArrayFilter('country', c)}
+                                            />
+                                            <label
+                                                className="form-check-label"
+                                                htmlFor={`country-${i}`}
+                                            >
+                                                {c}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="form-label fw-semibold">Region</label>
+                                <div className="border rounded p-2" style={{ maxHeight: '160px', overflowY: 'auto' }}>
+                                    {availableRegions.map((r, i) => (
+                                        <div className="form-check" key={i}>
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                id={`region-${i}`}
+                                                checked={filters.region.includes(r)}
+                                                onChange={() => toggleArrayFilter('region', r)}
+                                            />
+                                            <label
+                                                className="form-check-label"
+                                                htmlFor={`region-${i}`}
+                                            >
+                                                {r}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="form-label fw-semibold">Species</label>
+                                <div className="border rounded p-2" style={{ maxHeight: '120px', overflowY: 'auto' }}>
+                                    {availableSpecies.map((s, i) => (
+                                        <div className="form-check" key={i}>
+                                            <input
+                                                className="form-check-input"
+                                                type="checkbox"
+                                                id={`species-${i}`}
+                                                checked={filters.species.includes(s)}
+                                                onChange={() => toggleArrayFilter('species', s)}
+                                            />
+                                            <label
+                                                className="form-check-label"
+                                                htmlFor={`species-${i}`}
+                                            >
+                                                {s}
+                                            </label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="row g-3">
+                                <div className="col-6">
+                                    <label className="form-label fw-semibold">Min Score</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        value={filters.minScore}
+                                        onChange={(e) =>
+                                            setFilters({
+                                                ...filters,
+                                                minScore: Number(e.target.value) || 0,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="col-6">
+                                    <label className="form-label fw-semibold">Min Flavor</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        value={filters.minFlavor}
+                                        onChange={(e) =>
+                                            setFilters({
+                                                ...filters,
+                                                minFlavor: Number(e.target.value) || 0,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="col-6">
+                                    <label className="form-label fw-semibold">Min Acidity</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        value={filters.minAcidity}
+                                        onChange={(e) =>
+                                            setFilters({
+                                                ...filters,
+                                                minAcidity: Number(e.target.value) || 0,
+                                            })
+                                        }
+                                    />
+                                </div>
+
+                                <div className="col-6">
+                                    <label className="form-label fw-semibold">Min Sweetness</label>
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        value={filters.minSweetness}
+                                        onChange={(e) =>
+                                            setFilters({
+                                                ...filters,
+                                                minSweetness: Number(e.target.value) || 0,
+                                            })
+                                        }
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="d-grid gap-2 mt-4">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-danger"
+                                    onClick={clearAll}
+                                >
+                                    Clear All
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => setShowFilters(false)}
+                                >
+                                    Done
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <p><b>Country:</b> {bean["Country.of.Origin"]}</p>
-                    <p><b>Region:</b> {bean["Region"]}</p>
-                    <p><b>Species:</b> {bean["Species"]}</p>
-                    <p><b>Aroma:</b> {bean["Aroma"]}</p>
-                    <p><b>Flavor:</b> {bean["Flavor"]}</p>
-                    <p><b>Acidity:</b> {bean["Acidity"]}</p>
-                    <p><b>Sweetness:</b> {bean["Sweetness"]}</p>
-                    <p><b>Aftertaste:</b> {bean["Aftertaste"]}</p>
-                </div>
-            ))}
 
-
-            {/* Bottom of page numbers (pagination) */}
-            <div style={{display: "flex", gap: "10px", padding: "12px", justifyContent: "center"}}>
-                {/*Left arrow button*/}
-                <button onClick={() => setPage(page - 1)} disabled={page <= 1}>&lt;</button>
-               
-                {totalPages - page < 1 && page - 4 > 0 && <button onClick={() => setPage(page - 4)}>{page - 4}</button>}
-                {totalPages - page < 2 && page - 3 > 0 && <button onClick={() => setPage(page - 3)}>{page - 3}</button>}
-                
-                {page - 2 > 0 && <button onClick={() => setPage(page - 2)}>{page - 2}</button>}
-                {page - 1 > 0 && <button onClick={() => setPage(page - 1)}>{page - 1}</button>}
-
-                 {/*Current page button*/}
-                <button style={{fontWeight: "bold", border: "1.5px solid black", width: "30px", height: "35px"}}>{page}</button>
-               
-                {page + 1 <= totalPages && <button onClick={() => setPage(page + 1)}>{page + 1}</button>}
-                {page + 2 <= totalPages && <button onClick={() => setPage(page + 2)}>{page + 2}</button>}
-                {page + 3 <= totalPages && page < 3 && <button onClick={() => setPage(page + 3)}>{page + 3}</button>}
-                {page + 4 <= totalPages && page < 2 && <button onClick={() => setPage(page + 4)}>{page + 4}</button>}
-                
-                 {/*Right arrow button*/}
-                <button onClick={() => setPage(page + 1)} disabled={page >= totalPages}>&gt;</button>
-            </div>
+                    <div
+                        className="offcanvas-backdrop fade show"
+                        onClick={() => setShowFilters(false)}
+                    ></div>
+                </>
+            )}
 
             <Popup isOpen={isOpen} onClose={() => setIsOpen(false)}>
-                <p>Please sign up or log in to save favorites.</p>
-                <button onClick={() => navigate('/signup')}>Sign Up</button>
-                <button style={{margin: "20px"}} onClick={() => navigate('/login')}>Log In</button>
+                <p className="mb-4">Please sign up or log in to save favorites.</p>
+                <div className="d-flex justify-content-center gap-3">
+                    <button
+                        className="btn btn-primary"
+                        onClick={() => navigate('/signup')}
+                    >
+                        Sign Up
+                    </button>
+                    <button
+                        className="btn btn-outline-secondary"
+                        onClick={() => navigate('/login')}
+                    >
+                        Log In
+                    </button>
+                </div>
             </Popup>
-        </div>
-    )
+        </section>
+    );
 }
