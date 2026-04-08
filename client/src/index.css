@@ -2,6 +2,12 @@
 
 body {
     font-family: 'Nunito', sans-serif;
+    background-color: #ebe5da;
+    margin: 0;
+}
+
+html {
+    background-color: #ebe5da;
 }
 
 h1 {

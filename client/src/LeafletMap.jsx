@@ -68,7 +68,7 @@ function LeafletMap() {
                         >
                             <Popup maxWidth={350}>
                                 <div style={{ maxWidth: '330px' }}>
-                                    <h3 style={{ margin: '0 0 10px 0', color: '#8B4513', borderBottom: '2px solid #8B4513', paddingBottom: '5px' }}>
+                                    <h3 style={{ margin: '0 0 10px 0', color: '#1e000e', borderBottom: '2px solid #1e000e', paddingBottom: '5px' }}>
                                         {country.name} 
 
                                     </h3>

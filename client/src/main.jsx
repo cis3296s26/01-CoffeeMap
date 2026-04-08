@@ -37,7 +37,7 @@ function HomePage() {
             <div className="card shadow-sm border-0 mb-4">
                 <div style={{
                     height: '4px',
-                    backgroundColor: '#8B4513',
+                    backgroundColor: '#1e000e',
                     borderTopLeftRadius: '0.5rem',
                     borderTopRightRadius: '0.5rem'
                 }} />
@@ -46,7 +46,7 @@ function HomePage() {
                         <h4 className="card-title mb-3">
                         Interactive Coffee Map
                         </h4>
-                        <span className="badge" style={{ backgroundColor: '#8B4513' }}>
+                        <span className="badge" style={{ backgroundColor: '#1e000e' }}>
                             CQI Data
                         </span>
                     </div>
