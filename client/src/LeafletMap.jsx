@@ -99,7 +99,7 @@ function LeafletMap() {
                                         onClick={() => navigate(`/country/${country.name}`)}
                                         className="btn btn-sm btn-dark mt-2"
                                         style={{
-                                            backgroundColor: '#8B4513',
+                                            backgroundColor: '#1e000e',
                                             color: 'white',
                                             border: 'none'
                                         }}
