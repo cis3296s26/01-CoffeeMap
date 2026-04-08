@@ -43,7 +43,7 @@ export default function CountryDetail() {
             <p><b>Varieties:</b> {country.varieties.join(', ')}</p>
             <p><b>Total Samples:</b> {country.sampleCount}</p>
 
-            {/* Charts */}
+            {/* Graph - Bar Charts */}
             <h2>Flavor Profile</h2>
             <BarChart width={500} height={300} data={chartData}>
                 <XAxis dataKey="name" />
