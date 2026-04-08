@@ -5,23 +5,25 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
 
 export default function CountryDetail() {
     const { countryName } = useParams()
-    const { countryData } = useCoffeeData()
+    const { loading, error, countryData } = useCoffeeData()
     const navigate = useNavigate()
-    const countryInfo = coffeeCountries.countries.find(c => c.name === countryName)
 
+    const decodeName = decodeURIComponent(countryName)
+    const countryInfo = coffeeCountries.countries.find(c => c.name === countryName)
     const country = countryData.find(c => c.name === countryName)
 
+    if (loading) return <p>Loading data...</p>
+    if (error) return <p>Error</p>
     if (!country) return <p>Country not found</p>
 
     const chartData = [
-        { name: 'Aroma', value: country.avgAroma },
-        { name: 'Flavor', value: country.avgFlavor },
-        { name: 'Acidity', value: country.avgAcidity },
-        { name: 'Sweetness', value: country.avgSweetness },
-        { name: 'Aftertaste', value: country.avgAftertaste },
+        { name: 'Aroma', value: Number(country.avgAroma)},
+        { name: 'Flavor', value: Number(country.avgFlavor)},
+        { name: 'Acidity', value: Number(country.avgAcidity) },
+        { name: 'Sweetness', value: Number(country.avgSweetness) },
+        { name: 'Aftertaste', value: Number(country.avgAftertaste) },
     ]
-    console.log("country data:", country)
-    console.log("chartData:", chartData)
+
     return (
         <div style={{padding: "20px"}}>
             <h1>{countryName} Coffee</h1>
