@@ -45,6 +45,7 @@ We recommend creating a .gitignore file for the installations.
 For Windows:
 Install dependencies npm install
 ```
+cd client
 npm install
 npm install react-router-dom
 npm install firebase
