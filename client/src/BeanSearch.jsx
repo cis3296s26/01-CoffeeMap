@@ -31,7 +31,7 @@ export default function BeanSearch() {
 
     // extract data 
     useEffect(() => {
-        const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/master/data/arabica_data_cleaned.csv"
+        const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/arabica_data_cleaned.csv"
         const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
 
         Papa.parse(arabica_csv, {
