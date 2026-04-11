@@ -13,6 +13,16 @@ export function AuthProvider({children}) {
     const [user, setUser] = useState(null);
     const [userData, setUserData] = useState(null);
 
+    //refreshes user data without needing to log out
+    const refreshUserData = async () => {
+        if (user) {
+            const docSnap = await getDoc(doc(db, "users", user.uid));
+            if(docSnap.exists()){
+                setUserData(docSnap.data());
+            }
+        }
+    };
+
     useEffect(() => {
         const changeState = onAuthStateChanged(auth, async(user) => {
             setUser(user);
@@ -28,7 +38,7 @@ export function AuthProvider({children}) {
 
     return (
         //!!user converts to boolean (default false)
-        <AuthContext.Provider value={{isAuthenticated: !!user, user, userData}}>
+        <AuthContext.Provider value={{isAuthenticated: !!user, user, userData, refreshUserData}}>
             {children}
         </AuthContext.Provider>
     );

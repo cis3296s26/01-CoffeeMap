@@ -32,7 +32,7 @@ export default function SignUp() {
     };
 
     return (
-        <section id='signup'>
+        <section id='signup'style={{ padding: '20px',  backgroundColor: '#e8e5da', minHeight: '100vh', boxSizing: 'border-box' , display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
             <h2>Sign Up</h2>
             <p>
                 First Name:{' '}

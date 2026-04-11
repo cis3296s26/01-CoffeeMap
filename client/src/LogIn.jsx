@@ -21,7 +21,7 @@ export default function LogIn(){
     };
 
     return(
-        <section id='login'>
+        <section id='login'style={{ padding: '20px',  backgroundColor: '#e8e5da', minHeight: '100vh', boxSizing: 'border-box' , display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
             <h2>Log In</h2>
             <p>
                 Email:{' '}
