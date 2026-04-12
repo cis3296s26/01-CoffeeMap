@@ -74,7 +74,7 @@ export default function SignUp() {
                                 <input
                                     type='text'
                                     className="form-control"
-                                    value={email}
+                                    value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
