@@ -593,6 +593,7 @@ const toggleArrayFilter = (key, value) => {
                 <p className="mb-4">Please sign up or log in to save favorites.</p>
                 <div className="d-flex justify-content-center gap-3">
                     <button
+                        style={{backgroundColor: "#1e000e"}}
                         className="btn btn-primary"
                         onClick={() => navigate('/signup')}
                     >
