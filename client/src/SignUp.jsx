@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from './firebase';
 import {doc, setDoc} from 'firebase/firestore';
 import {db} from './firebase';
@@ -10,6 +10,9 @@ export default function SignUp() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    
+    // State variable to track password visibility
+    const [showPassword, setShowPassword] = useState(false);
 
     //async and await wait for operation to complete before continuing 
     const handleAccountCreation = async() => {
@@ -71,12 +74,22 @@ export default function SignUp() {
 
                             <div className="mb-4">
                                 <label className="form-label">Password</label>
-                                <input
-                                    type='password'
-                                    className="form-control"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
+                                <div className="input-group">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        className="form-control"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        style={{ borderRight: 'none' }}
+                                    />
+                                    <span 
+                                        className="input-group-text bg-white text-muted" 
+                                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? 'Hide' : 'Show'}
+                                    </span>
+                                </div>
                             </div>
 
                             <button 
