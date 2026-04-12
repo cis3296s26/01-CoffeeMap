@@ -12,6 +12,10 @@ export default function EditAccount(){
     const [currentPassword, setCurrentPassword] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    
+    // Create separate state variables for each password field
+    const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
 
     const handleEditAccount = async() =>{
         try {
@@ -42,7 +46,7 @@ export default function EditAccount(){
 
     if (!userData) return <p>Loading...</p>;
 
-return (
+    return (
         <section className="container py-5" style={{ minHeight: '100vh', backgroundColor: '#e8e5da' }}>
             <div className="row justify-content-center">
                 <div className="col-md-6 col-lg-5">
@@ -82,22 +86,42 @@ return (
 
                             <div className="mb-3">
                                 <label className="form-label">Current Password</label>
-                                <input
-                                    type='password'
-                                    className="form-control"
-                                    value={currentPassword}
-                                    onChange={(e) => setCurrentPassword(e.target.value)}
-                                />
+                                <div className="input-group">
+                                    <input
+                                        type={showCurrentPassword ? 'text' : 'password'}
+                                        className="form-control"
+                                        value={currentPassword}
+                                        onChange={(e) => setCurrentPassword(e.target.value)}
+                                        style={{ borderRight: 'none' }}
+                                    />
+                                    <span 
+                                        className="input-group-text bg-white text-muted" 
+                                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                                        onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                                    >
+                                        {showCurrentPassword ? 'Hide' : 'Show'}
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="mb-4">
                                 <label className="form-label">New Password</label>
-                                <input
-                                    type='password'
-                                    className="form-control"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
+                                <div className="input-group">
+                                    <input
+                                        type={showNewPassword ? 'text' : 'password'}
+                                        className="form-control"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        style={{ borderRight: 'none' }}
+                                    />
+                                    <span 
+                                        className="input-group-text bg-white text-muted" 
+                                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                                        onClick={() => setShowNewPassword(!showNewPassword)}
+                                    >
+                                        {showNewPassword ? 'Hide' : 'Show'}
+                                    </span>
+                                </div>
                             </div>
 
                             <button
