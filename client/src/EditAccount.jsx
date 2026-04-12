@@ -42,51 +42,81 @@ export default function EditAccount(){
 
     if (!userData) return <p>Loading...</p>;
 
-    return(
-        <section id='editaccount'style={{ padding: '20px',  backgroundColor: '#e8e5da', minHeight: '100vh', boxSizing: 'border-box' , display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
-            <h2>Edit Account</h2>
-            <p>
-                First Name:{' '}
-                <input
-                    type='text'
-                    defaultValue={userData.firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                />
-            </p>
-            <p>
-                Last Name:{' '}
-                <input
-                    type='text'
-                    defaultValue={userData.lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                />
-            </p>
-            <p>
-                Email:{' '}
-                <input
-                    type='text'
-                    defaultValue={userData.email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </p>
-            <p>
-                Current Password:{' '}
-                <input
-                    type='password'
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-            </p>
-            <p>
-                New Password:{' '}
-                <input
-                    type='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </p>
-            <button onClick={handleEditAccount}>Save</button>
-            {error && <p>{error}</p>}
+return (
+        <section className="container py-5" style={{ minHeight: '100vh', backgroundColor: '#e8e5da' }}>
+            <div className="row justify-content-center">
+                <div className="col-md-6 col-lg-5">
+                    <div className="card shadow border-0">
+                        <div className="card-body p-4 p-md-5">
+                            <h2 className="text-center mb-4">Edit Account</h2>
+
+                            <div className="mb-3">
+                                <label className="form-label">First Name</label>
+                                <input
+                                    type='text'
+                                    className="form-control"
+                                    defaultValue={userData.firstName}
+                                    onChange={(e) => setFirstName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Last Name</label>
+                                <input
+                                    type='text'
+                                    className="form-control"
+                                    defaultValue={userData.lastName}
+                                    onChange={(e) => setLastName(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Email</label>
+                                <input
+                                    type='email'
+                                    className="form-control"
+                                    defaultValue={userData.email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Current Password</label>
+                                <input
+                                    type='password'
+                                    className="form-control"
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="mb-4">
+                                <label className="form-label">New Password</label>
+                                <input
+                                    type='password'
+                                    className="form-control"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+
+                            <button
+                                className="btn w-100 text-white shadow-sm"
+                                style={{ backgroundColor: '#1e000e' }}
+                                onClick={handleEditAccount}
+                            >
+                                Save
+                            </button>
+
+                            {error && (
+                                <div className="alert alert-danger mt-3 text-center py-2 small">
+                                    {error}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
     );
 }
