@@ -32,7 +32,7 @@ export default function SignUp() {
     };
 
     return (
-        <section className="container mt-5" style={{ minHeight: '100vh', backgroundColor: '#e8e5da' }}>
+        <section className="container py-5" style={{ minHeight: '100vh', backgroundColor: '#e8e5da' }}>
             <div className="row justify-content-center">
                 <div className="col-md-6 col-lg-5">
                     <div className="card shadow border-0">
@@ -62,35 +62,41 @@ export default function SignUp() {
                             <div className="mb-3">
                                 <label className="form-label">Email</label>
                                 <input
-                                    type='text'
+                                    type='email'
                                     className="form-control"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
 
-                            <div className="mb-3">
+                            <div className="mb-4">
                                 <label className="form-label">Password</label>
                                 <input
-                                    type='text'
+                                    type='password'
                                     className="form-control"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
 
-                            <button className="ntn w-100 text-white shadow-sm" 
+                            <button 
+                                className="btn w-100 text-white shadow-sm" 
                                 style={{backgroundColor: "#1e000e"}} 
-                                onClick={handleAccountCreation}>
-                                    Create Account
-                                </button>
+                                onClick={handleAccountCreation}
+                            >
+                                Create Account
+                            </button>
+
+                            {error && (
+                                <div className="alert alert-danger mt-3 text-center py-2 small">
+                                    {error}
+                                </div>
+                            )}
 
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-    
-    )
-
+    );
 }
