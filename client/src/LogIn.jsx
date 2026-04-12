@@ -20,27 +20,49 @@ export default function LogIn(){
         }
     };
 
-    return(
-        <section id='login'style={{ padding: '20px',  backgroundColor: '#e8e5da', minHeight: '100vh', boxSizing: 'border-box' , display:'flex', flexDirection:'column', alignItems:'center', textAlign:'center'}}>
-            <h2>Log In</h2>
-            <p>
-                Email:{' '}
-                <input
-                    type='text'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-            </p>
-            <p>
-                Password:{' '}
-                <input
-                    type='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </p>
-            <button onClick={handleLogin}>Log in</button>
-            {error && <p>{error}</p>}
+
+    return (
+        <section className="container mt-5" style={{ minHeight: '100vh', backgroundColor: '#e8e5da' }}>
+            <div className="row justify-content-center">
+                <div className="col-md-6 col-lg-5">
+                    <div className="card shadow border-0">
+                        <div className="card-body p-4 p-md-5">
+                            <h2 className="text-center mb-4">Log In</h2>
+            
+
+                            <div className="mb-3">
+                                <label className="form-label">Email</label>
+                                <input
+                                    type='text'
+                                    className="form-control"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+
+                            <div className="mb-3">
+                                <label className="form-label">Password</label>
+                                <input
+                                    type='text'
+                                    className="form-control"
+                                    value={email}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                />
+                            </div>
+
+                            <button className="ntn w-100 text-white shadow-sm" 
+                                style={{backgroundColor: "#1e000e"}} 
+                                onClick={handleLogin}>
+                                    Log In
+                                </button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+    
     )
+
+
 }
