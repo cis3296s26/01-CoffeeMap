@@ -151,15 +151,11 @@ export default function BeanSearch() {
     });
 
     // sort cqi results
-    const sortedBeans = [...filteredBeans].sort((a, b) => {
-        if (filters.sortBy === "az") {
-            return a["Country.of.Origin"].localeCompare(b["Country.of.Origin"])
-        }
-        if (filters.sortBy === "za") {
-            return b["Country.of.Origin"].localeCompared(a["Country.of.Origin"])
-        }
+    const sortedBeans = [...filteredBeans].sort((a,b) => {
+        if(filters.sortBy === "az") return a["Country.of.Origin"].localeCompare(b["Country.of.Origin"])
+        if(filters.sortBy === "za") return b["Country.of.Origin"].localeCompare(a["Country.of.Origin"])
         return 0
-    })
+    })   
 
     // search reviews dataset
     const filteredReviews = reviews.filter((review) => {
@@ -174,12 +170,8 @@ export default function BeanSearch() {
         )
     })
 
-    //sort function
-    const sorted = [...filtered].sort((a,b) => {
-        if(filters.sortBy === "az") return a["Country.of.Origin"].localeCompare(b["Country.of.Origin"])
-        if(filters.sortBy === "za") return b["Country.of.Origin"].localeCompare(a["Country.of.Origin"])
-        return 0
-    })    
+    //sort function 
+    const useResults = dataSource === 'cqi' ? sortedBeans : filteredReviews
     const totalPages = Math.max(1, Math.ceil(sorted.length / itemsPerPage));
     const currentItems = sorted.slice((page - 1) * itemsPerPage, page * itemsPerPage)
     
