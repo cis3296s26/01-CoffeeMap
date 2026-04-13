@@ -6,6 +6,21 @@ import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
 import { useNavigate } from 'react-router-dom'
 import { useCoffeeData2 } from './useCoffeeData2'
 
+
+
+//Filter function (moved out of BeanSearch for testing purposes)
+export const applyFilters = (bean, filters) => {
+    const matchCountry = filters.country.length === 0 || filters.country.includes(bean["Country.of.Origin"])
+    const matchRegion = filters.region.length === 0 || filters.region.includes(bean["Region"])
+    const matchAroma = filters.aroma.length === 0 || filters.aroma.includes(bean["Aroma"])
+    const matchSpecies = filters.species.length === 0 || filters.species.includes(bean["Species"])
+    const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
+    const matchFlavor = !filters.minFlavor || parseFloat(bean["Flavor"]) >= parseFloat(filters.minFlavor)
+    const matchAcidity = !filters.minAcidity || parseFloat(bean["Acidity"]) >= parseFloat(filters.minAcidity)
+    const matchSweetness = !filters.minSweetness || parseFloat(bean["Sweetness"]) >= parseFloat(filters.minSweetness)
+    return matchCountry && matchRegion && matchAroma && matchSpecies && matchScore && matchFlavor && matchAcidity && matchSweetness
+}
+
 export default function BeanSearch() {
     // initialize variables
     const [beans, setBeans] = useState([])
@@ -28,7 +43,7 @@ export default function BeanSearch() {
     })
     const { user } = useAuth()
     const [page, setPage] = useState(1)
-    const itemsPerPage = 10
+    const itemsPerPage = 9
     const [favorites, setFavorites] = useState([])
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false);
@@ -147,7 +162,7 @@ export default function BeanSearch() {
             bean["Region"]?.toLowerCase().includes(lowquery) ||
             bean["Variety"]?.toLowerCase().includes(lowquery);
 
-        return matchSearch && applyFilters(bean);
+        return matchSearch && applyFilters(bean, filters);
     });
 
     // sort cqi results
@@ -701,6 +716,7 @@ const toggleArrayFilter = (key, value) => {
                 <p className="mb-4">Please sign up or log in to save favorites.</p>
                 <div className="d-flex justify-content-center gap-3">
                     <button
+                        style={{backgroundColor: "#1e000e"}}
                         className="btn btn-primary"
                         onClick={() => navigate('/signup')}
                     >
