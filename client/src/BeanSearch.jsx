@@ -238,26 +238,53 @@ const toggleArrayFilter = (key, value) => {
             <div className="card shadow-sm border-0 mb-4">
                 <div className="card-body">
                     <div className="row g-3 align-items-end">
-                        <div className="col-lg-8">
+                        <div className="col-lg-6">
                             <label className="form-label">Search beans</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Search by country, region, variety"
+                                placeholder={
+                                    dataSource === 'cqi'
+                                        ? "Search by country, region, variety"
+                                        : "Search by title, roaster, origin, notes"
+                                }
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                             />
                         </div>
 
-                        <div className="col-sm-6 col-lg-2">
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary w-100"
-                                onClick={() => setShowFilters(true)}
-                            >
-                                Filters
-                            </button>
+                        <div className="col-lg-3">
+                            <label className="form-label">Dataset</label>
+                            <div className="btn-group w-100">
+                                <button
+                                    type="button"
+                                    className={`btn ${dataSource === 'cqi' ? 'btn-dark' : 'btn-outline-dark'}`}
+                                    onClick={() => setDataSource('cqi')}
+                                >
+                                    CQI Samples
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`btn ${dataSource === 'reviews' ? 'btn-dark' : 'btn-outline-dark'}`}
+                                    onClick={() => setDataSource('reviews')}
+                                >
+                                    Coffee Reviews
+                                </button>
+                            </div>
                         </div>
+
+                        {dataSource === 'cqi' && (
+                            <div className="col-sm-6 col-lg-2">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary w-100"
+                                    onClick={() => setShowFilters(true)}
+                                >
+                                    Filters
+                                </button>
+                            </div>
+                        )}
+                        
 
                         <div className="col-sm-6 col-lg-2">
                             <button
@@ -275,7 +302,7 @@ const toggleArrayFilter = (key, value) => {
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4 className="mb-0">Results</h4>
                 <span className="text-muted">
-                    {sorted.length} bean{sorted.length !== 1 ? 's' : ''} found
+                    {useResults.length} bean{useResults.length !== 1 ? 's' : ''} found
                 </span>
             </div>
 
@@ -283,7 +310,7 @@ const toggleArrayFilter = (key, value) => {
                 <div className="alert alert-warning">
                     No beans matched your search and filter settings.
                 </div>
-            ) : (
+            ) : dataSource === 'cqi' ? (
                 <div className="row g-4">
                     {currentItems.map((bean, index) => (
                         <div className="col-md-6 col-xl-4" key={index}>
@@ -314,21 +341,6 @@ const toggleArrayFilter = (key, value) => {
                                             }
                                         >
                                             ★
-                                        </button>
-                                    </div>
-
-                                    <div className="btn-group mb-3">
-                                        <button
-                                            className={`btn ${dataSource === 'cqi' ? 'btn-dark' : 'btn-outline-dark'}`}
-                                            onClick={() => setDataSource('cqi')}
-                                        >
-                                            CQI Samples
-                                        </button>
-                                        <button
-                                            className={`btn ${dataSource === 'reviews' ? 'btn-dark' : 'btn-outline-dark'}`}
-                                            onClick={() => setDataSource('reviews')}
-                                        >
-                                            Coffee Reviews
                                         </button>
                                     </div>
 
@@ -364,6 +376,69 @@ const toggleArrayFilter = (key, value) => {
                                             {bean['Total.Cup.Points'] || 'N/A'}
                                         </p>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div className="row g-4">
+                    {currentItems.map((review, index) => (
+                        <div className="col-md-6 col-xl-4" key={review.id || index}>
+                            <div className="card shadow-sm border-0 h-100">
+                                <div className="card-body d-flex flex-column">
+                                    <div className="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 className="card-title mb-1">
+                                                {review.title || 'Untitled Review'}
+                                            </h5>
+                                            <p className="text-muted mb-0">
+                                                {review.roaster || 'Unknown Roaster'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-3">
+                                        {review.country && (
+                                            <span className="badge text-bg-light me-2">
+                                                {review.country}
+                                            </span>
+                                        )}
+                                        {review.roastLevel && (
+                                            <span className="badge text-bg-secondary">
+                                                {review.roastLevel}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className="small">
+                                        <p className="mb-2">
+                                            <strong>Origin:</strong> {review.coffeeOrigin || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Rating:</strong> {review.rating || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Bottom Line:</strong> {review.bottomLine || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Notes:</strong> {review.notes || 'N/A'}
+                                        </p>
+                                        <p className="mb-3">
+                                            <strong>Estimated Price:</strong> {review.estPrice || 'N/A'}
+                                        </p>
+                                    </div>
+
+                                    {review.url && (
+                                        <a
+                                            href={review.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="btn btn-outline-dark mt-auto"
+                                        >
+                                            Read Review
+                                        </a>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -431,7 +506,7 @@ const toggleArrayFilter = (key, value) => {
                 </ul>
             </nav>
 
-            {showFilters && (
+            {showFilters && dataSource === 'cqi' && (
                 <>
                     <div
                         className="offcanvas offcanvas-end show"
