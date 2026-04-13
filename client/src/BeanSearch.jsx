@@ -4,12 +4,16 @@ import Papa from 'papaparse'
 import { useAuth } from './AuthContext'
 import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
 import { useNavigate } from 'react-router-dom'
+import { useCoffeeData2 } from './useCoffeeData2'
 
 export default function BeanSearch() {
     // initialize variables
     const [beans, setBeans] = useState([])
     const [query, setQuery] = useState("")
     const [showFilters, setShowFilters] = useState(false)
+    const [dataSource, setDataSource] = useState('CQI')
+
+    const {reviews} = useCoffeeData2()
 
     const[filters, setFilters] = useState({
         country: [],
@@ -29,7 +33,7 @@ export default function BeanSearch() {
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false);
 
-    // extract data 
+    // extract data from cqi
     useEffect(() => {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/arabica_data_cleaned.csv"
         const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
@@ -74,7 +78,7 @@ export default function BeanSearch() {
 
     useEffect(() => {
         setPage(1);
-    }, [query, filters]);
+    }, [query, filters, dataSource]);
 
     const getBeanId = (bean) => `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_')
 
@@ -122,7 +126,7 @@ export default function BeanSearch() {
         }
     }
 
-    //Filter function
+    //Filter function for cqi
     const applyFilters = (bean) => {
         const matchCountry = filters.country.length === 0 || filters.country.includes(bean["Country.of.Origin"])
         const matchRegion = filters.region.length === 0 || filters.region.includes(bean["Region"])
@@ -135,8 +139,8 @@ export default function BeanSearch() {
         return matchCountry && matchRegion && matchAroma && matchSpecies && matchScore && matchFlavor && matchAcidity && matchSweetness
     }
 
-    // search through database using search bar input
-    const filtered = beans.filter((bean) => {
+    // search through database using search bar input for cqi
+    const filteredBeans = beans.filter((bean) => {
         const lowquery = query.toLowerCase();
         const matchSearch =
             bean["Country.of.Origin"]?.toLowerCase().includes(lowquery) ||
@@ -145,6 +149,30 @@ export default function BeanSearch() {
 
         return matchSearch && applyFilters(bean);
     });
+
+    // sort cqi results
+    const sortedBeans = [...filteredBeans].sort((a, b) => {
+        if (filters.sortBy === "az") {
+            return a["Country.of.Origin"].localeCompare(b["Country.of.Origin"])
+        }
+        if (filters.sortBy === "za") {
+            return b["Country.of.Origin"].localeCompared(a["Country.of.Origin"])
+        }
+        return 0
+    })
+
+    // search reviews dataset
+    const filteredReviews = reviews.filter((review) => {
+        const lowquery = query.toLowerCase()
+
+        return (
+            review.title?.toLowerCase().includes(lowquery) ||
+            review.roaster?.toLowerCase().includes(lowquery) ||
+            review.coffeeOrigin?.toLowerCase().includes(lowquery) ||
+            review.notes?.toLowerCase().includes(lowquery) ||
+            review.roastLevel?.toLowerCase().includes(lowquery)
+        )
+    })
 
     //sort function
     const sorted = [...filtered].sort((a,b) => {
@@ -294,6 +322,21 @@ const toggleArrayFilter = (key, value) => {
                                             }
                                         >
                                             ★
+                                        </button>
+                                    </div>
+
+                                    <div className="btn-group mb-3">
+                                        <button
+                                            className={`btn ${dataSource === 'cqi' ? 'btn-dark' : 'btn-outline-dark'}`}
+                                            onClick={() => setDataSource('cqi')}
+                                        >
+                                            CQI Samples
+                                        </button>
+                                        <button
+                                            className={`btn ${dataSource === 'reviews' ? 'btn-dark' : 'btn-outline-dark'}`}
+                                            onClick={() => setDataSource('reviews')}
+                                        >
+                                            Coffee Reviews
                                         </button>
                                     </div>
 

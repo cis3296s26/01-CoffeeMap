@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import reviews_csv from './src/reviews_feb_2023.csv';
 
-export function useCoffeeData() {
+export function useCoffeeData2() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [countryData, setCountryData] = useState([]);
