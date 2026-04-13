@@ -58,5 +58,11 @@ function extractCountry(origin) {
         'Bolivia', 'Nicaragua', 'Ethiopia', 'Colombia', 'Guatemala', 'Kenya', 'Taiwan', 'Burundi', 'Brazil', 'Peru', 'Honduras', 'Costa Rica', 'Panama', 'Rwanda', 'El Salvador', 'Mexico', 'Indonesia', 'Uganda', 'India', 'Papua New Guinea', 'Tanzania', 'China', 'Thailand', 'Vietnam', 'Haiti', 'Jamaica', 'Yemen', 'Laos', 'Myanmar', 'Ecuador'
     ]
 
-    for (const country of countries) 
+    for (const country of countries) {
+        if (origin.toLowerCase().includes(country.toLowerCase())) {
+            return country
+        }
+    }
+
+    return ''
 }
