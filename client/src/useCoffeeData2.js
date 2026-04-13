@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
-import reviews_csv from './src/reviews_feb_2023.csv';
+import reviews_csv from './reviews_feb_2023.csv?url';
 
 export function useCoffeeData2() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [countryData, setCountryData] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     Papa.parse(reviews_csv, {
@@ -36,33 +36,33 @@ export function useCoffeeData2() {
                     roasterLocation: row.roaster_location || '',
                     url: row.url || '',
                     country: extractCountry(row.coffee_origin),
-                }))
+                }));
 
-                setReviews(cleaned)
-                setLoading(false)
+                setReviews(cleaned);
+                setLoading(false);
             },
             error: (err) => {
                 setError(err.message)
-                setLoading(false)
+                setLoading(false);
             }
-        })
-    }, [])
+        });
+    }, []);
 
   return { reviews, loading, error };
 }
 
 function extractCountry(origin) {
-    if (!origin) return ''
+    if (!origin) return '';
 
     const countries = [
         'Bolivia', 'Nicaragua', 'Ethiopia', 'Colombia', 'Guatemala', 'Kenya', 'Taiwan', 'Burundi', 'Brazil', 'Peru', 'Honduras', 'Costa Rica', 'Panama', 'Rwanda', 'El Salvador', 'Mexico', 'Indonesia', 'Uganda', 'India', 'Papua New Guinea', 'Tanzania', 'China', 'Thailand', 'Vietnam', 'Haiti', 'Jamaica', 'Yemen', 'Laos', 'Myanmar', 'Ecuador'
-    ]
+    ];
 
     for (const country of countries) {
         if (origin.toLowerCase().includes(country.toLowerCase())) {
-            return country
+            return country;
         }
     }
 
-    return ''
+    return '';
 }

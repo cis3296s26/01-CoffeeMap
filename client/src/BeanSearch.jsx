@@ -11,7 +11,7 @@ export default function BeanSearch() {
     const [beans, setBeans] = useState([])
     const [query, setQuery] = useState("")
     const [showFilters, setShowFilters] = useState(false)
-    const [dataSource, setDataSource] = useState('CQI')
+    const [dataSource, setDataSource] = useState('cqi')
 
     const {reviews} = useCoffeeData2()
 
@@ -172,8 +172,8 @@ export default function BeanSearch() {
 
     //sort function 
     const useResults = dataSource === 'cqi' ? sortedBeans : filteredReviews
-    const totalPages = Math.max(1, Math.ceil(sorted.length / itemsPerPage));
-    const currentItems = sorted.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+    const totalPages = Math.max(1, Math.ceil(useResults.length / itemsPerPage));
+    const currentItems = useResults.slice((page - 1) * itemsPerPage, page * itemsPerPage)
     
     //Available region based on selected country and species filters
     const availableRegions = [...new Set(
