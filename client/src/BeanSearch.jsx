@@ -4,6 +4,7 @@ import Papa from 'papaparse'
 import { useAuth } from './AuthContext'
 import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
 import { useNavigate } from 'react-router-dom'
+import { useCoffeeData2 } from './useCoffeeData2'
 
 
 
@@ -25,6 +26,9 @@ export default function BeanSearch() {
     const [beans, setBeans] = useState([])
     const [query, setQuery] = useState("")
     const [showFilters, setShowFilters] = useState(false)
+    const [dataSource, setDataSource] = useState('cqi')
+
+    const {reviews} = useCoffeeData2()
 
     const[filters, setFilters] = useState({
         country: [],
@@ -44,7 +48,7 @@ export default function BeanSearch() {
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false);
 
-    // extract data 
+    // extract data from cqi
     useEffect(() => {
         const arabica_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/arabica_data_cleaned.csv"
         const robusta_csv = "https://raw.githubusercontent.com/jldbc/coffee-quality-database/refs/heads/master/data/robusta_data_cleaned.csv"
@@ -89,7 +93,7 @@ export default function BeanSearch() {
 
     useEffect(() => {
         setPage(1);
-    }, [query, filters]);
+    }, [query, filters, dataSource]);
 
     const getBeanId = (bean) => `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_')
 
@@ -137,8 +141,21 @@ export default function BeanSearch() {
         }
     }
 
-    // search through database using search bar input
-    const filtered = beans.filter((bean) => {
+    //Filter function for cqi
+    const applyFilters = (bean) => {
+        const matchCountry = filters.country.length === 0 || filters.country.includes(bean["Country.of.Origin"])
+        const matchRegion = filters.region.length === 0 || filters.region.includes(bean["Region"])
+        const matchAroma = filters.aroma.length === 0 || filters.aroma.includes(bean["Aroma"])
+        const matchSpecies = filters.species.length === 0 || filters.species.includes(bean["Species"])
+        const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
+        const matchFlavor = !filters.minFlavor || parseFloat(bean["Flavor"]) >= parseFloat(filters.minFlavor)
+        const matchAcidity = !filters.minAcidity || parseFloat(bean["Acidity"]) >= parseFloat(filters.minAcidity)
+        const matchSweetness = !filters.minSweetness || parseFloat(bean["Sweetness"]) >= parseFloat(filters.minSweetness)
+        return matchCountry && matchRegion && matchAroma && matchSpecies && matchScore && matchFlavor && matchAcidity && matchSweetness
+    }
+
+    // search through database using search bar input for cqi
+    const filteredBeans = beans.filter((bean) => {
         const lowquery = query.toLowerCase();
         const matchSearch =
             bean["Country.of.Origin"]?.toLowerCase().includes(lowquery) ||
@@ -148,14 +165,30 @@ export default function BeanSearch() {
         return matchSearch && applyFilters(bean, filters);
     });
 
-    //sort function
-    const sorted = [...filtered].sort((a,b) => {
+    // sort cqi results
+    const sortedBeans = [...filteredBeans].sort((a,b) => {
         if(filters.sortBy === "az") return a["Country.of.Origin"].localeCompare(b["Country.of.Origin"])
         if(filters.sortBy === "za") return b["Country.of.Origin"].localeCompare(a["Country.of.Origin"])
         return 0
-    })    
-    const totalPages = Math.max(1, Math.ceil(sorted.length / itemsPerPage));
-    const currentItems = sorted.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+    })   
+
+    // search reviews dataset
+    const filteredReviews = reviews.filter((review) => {
+        const lowquery = query.toLowerCase()
+
+        return (
+            review.title?.toLowerCase().includes(lowquery) ||
+            review.roaster?.toLowerCase().includes(lowquery) ||
+            review.coffeeOrigin?.toLowerCase().includes(lowquery) ||
+            review.notes?.toLowerCase().includes(lowquery) ||
+            review.roastLevel?.toLowerCase().includes(lowquery)
+        )
+    })
+
+    //sort function 
+    const useResults = dataSource === 'cqi' ? sortedBeans : filteredReviews
+    const totalPages = Math.max(1, Math.ceil(useResults.length / itemsPerPage));
+    const currentItems = useResults.slice((page - 1) * itemsPerPage, page * itemsPerPage)
     
     //Available region based on selected country and species filters
     const availableRegions = [...new Set(
@@ -220,26 +253,53 @@ const toggleArrayFilter = (key, value) => {
             <div className="card shadow-sm border-0 mb-4">
                 <div className="card-body">
                     <div className="row g-3 align-items-end">
-                        <div className="col-lg-8">
+                        <div className="col-lg-6">
                             <label className="form-label">Search beans</label>
                             <input
                                 type="text"
                                 className="form-control"
-                                placeholder="Search by country, region, variety"
+                                placeholder={
+                                    dataSource === 'cqi'
+                                        ? "Search by country, region, variety"
+                                        : "Search by title, roaster, origin, notes"
+                                }
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                             />
                         </div>
 
-                        <div className="col-sm-6 col-lg-2">
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary w-100"
-                                onClick={() => setShowFilters(true)}
-                            >
-                                Filters
-                            </button>
+                        <div className="col-lg-3">
+                            <label className="form-label">Dataset</label>
+                            <div className="btn-group w-100">
+                                <button
+                                    type="button"
+                                    className={`btn ${dataSource === 'cqi' ? 'btn-dark' : 'btn-outline-dark'}`}
+                                    onClick={() => setDataSource('cqi')}
+                                >
+                                    CQI Samples
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`btn ${dataSource === 'reviews' ? 'btn-dark' : 'btn-outline-dark'}`}
+                                    onClick={() => setDataSource('reviews')}
+                                >
+                                    Coffee Reviews
+                                </button>
+                            </div>
                         </div>
+
+                        {dataSource === 'cqi' && (
+                            <div className="col-sm-6 col-lg-2">
+                                <button
+                                    type="button"
+                                    className="btn btn-outline-secondary w-100"
+                                    onClick={() => setShowFilters(true)}
+                                >
+                                    Filters
+                                </button>
+                            </div>
+                        )}
+                        
 
                         <div className="col-sm-6 col-lg-2">
                             <button
@@ -257,7 +317,7 @@ const toggleArrayFilter = (key, value) => {
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4 className="mb-0">Results</h4>
                 <span className="text-muted">
-                    {sorted.length} bean{sorted.length !== 1 ? 's' : ''} found
+                    {useResults.length} bean{useResults.length !== 1 ? 's' : ''} found
                 </span>
             </div>
 
@@ -265,7 +325,7 @@ const toggleArrayFilter = (key, value) => {
                 <div className="alert alert-warning">
                     No beans matched your search and filter settings.
                 </div>
-            ) : (
+            ) : dataSource === 'cqi' ? (
                 <div className="row g-4">
                     {currentItems.map((bean, index) => (
                         <div className="col-md-6 col-xl-4" key={index}>
@@ -336,6 +396,69 @@ const toggleArrayFilter = (key, value) => {
                         </div>
                     ))}
                 </div>
+            ) : (
+                <div className="row g-4">
+                    {currentItems.map((review, index) => (
+                        <div className="col-md-6 col-xl-4" key={review.id || index}>
+                            <div className="card shadow-sm border-0 h-100">
+                                <div className="card-body d-flex flex-column">
+                                    <div className="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h5 className="card-title mb-1">
+                                                {review.title || 'Untitled Review'}
+                                            </h5>
+                                            <p className="text-muted mb-0">
+                                                {review.roaster || 'Unknown Roaster'}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-3">
+                                        {review.country && (
+                                            <span className="badge text-bg-light me-2">
+                                                {review.country}
+                                            </span>
+                                        )}
+                                        {review.roastLevel && (
+                                            <span className="badge text-bg-secondary">
+                                                {review.roastLevel}
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div className="small">
+                                        <p className="mb-2">
+                                            <strong>Origin:</strong> {review.coffeeOrigin || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Rating:</strong> {review.rating || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Bottom Line:</strong> {review.bottomLine || 'N/A'}
+                                        </p>
+                                        <p className="mb-2">
+                                            <strong>Notes:</strong> {review.notes || 'N/A'}
+                                        </p>
+                                        <p className="mb-3">
+                                            <strong>Estimated Price:</strong> {review.estPrice || 'N/A'}
+                                        </p>
+                                    </div>
+
+                                    {review.url && (
+                                        <a
+                                            href={review.url}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="btn btn-outline-dark mt-auto"
+                                        >
+                                            Read Review
+                                        </a>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             )}
 
             <nav className="mt-4">
@@ -398,7 +521,7 @@ const toggleArrayFilter = (key, value) => {
                 </ul>
             </nav>
 
-            {showFilters && (
+            {showFilters && dataSource === 'cqi' && (
                 <>
                     <div
                         className="offcanvas offcanvas-end show"
