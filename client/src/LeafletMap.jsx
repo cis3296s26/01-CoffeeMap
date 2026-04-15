@@ -93,7 +93,6 @@ function LeafletMap() {
                                 >
                                     <h3 style={{ margin: '0 0 10px 0', color: '#1e000e', borderBottom: '2px solid #1e000e', paddingBottom: '5px' }}>
                                         {country.name} 
-
                                     </h3>
                                     <p><strong> Samples:</strong> {country.sampleCount}</p>
                                     
