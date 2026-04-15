@@ -1,18 +1,32 @@
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useCoffeeData } from './useCoffeeData';
+import { useCoffeeData2 } from './useCoffeeData2';
 import { useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { useNavigate } from 'react-router-dom';
 
 function LeafletMap() {
     const { loading, error, countryData } = useCoffeeData();
+    const { reviews, loading: reviewsLoading, error: reviewsError } = useCoffeeData2()
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
 
     const filtered = countryData.filter(country =>
         country.name.toLowerCase().includes(search.toLowerCase())
     );
-    if (loading) {
+
+    const reviewsByCountry = reviews.reduce((acc, review) => {
+        if (!review.country) return acc;
+
+        if (!acc[review.country]) {
+            acc[review.country] = [];
+        }
+
+        acc[review.country].push(review);
+        return acc;
+    }, {});
+
+    if (loading || reviewsLoading) {
         return (
             <div style={{ textAlign: 'center', padding: '50px' }}>
                 <h3>Loading coffee data from CQI database...</h3>
@@ -20,7 +34,7 @@ function LeafletMap() {
         );
     }
 
-    if (error) {
+    if (error || reviewsError) {
         return (
             <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
                 <h3>Error loading data: {error}</h3>
@@ -56,6 +70,10 @@ function LeafletMap() {
                     />
                     
                     {filtered.map((country, index) => (
+                        const countryReviews = reviewsByCountry[country.name] || [];
+                        return (
+                            
+                        )
                         <CircleMarker
                             key={index}
                             center={country.coords}
