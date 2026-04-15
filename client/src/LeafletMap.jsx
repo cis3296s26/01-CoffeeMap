@@ -10,7 +10,10 @@ function LeafletMap() {
     const navigate = useNavigate();
 
     const filtered = countryData.filter(country =>
-        country.name.toLowerCase().includes(search.toLowerCase())
+        country.name.toLowerCase().includes(search.toLowerCase()) &&
+        country.sampleCount > 0 &&
+        country.coords &&
+        country.coords.length === 2
     );
     if (loading) {
         return (
