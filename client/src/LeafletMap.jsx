@@ -84,11 +84,15 @@ function LeafletMap() {
                         >
                             <Popup maxWidth={350}>
                                 <div style={{ maxWidth: '330px' }}>
-                                    <h3 style={{ margin: '0 0 10px 0', color: '#1e000e', borderBottom: '2px solid #1e000e', paddingBottom: '5px' }}>
-                                        {country.name} 
-
-                                    </h3>
-                                    
+                            <Popup maxWidth={350}>
+                                <div
+                                    style={{
+                                        maxWidth: '330px',
+                                        maxHeight: '300px',
+                                        overflowY: 'auto',
+                                        paddingRight: '6px'
+                                    }}
+                                >
                                     <p><strong> Samples:</strong> {country.sampleCount}</p>
                                     
                                     {country.avgScore && (
@@ -112,8 +116,8 @@ function LeafletMap() {
 
                                     {countryReviews.length > 0 && (
                                         <div style={{ marginTop: '12px', borderTop: '1px solid #ccc', paddingTop: '10px'}}>
-                                            <p><strong> Coffee Reviews:</strong>{countryReviews.length}</p>
-                                            <p><strong> Reviewed coffees:</strong></p>
+                                            <p><strong> Coffee Reviews: </strong>{countryReviews.length}</p>
+                                            <p><strong> Reviewed coffees: </strong></p>
                                             <ul style={{ paddingLeft: '18px', marginBottom: '8px'}}>
                                                 {countryReviews.slice(0,3).map((review) => (
                                                     <li key={review.id} style={{ marginBottom: '6px' }}>
