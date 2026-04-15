@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
+import { average } from 'firebase/firestore';
 
 export function useCoffeeData() {
   const [loading, setLoading] = useState(true);
@@ -61,6 +62,16 @@ export function useCoffeeData() {
   }, []);
 
   return { loading, error, countryData };
+}
+
+function firstValidValue(row, keys) {
+  for (const key of keys) {
+    const value = row[key];
+    if (value !== undefined && value !== null && value !== "") {
+      return value;
+    }
+  }
+  return "";
 }
 
 //country coordinates mapping
@@ -126,6 +137,8 @@ function processData(data) {
           Uniformity: [],
           Moisture: [],
           "Cup Cleanliness": [],
+        },
+        defectNumber: {
           Defects: [],
         },
         varieties: new Set(),
@@ -138,38 +151,19 @@ function processData(data) {
     if (!isNaN(score)) countries[country].scores.push(score);
 
     // parse and add flavor metrics
-    const aroma = parseFloat(row.Aroma);
-    if (!isNaN(aroma)) countries[country].aromas.push(aroma);
+    Object.keys(countries[country].metrics).forEach((metricName) => {
+      const value = parseFloat(row[metricName]);
+      if (!isNaN(value)) {
+        countries[country].metrics[metricName].push(value);
+      }
+    });
 
-    const flavor = parseFloat(row.Flavor);
-    if (!isNaN(flavor)) countries[country].flavors.push(flavor);
-
-    const acidity = parseFloat(row.Acidity);
-    if (!isNaN(acidity)) countries[country].acidity.push(acidity);
-
-    const sweetness = parseFloat(row.Sweetness);
-    if (!isNaN(sweetness)) countries[country].sweetness.push(sweetness);
-
-    const aftertaste = parseFloat(row.Aftertaste);
-    if (!isNaN(aftertaste)) countries[country].aftertaste.push(aftertaste);
-
-    const body = parseFloat(row.Body);
-    if (!isNaN(body)) countries[country].body.push(body);
-
-    const balance = parseFloat(row.balance);
-    if (!isNaN(balance)) countries[country].balance.push(balance);
-
-    const uniformity = parseFloat(row.uniformity);
-    if (!isNaN(uniformity)) countries[country].uniformity.push(uniformity);
-
-    const moisture = parseFloat(row.moisture);
-    if (!isNaN(moisture)) countries[country].moisture.push(moisture);
-
-    const cleanliness = parseFloat(row.cleanliness);
-    if (!isNaN(cleanliness)) countries[country].cleanliness.push(cleanliness);
-
-    const defects = parseFloat(row.defects);
-    if (!isNaN(defects)) countries[country].defects.push(defects);
+    Object.keys(countries[country].defectNumber).forEach((metricName) => {
+      const value = parseFloat(row[metricName]);
+      if (!isNaN(value)) {
+        countries[country].defectNumber[metricName].push(value);
+      }
+    });
     
     //track varieties/processing methods
     if (row.Variety) {
@@ -181,7 +175,7 @@ function processData(data) {
     
     countries[country].samples.push(row);
   });
-  
+
   //convert to array and add coordinates
   const countryArray = Object.keys(countries).map(countryName => {
     const country = countries[countryName];
@@ -198,17 +192,24 @@ function processData(data) {
       if (arr.length === 0) return 0;
       return parseFloat((arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(2));
     };
+
+    const averageMetrics = {};
+    Object.entries(country.metrics).forEach(([metricName, values]) => {
+      averageMetrics[`avg${metricName.replace(/\s+/g, "")}`] = calcAvg(values);
+    });
+
+    const averageDefectNumber = {};
+    Object.entries(country.defectNumber).forEach(([metricName, values]) => {
+      averageDefectNumber[`avg${metricName.replace(/\s+/g, "")}`] = calcAvg(values);
+    });
     
     return {
       name: countryName,
-      coords: coords,
-      sampleCount: country.samples.length,
-      avgScore: calcAvg(country.scores),
-      avgAroma: calcAvg(country.aromas),
-      avgFlavor: calcAvg(country.flavors),
-      avgAcidity: calcAvg(country.acidity),
-      avgSweetness: calcAvg(country.sweetness),
-      avgAftertaste: calcAvg(country.aftertaste),
+        coords: coords,
+        sampleCount: country.samples.length,
+        avgScore: calcAvg(country.scores),
+        ...averageMetrics,
+        ...averageDefectNumber,
       varieties: Array.from(country.varieties),
       processingMethods: Array.from(country.processingMethods)
     };
