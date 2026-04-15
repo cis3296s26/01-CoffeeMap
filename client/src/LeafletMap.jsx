@@ -83,8 +83,6 @@ function LeafletMap() {
                             fillOpacity={0.7}
                         >
                             <Popup maxWidth={350}>
-                                <div style={{ maxWidth: '330px' }}>
-                            <Popup maxWidth={350}>
                                 <div
                                     style={{
                                         maxWidth: '330px',
