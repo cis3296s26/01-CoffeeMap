@@ -110,6 +110,10 @@ function LeafletMap() {
                                         </div>
                                     )}
 
+                                    {countryReviews.length > 0 && (
+
+                                    )}
+
                                     {/*Button to navigate to country detail page with more information about the country and its coffee quality data*/}
                                     <button
                                         onClick={() => navigate(`/country/${country.name}`)}
