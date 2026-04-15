@@ -18,7 +18,18 @@ export function useCoffeeData() {
         // compile database using extracted data
         const adatabase = aresults.data.map(bean => ({
           ...bean,
-          Species: "Arabica"
+          Species: "Arabica",
+          Aroma: firstValidValue(bean, ["Aroma"]),
+          Flavor: firstValidValue(bean, ["Flavor"]),
+          Aftertaste: firstValidValue(bean, ["Aftertaste"]),
+          Acidity: firstValidValue(bean, ["Acidity"]),
+          Body: firstValidValue(bean, ["Body"]),
+          Balance: firstValidValue(bean, ["Balance"]),
+          Uniformity: firstValidValue(bean, ["Uniformity"]),
+          "Cup Cleanliness": firstValidValue(bean, ["Clean.Cup"]),
+          Sweetness: firstValidValue(bean, ["Sweetness"]),
+          Moisture: firstValidValue(bean, ["Moisture"]),
+          Defects: sumDefects(bean),
         }));
         Papa.parse(robusta_csv, {
           download: true,
@@ -28,18 +39,17 @@ export function useCoffeeData() {
             const rdatabase = rresults.data.map(bean => ({
               ...bean,
               Species: "Robusta",
-
-              Acidity: firstValidValue(bean, ["Acidity", "Salt...Acid"]),
-              Sweetness: firstValidValue(bean, ["Sweetness", "Bitter...Sweet"]),
-              Aroma: firstValidValue(bean, ["Aroma", "Fragrance...Aroma"]),
+              Aroma: firstValidValue(bean, ["Fragrance...Aroma"]),
               Flavor: firstValidValue(bean, ["Flavor"]),
               Aftertaste: firstValidValue(bean, ["Aftertaste"]),
-              Body: firstValidValue(bean, ["Body"]),
+              Acidity: firstValidValue(bean, ["Salt...Acid"]),
+              Body: firstValidValue(bean, ["Mouthfeel"]),
               Balance: firstValidValue(bean, ["Balance"]),
-              Uniformity: firstValidValue(bean, ["Uniformity", "Uniform.Cup"]),
-              "Cup Cleanliness": firstValidValue(bean, ["Cup Cleanliness", "Clean.Cup"]),
+              Uniformity: firstValidValue(bean, ["Uniform.Cup"]),
+              "Cup Cleanliness": firstValidValue(bean, ["Clean.Cup"]),
+              Sweetness: firstValidValue(bean, ["Bitter...Sweet"]),
               Moisture: firstValidValue(bean, ["Moisture"]),
-              Defects: firstValidValue(bean, ["Defects", "Category.One.Defects", "Category.Two.Defects"]),
+              Defects: sumDefects(bean),
             }));
 
             const mergedData = [...adatabase, ...rdatabase];
@@ -72,6 +82,12 @@ function firstValidValue(row, keys) {
     }
   }
   return "";
+}
+
+function sumDefects(row) {
+  const cat1 = parseFloat(row["Category.One.Defects"]) || 0;
+  const cat2 = parseFloat(row["Category.Two.Defects"]) || 0;
+  return cat1 + cat2;
 }
 
 //country coordinates mapping

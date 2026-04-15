@@ -26,15 +26,11 @@ export default function CountryDetail() {
         { name: 'Cup Cleanliness', value: Number(country.avgCupCleanliness) },
         { name: 'Sweetness', value: Number(country.avgSweetness) },
         { name: 'Moisture', value: Number(country.avgMoisture) },
-    ];
-
-    const defectData = [
-        { name: 'Defects', value: Number(country.avgDefects) },
-    ];
+    ]
 
     return (
         <div style={{ padding: "20px" }}>
-            <h1>{decodedName} Coffee</h1>
+            <h1>{decodeName} Coffee</h1>
             
             {/* Description */}
             <h2>About</h2>
@@ -74,19 +70,24 @@ export default function CountryDetail() {
             <div style={{ marginTop: '20px' }}>
                 {chartData.map((item) => (
                     <p key={item.name}>
-                        <b>{item.name}:</b> {Number.isFinite(item.value) ? item.value : 'N/A'}
+                        <b>{item.name}:</b>{" "} 
+                        {Number.isFinite(item.value) ? item.value : 'N/A'}
                     </p>
                 ))}
             </div>
 
             <h2 style={{ marginTop: '24px' }}>Defect Penalty</h2>
             <p>
-                <b>Average Defects:</b>{' '}
-                {Number.isFinite(Number(country.avgDefects)) ? Number(country.avgDefects) : 'N/A'}
+                <b>Average Defects:</b>{" "}
+                {Number.isFinite(Number(country.avgDefects))
+                    ? Number(country.avgDefects)
+                    : 'N/A'}
             </p>
 
             <h2 style={{ marginTop: '24px' }}>Final Cup Score</h2>
-            <p><b>Average Total Cup Points:</b> {country.avgScore}/100</p>
+            <p>
+                <b>Average Total Cup Points:</b> {country.avgScore}/100
+            </p>
         </div>
     )
 }
