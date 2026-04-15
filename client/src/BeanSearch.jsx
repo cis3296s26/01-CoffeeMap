@@ -141,6 +141,7 @@ export default function BeanSearch() {
         }
     }
 
+    
     //Filter function for cqi
     const applyFilters = (bean) => {
         const matchCountry = filters.country.length === 0 || filters.country.includes(bean["Country.of.Origin"])
@@ -216,6 +217,7 @@ export default function BeanSearch() {
             .filter(Boolean)
     )].sort()
 
+    
     const clearAll = () => {
     setQuery('');
     setFilters({
@@ -231,6 +233,13 @@ export default function BeanSearch() {
     });
     setPage(1);
 };
+
+    const InfoTooltip = ({ text }) => (
+    <span className="tooltip-container">
+        <span className="tooltip-icon">?</span>
+        <span className="tooltip-text">{text}</span>
+    </span>
+);
 
 const toggleArrayFilter = (key, value) => {
     const updated = filters[key].includes(value)
@@ -371,19 +380,31 @@ const toggleArrayFilter = (key, value) => {
 
                                     <div className="small">
                                         <p className="mb-2">
-                                            <strong>Aroma:</strong> {bean['Aroma'] || 'N/A'}
+                                            <strong>
+                                                Aroma
+                                                 <InfoTooltip text="The smell of the coffee." />
+                                             </strong> {bean['Aroma'] || 'N/A'}
                                         </p>
                                         <p className="mb-2">
-                                            <strong>Flavor:</strong> {bean['Flavor'] || 'N/A'}
+                                            <strong>
+                                                Flavor
+                                                 <InfoTooltip text="The overall taste profile combining aroma, acidity, and body." />
+                                            </strong> {bean['Flavor'] || 'N/A'}
                                         </p>
                                         <p className="mb-2">
-                                            <strong>Acidity:</strong> {bean['Acidity'] || 'N/A'}
+                                            <strong>Acidity
+                                                <InfoTooltip text="Brightness or liveliness in coffee—not sourness." />
+                                                </strong> {bean['Acidity'] || 'N/A'}
                                         </p>
                                         <p className="mb-2">
-                                            <strong>Sweetness:</strong> {bean['Sweetness'] || 'N/A'}
+                                            <strong>Sweetness
+                                                <InfoTooltip text="Natural sugar-like qualities that balance bitterness." />
+                                                </strong> {bean['Sweetness'] || 'N/A'}
                                         </p>
                                         <p className="mb-2">
-                                            <strong>Aftertaste:</strong> {bean['Aftertaste'] || 'N/A'}
+                                            <strong>Aftertaste
+                                                <InfoTooltip text="The flavor that lingers after swallowing." />
+                                                </strong> {bean['Aftertaste'] || 'N/A'}
                                         </p>
                                         <p className="mb-0">
                                             <strong>Total Cup Points:</strong>{' '}
