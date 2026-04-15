@@ -343,19 +343,18 @@ const toggleArrayFilter = (key, value) => {
 
                                         <button
                                             type="button"
-                                            className={`btn btn-sm ${
-                                                isFavorited(bean)
-                                                    ? 'btn-warning'
-                                                    : 'btn-outline-secondary'
-                                            }`}
+                                            style={{
+                                                background: 'none',
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                fontSize: '1.2rem',
+                                                color: isFavorited(bean) ? 'red' : '#aaa',
+                                                padding: '0'
+                                            }}
                                             onClick={() => toggleFavorite(bean)}
-                                            title={
-                                                isFavorited(bean)
-                                                    ? 'Remove from favorites'
-                                                    : 'Add to favorites'
-                                            }
+                                            title={isFavorited(bean) ? 'Remove from favorites' : 'Add to favorites'}
                                         >
-                                            ★
+                                            {isFavorited(bean) ? '♥' : '♡'}
                                         </button>
                                     </div>
 
