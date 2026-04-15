@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Papa from 'papaparse';
+import { average } from 'firebase/firestore';
 
 export function useCoffeeData() {
   const [loading, setLoading] = useState(true);
@@ -17,7 +18,18 @@ export function useCoffeeData() {
         // compile database using extracted data
         const adatabase = aresults.data.map(bean => ({
           ...bean,
-          Species: "Arabica"
+          Species: "Arabica",
+          Aroma: firstValidValue(bean, ["Aroma"]),
+          Flavor: firstValidValue(bean, ["Flavor"]),
+          Aftertaste: firstValidValue(bean, ["Aftertaste"]),
+          Acidity: firstValidValue(bean, ["Acidity"]),
+          Body: firstValidValue(bean, ["Body"]),
+          Balance: firstValidValue(bean, ["Balance"]),
+          Uniformity: firstValidValue(bean, ["Uniformity"]),
+          "Cup Cleanliness": firstValidValue(bean, ["Clean.Cup"]),
+          Sweetness: firstValidValue(bean, ["Sweetness"]),
+          Moisture: firstValidValue(bean, ["Moisture"]),
+          Defects: sumDefects(bean),
         }));
         Papa.parse(robusta_csv, {
           download: true,
@@ -27,8 +39,17 @@ export function useCoffeeData() {
             const rdatabase = rresults.data.map(bean => ({
               ...bean,
               Species: "Robusta",
-              Acidity: bean["Salt...Acid"],
-              Sweetness: bean["Bitter...Sweet"]
+              Aroma: firstValidValue(bean, ["Fragrance...Aroma"]),
+              Flavor: firstValidValue(bean, ["Flavor"]),
+              Aftertaste: firstValidValue(bean, ["Aftertaste"]),
+              Acidity: firstValidValue(bean, ["Salt...Acid"]),
+              Body: firstValidValue(bean, ["Mouthfeel"]),
+              Balance: firstValidValue(bean, ["Balance"]),
+              Uniformity: firstValidValue(bean, ["Uniform.Cup"]),
+              "Cup Cleanliness": firstValidValue(bean, ["Clean.Cup"]),
+              Sweetness: firstValidValue(bean, ["Bitter...Sweet"]),
+              Moisture: firstValidValue(bean, ["Moisture"]),
+              Defects: sumDefects(bean),
             }));
 
             const mergedData = [...adatabase, ...rdatabase];
@@ -51,6 +72,22 @@ export function useCoffeeData() {
   }, []);
 
   return { loading, error, countryData };
+}
+
+function firstValidValue(row, keys) {
+  for (const key of keys) {
+    const value = row[key];
+    if (value !== undefined && value !== null && value !== "") {
+      return value;
+    }
+  }
+  return "";
+}
+
+function sumDefects(row) {
+  const cat1 = parseFloat(row["Category.One.Defects"]) || 0;
+  const cat2 = parseFloat(row["Category.Two.Defects"]) || 0;
+  return cat1 + cat2;
 }
 
 //country coordinates mapping
@@ -105,11 +142,21 @@ function processData(data) {
         name: country,
         samples: [],
         scores: [],
-        aromas: [],
-        flavors: [],
-        acidity: [],
-        sweetness: [],
-        aftertaste: [],
+        metrics: {
+          Aroma: [],
+          Flavor: [],
+          Acidity: [],
+          Sweetness: [],
+          Aftertaste: [],
+          Body: [],
+          Balance: [],
+          Uniformity: [],
+          Moisture: [],
+          "Cup Cleanliness": [],
+        },
+        defectNumber: {
+          Defects: [],
+        },
         varieties: new Set(),
         processingMethods: new Set()
       };
@@ -120,20 +167,19 @@ function processData(data) {
     if (!isNaN(score)) countries[country].scores.push(score);
 
     // parse and add flavor metrics
-    const aroma = parseFloat(row.Aroma);
-    if (!isNaN(aroma)) countries[country].aromas.push(aroma);
+    Object.keys(countries[country].metrics).forEach((metricName) => {
+      const value = parseFloat(row[metricName]);
+      if (!isNaN(value)) {
+        countries[country].metrics[metricName].push(value);
+      }
+    });
 
-    const flavor = parseFloat(row.Flavor);
-    if (!isNaN(flavor)) countries[country].flavors.push(flavor);
-
-    const acidity = parseFloat(row.Acidity);
-    if (!isNaN(acidity)) countries[country].acidity.push(acidity);
-
-    const sweetness = parseFloat(row.Sweetness);
-    if (!isNaN(sweetness)) countries[country].sweetness.push(sweetness);
-
-    const aftertaste = parseFloat(row.Aftertaste);
-    if (!isNaN(aftertaste)) countries[country].aftertaste.push(aftertaste);
+    Object.keys(countries[country].defectNumber).forEach((metricName) => {
+      const value = parseFloat(row[metricName]);
+      if (!isNaN(value)) {
+        countries[country].defectNumber[metricName].push(value);
+      }
+    });
     
     //track varieties/processing methods
     if (row.Variety) {
@@ -145,7 +191,7 @@ function processData(data) {
     
     countries[country].samples.push(row);
   });
-  
+
   //convert to array and add coordinates
   const countryArray = Object.keys(countries).map(countryName => {
     const country = countries[countryName];
@@ -162,17 +208,24 @@ function processData(data) {
       if (arr.length === 0) return 0;
       return parseFloat((arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(2));
     };
+
+    const averageMetrics = {};
+    Object.entries(country.metrics).forEach(([metricName, values]) => {
+      averageMetrics[`avg${metricName.replace(/\s+/g, "")}`] = calcAvg(values);
+    });
+
+    const averageDefectNumber = {};
+    Object.entries(country.defectNumber).forEach(([metricName, values]) => {
+      averageDefectNumber[`avg${metricName.replace(/\s+/g, "")}`] = calcAvg(values);
+    });
     
     return {
       name: countryName,
-      coords: coords,
-      sampleCount: country.samples.length,
-      avgScore: calcAvg(country.scores),
-      avgAroma: calcAvg(country.aromas),
-      avgFlavor: calcAvg(country.flavors),
-      avgAcidity: calcAvg(country.acidity),
-      avgSweetness: calcAvg(country.sweetness),
-      avgAftertaste: calcAvg(country.aftertaste),
+        coords: coords,
+        sampleCount: country.samples.length,
+        avgScore: calcAvg(country.scores),
+        ...averageMetrics,
+        ...averageDefectNumber,
       varieties: Array.from(country.varieties),
       processingMethods: Array.from(country.processingMethods)
     };

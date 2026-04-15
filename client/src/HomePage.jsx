@@ -30,7 +30,7 @@ function HomePage() {
                     className="lead text-muted mx-auto"
                     style={{maxWidth: '900px'}}
                 >
-                    Explore coffee-producing countries and their quality data from the Coffee Quality Institute database
+                    Explore coffee-producing countries below!
                 </p>
             </div>
 
