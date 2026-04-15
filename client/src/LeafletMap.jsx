@@ -49,10 +49,17 @@ function LeafletMap() {
                     center={[10, -20]}
                     zoom={2}
                     style={{ height: '100%', width: '100%' }}
+                maxBounds={[
+                    [-90, -180],
+                    [90, 180]
+                     ]}
+                maxBoundsViscosity={1.0}
+                //added the map not wrapping
                 >
                     <TileLayer
                         attribution='© OpenStreetMap contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        noWrap={true}
                     />
                     
                     {filtered.map((country, index) => (
