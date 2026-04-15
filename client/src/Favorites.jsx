@@ -1,18 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { getFavorites, removeFromFavorites } from './favoriteDB';
+import StarRating from './StarRating';
+import { updateFavoriteRating } from './favoriteDB';
 
 export default function Favorites() {
     const { user } = useAuth();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [ratingFilter, setRatingFilter] = useState(0);
+
+    const filteredFavorites = ratingFilter === 0
+        ? favorites
+        : favorites.filter(fav => (fav.rating || 0) === ratingFilter);
 
     //For pagination of favorites, show 10 items per page and 
     // have buttons to navigate between pages
     const [page, setPage] = useState(1);
     const itemsPerPage = 10;
-    const totalPages = Math.ceil(favorites.length / itemsPerPage)
-    const currentItems = favorites.slice((page - 1) * itemsPerPage, page * itemsPerPage)
+    const totalPages = Math.ceil(filteredFavorites.length / itemsPerPage);
+    const currentItems = filteredFavorites.slice((page - 1) * itemsPerPage, page * itemsPerPage);
     
 
 
@@ -57,6 +64,26 @@ export default function Favorites() {
     return (
         <section id="favorites" >
             <h1 >My Favorites</h1>
+
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '0 15px 16px' }}>
+                {[0, 5, 4, 3, 2, 1].map((star) => (
+                    <button
+                        key={star}
+                        onClick={() => { setRatingFilter(star); setPage(1); }}
+                        style={{
+                            fontWeight: ratingFilter === star ? 'bold' : 'normal',
+                            border: ratingFilter === star ? '2px solid black' : '1px solid #ccc',
+                            borderRadius: '6px',
+                            padding: '4px 12px',
+                            cursor: 'pointer',
+                            background: 'white',
+                        }}
+                    >
+                        {star === 0 ? 'All' : `${'★'.repeat(star)}`}
+                    </button>
+                ))}
+            </div>
+
             {currentItems.map((fav, index) => (
                 <div key={index} style={{border:"2px solid black", margin:"15px", padding:"15px"}}>
                     <p><b>Country:</b> {fav.country}</p>
@@ -67,9 +94,16 @@ export default function Favorites() {
                     <p><b>Acidity:</b> {fav.acidity}</p>
                     <p><b>Sweetness:</b> {fav.sweetness}</p>
                     <p><b>Score:</b> {fav.score}</p>
-                    <button onClick={() => removeFromFavorites(user.uid, { country: fav.country, region: fav.region })}>
-                        Remove
-                    </button>
+                    <div style={{ marginTop: '8px' }}>
+                        <StarRating
+                            rating={fav.rating || 0}
+                            onRate={(stars) => updateFavoriteRating(user.uid, fav.country, fav.region, stars)}
+                        />
+                        <br />
+                        <button onClick={() => removeFromFavorites(user.uid, { country: fav.country, region: fav.region })}>
+                            Remove
+                        </button>
+                    </div>
                     
                 </div>
 

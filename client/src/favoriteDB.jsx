@@ -34,3 +34,9 @@ export function getFavorites(userId, callback){
     })
 
 }
+
+//rate favorite out of 5 stars
+export const updateFavoriteRating = async (userId, country, region, rating) => {
+    const beanId = `${country}_${region}`.replace(/\s+/g, '_');
+    await setDoc(doc(db, 'users', userId, 'favorites', beanId), { rating }, { merge: true });
+};
