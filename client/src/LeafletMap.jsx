@@ -1,11 +1,13 @@
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useCoffeeData } from './useCoffeeData';
+import { useCoffeeData2 } from './useCoffeeData2';
 import { useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import { useNavigate } from 'react-router-dom';
 
 function LeafletMap() {
     const { loading, error, countryData } = useCoffeeData();
+    const { reviews, loading: reviewsLoading, error: reviewsError } = useCoffeeData2()
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
 
@@ -15,7 +17,19 @@ function LeafletMap() {
         country.coords &&
         country.coords.length === 2
     );
-    if (loading) {
+
+    const reviewsByCountry = reviews.reduce((acc, review) => {
+        if (!review.country) return acc;
+
+        if (!acc[review.country]) {
+            acc[review.country] = [];
+        }
+
+        acc[review.country].push(review);
+        return acc;
+    }, {});
+
+    if (loading || reviewsLoading) {
         return (
             <div style={{ textAlign: 'center', padding: '50px' }}>
                 <h3>Loading coffee data from CQI database...</h3>
@@ -23,7 +37,7 @@ function LeafletMap() {
         );
     }
 
-    if (error) {
+    if (error || reviewsError) {
         return (
             <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
                 <h3>Error loading data: {error}</h3>
@@ -65,8 +79,10 @@ function LeafletMap() {
                         noWrap={true}
                     />
                     
-                    {filtered.map((country, index) => (
-                        <CircleMarker
+                    {filtered.map((country, index) => {
+                        const countryReviews = reviewsByCountry[country.name] || [];
+                        return (
+                            <CircleMarker
                             key={index}
                             center={country.coords}
                             radius={Math.min(5 + (country.sampleCount / 10), 15)} //size based on samples
@@ -77,12 +93,17 @@ function LeafletMap() {
                             fillOpacity={0.7}
                         >
                             <Popup maxWidth={350}>
-                                <div style={{ maxWidth: '330px' }}>
+                                <div
+                                    style={{
+                                        maxWidth: '330px',
+                                        maxHeight: '300px',
+                                        overflowY: 'auto',
+                                        paddingRight: '6px'
+                                    }}
+                                >
                                     <h3 style={{ margin: '0 0 10px 0', color: '#1e000e', borderBottom: '2px solid #1e000e', paddingBottom: '5px' }}>
                                         {country.name} 
-
                                     </h3>
-                                    
                                     <p><strong> Samples:</strong> {country.sampleCount}</p>
                                     
                                     {country.avgScore && (
@@ -104,6 +125,24 @@ function LeafletMap() {
                                         </div>
                                     )}
 
+                                    {countryReviews.length > 0 && (
+                                        <div style={{ marginTop: '12px', borderTop: '1px solid #ccc', paddingTop: '10px'}}>
+                                            <p><strong> Coffee Reviews: </strong>{countryReviews.length}</p>
+                                            <p><strong> Reviewed coffees: </strong></p>
+                                            <ul style={{ paddingLeft: '18px', marginBottom: '8px'}}>
+                                                {countryReviews.slice(0,3).map((review) => (
+                                                    <li key={review.id} style={{ marginBottom: '6px' }}>
+                                                        <div><strong>{review.title}</strong></div>
+                                                        <div style={{ fontSize: '0.9em' }}>
+                                                            {review.roaster || 'Unknown Roaster'}
+                                                            {review.rating ?` • ${review.rating}` : ''}
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
                                     {/*Button to navigate to country detail page with more information about the country and its coffee quality data*/}
                                     <button
                                         onClick={() => navigate(`/country/${country.name}`)}
@@ -119,7 +158,8 @@ function LeafletMap() {
                                 </div>
                             </Popup>
                         </CircleMarker>
-                    ))}
+                        );
+                    })}
                 </MapContainer>
             </div>
         </div>
