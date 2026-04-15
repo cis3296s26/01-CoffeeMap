@@ -112,10 +112,19 @@ function LeafletMap() {
 
                                     {countryReviews.length > 0 && (
                                         <div style={{ marginTop: '12px', borderTop: '1px solid #ccc', paddingTop: '10px'}}>
-                                            <p><strong> :</strong></p>
-                                            <p style={{ fontSize: '0.9em', marginLeft: '10px' }}>
-                                                {country.processingMethods.join(', ')}
-                                            </p>
+                                            <p><strong> Coffee Reviews:</strong>{countryReviews.length}</p>
+                                            <p><strong> Reviewed coffees:</strong></p>
+                                            <ul style={{ paddingLeft: '18px', marginBottom: '8px'}}>
+                                                {countryReviews.slice(0,3).map((review) => (
+                                                    <li key={review.id} style={{ marginBottom: '6px' }}>
+                                                        <div><strong>{review.title}</strong></div>
+                                                        <div style={{ fontSize: '0.9em' }}>
+                                                            {review.roaster || 'Unknown Roaster'}
+                                                            {review.rating ?` • ${review.rating}` : ''}
+                                                        </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
                                         </div>
                                     )}
 
