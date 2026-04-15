@@ -1,16 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useCoffeeData } from './useCoffeeData'
 import coffeeCountries from "./data/coffeeCountries.json"
-import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
 export default function CountryDetail() {
     const { countryName } = useParams()
     const { loading, error, countryData } = useCoffeeData()
-    const navigate = useNavigate()
 
     const decodeName = decodeURIComponent(countryName)
-    const countryInfo = coffeeCountries.countries.find(c => c.name === countryName)
-    const country = countryData.find(c => c.name === countryName)
+    const countryInfo = coffeeCountries.countries.find(c => c.name === decodeName)
+    const country = countryData.find(c => c.name === decodeName)
 
     if (loading) return <p>Loading data...</p>
     if (error) return <p>Error</p>
@@ -34,8 +33,8 @@ export default function CountryDetail() {
     ];
 
     return (
-        <div style={{padding: "20px"}}>
-            <h1>{countryName} Coffee</h1>
+        <div style={{ padding: "20px" }}>
+            <h1>{decodedName} Coffee</h1>
             
             {/* Description */}
             <h2>About</h2>
