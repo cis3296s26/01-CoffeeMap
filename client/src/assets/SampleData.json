@@ -1,0 +1,24 @@
+[
+  {
+    "country": "Brazil",
+    "flavour-notes": ["fruity", "nutty", "smooth"],
+    "harvest-period-arabica": [{
+      "start": "may",
+      "end": "sep"
+    }],
+    "harvest-period-robusta": [{
+      "start": "mar",
+      "end": "jul"
+    }],
+    "common-varieties": ["yellow-bourbon", "mundo-novo", "catui", "igato"]
+  },
+  {
+    "country": "Columbia",
+    "flavour-notes": ["chocolate", "citrus", "nutty"],
+    "harvest-period-arabica": [{
+      "start": "sep",
+      "end": "dec"
+    }],
+    "common-varieties": ["castillo", "bourbon", "typica"]
+  }
+]
