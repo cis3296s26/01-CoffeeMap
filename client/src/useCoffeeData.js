@@ -27,8 +27,18 @@ export function useCoffeeData() {
             const rdatabase = rresults.data.map(bean => ({
               ...bean,
               Species: "Robusta",
-              Acidity: bean["Salt...Acid"],
-              Sweetness: bean["Bitter...Sweet"]
+
+              Acidity: firstValidValue(bean, ["Acidity", "Salt...Acid"]),
+              Sweetness: firstValidValue(bean, ["Sweetness", "Bitter...Sweet"]),
+              Aroma: firstValidValue(bean, ["Aroma", "Fragrance...Aroma"]),
+              Flavor: firstValidValue(bean, ["Flavor"]),
+              Aftertaste: firstValidValue(bean, ["Aftertaste"]),
+              Body: firstValidValue(bean, ["Body"]),
+              Balance: firstValidValue(bean, ["Balance"]),
+              Uniformity: firstValidValue(bean, ["Uniformity", "Uniform.Cup"]),
+              "Cup Cleanliness": firstValidValue(bean, ["Cup Cleanliness", "Clean.Cup"]),
+              Moisture: firstValidValue(bean, ["Moisture"]),
+              Defects: firstValidValue(bean, ["Defects", "Category.One.Defects", "Category.Two.Defects"]),
             }));
 
             const mergedData = [...adatabase, ...rdatabase];
@@ -105,11 +115,19 @@ function processData(data) {
         name: country,
         samples: [],
         scores: [],
-        aromas: [],
-        flavors: [],
-        acidity: [],
-        sweetness: [],
-        aftertaste: [],
+        metrics: {
+          Aroma: [],
+          Flavor: [],
+          Acidity: [],
+          Sweetness: [],
+          Aftertaste: [],
+          Body: [],
+          Balance: [],
+          Uniformity: [],
+          Moisture: [],
+          "Cup Cleanliness": [],
+          Defects: [],
+        },
         varieties: new Set(),
         processingMethods: new Set()
       };
@@ -134,6 +152,24 @@ function processData(data) {
 
     const aftertaste = parseFloat(row.Aftertaste);
     if (!isNaN(aftertaste)) countries[country].aftertaste.push(aftertaste);
+
+    const body = parseFloat(row.Body);
+    if (!isNaN(body)) countries[country].body.push(body);
+
+    const balance = parseFloat(row.balance);
+    if (!isNaN(balance)) countries[country].balance.push(balance);
+
+    const uniformity = parseFloat(row.uniformity);
+    if (!isNaN(uniformity)) countries[country].uniformity.push(uniformity);
+
+    const moisture = parseFloat(row.moisture);
+    if (!isNaN(moisture)) countries[country].moisture.push(moisture);
+
+    const cleanliness = parseFloat(row.cleanliness);
+    if (!isNaN(cleanliness)) countries[country].cleanliness.push(cleanliness);
+
+    const defects = parseFloat(row.defects);
+    if (!isNaN(defects)) countries[country].defects.push(defects);
     
     //track varieties/processing methods
     if (row.Variety) {
