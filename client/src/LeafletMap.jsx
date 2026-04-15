@@ -111,7 +111,12 @@ function LeafletMap() {
                                     )}
 
                                     {countryReviews.length > 0 && (
-
+                                        <div style={{ marginTop: '12px', borderTop: '1px solid #ccc', paddingTop: '10px'}}>
+                                            <p><strong> :</strong></p>
+                                            <p style={{ fontSize: '0.9em', marginLeft: '10px' }}>
+                                                {country.processingMethods.join(', ')}
+                                            </p>
+                                        </div>
                                     )}
 
                                     {/*Button to navigate to country detail page with more information about the country and its coffee quality data*/}
