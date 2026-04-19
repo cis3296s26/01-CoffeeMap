@@ -249,7 +249,7 @@ const toggleArrayFilter = (key, value) => {
     setFilters({ ...filters, [key]: updated });
 };
 
-    // frontend design
+    // frontend design bootstrap
     return (
         <section className="container-xl py-4">
             <div className="text-center mb-4">
