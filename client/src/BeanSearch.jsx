@@ -141,7 +141,19 @@ export default function BeanSearch() {
         }
     }
 
-
+    
+    //Filter function for cqi
+    const applyFilters = (bean) => {
+        const matchCountry = filters.country.length === 0 || filters.country.includes(bean["Country.of.Origin"])
+        const matchRegion = filters.region.length === 0 || filters.region.includes(bean["Region"])
+        const matchAroma = filters.aroma.length === 0 || filters.aroma.includes(bean["Aroma"])
+        const matchSpecies = filters.species.length === 0 || filters.species.includes(bean["Species"])
+        const matchScore = !filters.minScore || parseFloat(bean["Total.Cup.Points"]) >= filters.minScore
+        const matchFlavor = !filters.minFlavor || parseFloat(bean["Flavor"]) >= parseFloat(filters.minFlavor)
+        const matchAcidity = !filters.minAcidity || parseFloat(bean["Acidity"]) >= parseFloat(filters.minAcidity)
+        const matchSweetness = !filters.minSweetness || parseFloat(bean["Sweetness"]) >= parseFloat(filters.minSweetness)
+        return matchCountry && matchRegion && matchAroma && matchSpecies && matchScore && matchFlavor && matchAcidity && matchSweetness
+    }
 
     // search through database using search bar input for cqi
     const filteredBeans = beans.filter((bean) => {
