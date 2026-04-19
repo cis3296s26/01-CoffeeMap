@@ -1,5 +1,5 @@
 import {describe, it, expect} from 'vitest';
-import {applyFilters} from './src/BeanSearch'
+import {applyFilters} from './src/BeanSearch.jsx'
 
 const sampleBeans = [
     {"Country.of.Origin": "Ethiopia", "Region": "Yirgacheffe", "Aroma": "8.5", "Species": "Arabica"},
