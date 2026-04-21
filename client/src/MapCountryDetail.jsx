@@ -25,6 +25,7 @@ export default function CountryDetail() {
         { name: 'Uniformity', value: Number(country.avgUniformity) },
         { name: 'Cup Cleanliness', value: Number(country.avgCupCleanliness) },
         { name: 'Sweetness', value: Number(country.avgSweetness) },
+        { name: 'Cupper Points', value: Number(country.avgCupperPoints) },
         { name: 'Moisture', value: Number(country.avgMoisture) },
     ]
 
@@ -65,15 +66,6 @@ export default function CountryDetail() {
                         <Bar dataKey="value" fill="#8B4513" />
                     </BarChart>
                 </ResponsiveContainer>
-            </div>
-
-            <div style={{ marginTop: '20px' }}>
-                {chartData.map((item) => (
-                    <p key={item.name}>
-                        <b>{item.name}:</b>{" "} 
-                        {Number.isFinite(item.value) ? item.value : 'N/A'}
-                    </p>
-                ))}
             </div>
 
             <h2 style={{ marginTop: '24px' }}>Defect Penalty</h2>
