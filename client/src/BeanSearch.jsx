@@ -75,7 +75,8 @@ export default function BeanSearch() {
                             ...bean,
                             Species: "Robusta",
                             Acidity: bean["Salt...Acid"],
-                            Sweetness: bean["Bitter...Sweet"]
+                            Sweetness: bean["Bitter...Sweet"],
+                            Aroma: bean["Fragrance...Aroma"]
                         }));
 
                         setBeans([...adatabase, ...rdatabase]);
