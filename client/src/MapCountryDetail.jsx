@@ -25,6 +25,7 @@ export default function CountryDetail() {
         { name: 'Uniformity', value: Number(country.avgUniformity) },
         { name: 'Cup Cleanliness', value: Number(country.avgCupCleanliness) },
         { name: 'Sweetness', value: Number(country.avgSweetness) },
+        { name: 'Cupper Points', value: Number(country.avgCupperPoints) },
         { name: 'Moisture', value: Number(country.avgMoisture) },
     ]
 

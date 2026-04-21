@@ -50,6 +50,7 @@ export function useCoffeeData() {
               Sweetness: firstValidValue(bean, ["Bitter...Sweet"]),
               Moisture: firstValidValue(bean, ["Moisture"]),
               Defects: sumDefects(bean),
+              "Cupper Points": firstValidValue(bean, ["Cupper.Points"]),
             }));
 
             const mergedData = [...adatabase, ...rdatabase];
@@ -153,6 +154,7 @@ function processData(data) {
           Uniformity: [],
           Moisture: [],
           "Cup Cleanliness": [],
+          "Cupper Points": [],
         },
         defectNumber: {
           Defects: [],
