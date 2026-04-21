@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import Papa from 'papaparse'
 import { useAuth } from './AuthContext'
-import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
+import { getFavorites, saveFavorite, removeFromFavorites, normalizeBeanId } from './favoriteDB'
 import { useNavigate } from 'react-router-dom'
 import { useCoffeeData } from './useCoffeeData'
 import { useCoffeeData2 } from './useCoffeeData2'
@@ -98,10 +98,7 @@ export default function BeanSearch() {
         setPage(1);
     }, [query, filters, dataSource]);
 
-    const getBeanId = (bean) => 
-    `${bean["Country.of.Origin"] ?? ""}_${bean["Region"] || "Unknown"}_${bean["Species"] ?? ""}_${bean["Aroma"] ?? bean["Fragrance...Aroma"] ?? ""}_${bean["Aftertaste"] ?? ""}`
-        .replace(/\s+/g, '_')
-        .replace(/[^a-zA-Z0-9_]/g, '')
+    const getBeanId = (bean) => normalizeBeanId(bean)
         
     const isFavorited = (bean) => favorites.some(fav => fav.id === getBeanId(bean))
 

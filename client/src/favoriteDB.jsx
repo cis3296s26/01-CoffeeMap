@@ -1,8 +1,23 @@
 import {db} from "./firebase"; 
 import {doc, setDoc, deleteDoc, collection, onSnapshot} from "firebase/firestore";
 
-function normalizeBeanId(country = "", region = "") {
-  return `${country}_${region || "Unknown"}`.replace(/\s+/g, "_");
+export function normalizeBeanId(bean = {}) {
+  return [
+    bean["Country.of.Origin"] ?? bean.country ?? "",
+    bean["Region"] ?? bean.region ?? "Unknown",
+    bean["Species"] ?? bean.species ?? "",
+    bean["Variety"] ?? bean.variety ?? "",
+    bean["Producer"] ?? bean.producer ?? "",
+    bean["Farm.Name"] ?? bean.farmName ?? "",
+    bean["Processing.Method"] ?? bean.processingMethod ?? "",
+    bean["Aroma"] ?? bean["Fragrance...Aroma"] ?? bean.aroma ?? "",
+    bean["Aftertaste"] ?? bean.aftertaste ?? "",
+    bean["Total.Cup.Points"] ?? bean.score ?? ""
+  ]
+    .map(v => String(v).trim())
+    .join("_")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-zA-Z0-9_]/g, "");
 }
 
 function getCleanCup(bean) {
