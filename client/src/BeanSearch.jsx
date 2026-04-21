@@ -5,6 +5,7 @@ import { useAuth } from './AuthContext'
 import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
 import { useNavigate } from 'react-router-dom'
 import { useCoffeeData2 } from './useCoffeeData2'
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from 'recharts'
 
 
 
@@ -249,7 +250,38 @@ const toggleArrayFilter = (key, value) => {
     setFilters({ ...filters, [key]: updated });
 };
 
-    // frontend design bootstrap
+const getMetricValue = (bean, metric) => {
+    const metricMap = {
+        Aroma: bean["Aroma"],
+        Flavor: bean["Flavor"],
+        Aftertaste: bean["Aftertaste"],
+        Acidity: bean["Acidity"] || bean["Salt...Acid"],
+        Body: bean["Body"] || bean["Mouthfeel"],
+        Balance: bean["Balance"],
+        Uniformity: bean["Uniformity"] || bean["Uniform.Cup"],
+        "Cup Cleanliness": bean["Clean.Cup"],
+        Sweetness: bean["Sweetness"] || bean["Bitter...Sweet"],
+        "Cupper Points": bean["Cupper.Points"],
+    };
+
+    const value = parseFloat(metricMap[metric]);
+    return Number.isFinite(value) ? value : 0;
+};
+
+const getRadarData = (bean) => [
+    { metric: 'Aroma', value: getMetricValue(bean, 'Aroma') },
+    { metric: 'Flavor', value: getMetricValue(bean, 'Flavor') },
+    { metric: 'Aftertaste', value: getMetricValue(bean, 'Aftertaste') },
+    { metric: 'Acidity', value: getMetricValue(bean, 'Acidity') },
+    { metric: 'Body', value: getMetricValue(bean, 'Body') },
+    { metric: 'Balance', value: getMetricValue(bean, 'Balance') },
+    { metric: 'Uniformity', value: getMetricValue(bean, 'Uniformity') },
+    { metric: 'Clean Cup', value: getMetricValue(bean, 'Cup Cleanliness') },
+    { metric: 'Sweetness', value: getMetricValue(bean, 'Sweetness') },
+    { metric: 'Cupper Points', value: getMetricValue(bean, 'Cupper Points') },
+];
+
+    // frontend design
     return (
         <section className="container-xl py-4">
             <div className="text-center mb-4">
@@ -379,37 +411,37 @@ const toggleArrayFilter = (key, value) => {
                                     </div>
 
                                     <div className="small">
-                                        <p className="mb-2">
-                                            <strong>
-                                                Aroma
-                                                 <InfoTooltip text="The smell of the coffee." />
-                                             </strong> {bean['Aroma'] || 'N/A'}
-                                        </p>
-                                        <p className="mb-2">
-                                            <strong>
-                                                Flavor
-                                                 <InfoTooltip text="The overall taste profile combining aroma, acidity, and body." />
-                                            </strong> {bean['Flavor'] || 'N/A'}
-                                        </p>
-                                        <p className="mb-2">
-                                            <strong>Acidity
-                                                <InfoTooltip text="Brightness or liveliness in coffee—not sourness." />
-                                                </strong> {bean['Acidity'] || 'N/A'}
-                                        </p>
-                                        <p className="mb-2">
-                                            <strong>Sweetness
-                                                <InfoTooltip text="Natural sugar-like qualities that balance bitterness." />
-                                                </strong> {bean['Sweetness'] || 'N/A'}
-                                        </p>
-                                        <p className="mb-2">
-                                            <strong>Aftertaste
-                                                <InfoTooltip text="The flavor that lingers after swallowing." />
-                                                </strong> {bean['Aftertaste'] || 'N/A'}
-                                        </p>
+                                        <div style={{ width: '100%', height: 260, marginBottom: '12px' }}>
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <RadarChart data={getRadarData(bean)}>
+                                                    <PolarGrid />
+                                                    <PolarAngleAxis
+                                                        dataKey="metric"
+                                                        tick={{ fontSize: 11 }}
+                                                    />
+                                                    <PolarRadiusAxis
+                                                        angle={90}
+                                                        domain={[0, 10]}
+                                                        tick={{ fontSize: 10 }}
+                                                    />
+                                                    <Radar
+                                                        name="Flavor Metrics"
+                                                        dataKey="value"
+                                                        stroke="#8B4513"
+                                                        fill="#8B4513"
+                                                        fillOpacity={0.35}
+                                                    />
+                                                    <Tooltip />
+                                                </RadarChart>
+                                            </ResponsiveContainer>
+                                        </div>
                                         <p className="mb-0">
                                             <strong>Total Cup Points:</strong>{' '}
                                             {bean['Total.Cup.Points'] || 'N/A'}
                                         </p>
+                                        <p className="mb-1"><strong>Moisture:</strong> {bean['Moisture'] || 'N/A'}</p>
+                                        <p className="mb-1"><strong>Category One Defects:</strong> {bean['Category.One.Defects'] || 'N/A'}</p>
+                                        <p className="mb-1"><strong>Category Two Defects:</strong> {bean['Category.Two.Defects'] || 'N/A'}</p>
                                     </div>
                                 </div>
                             </div>
