@@ -4,6 +4,7 @@ import Papa from 'papaparse'
 import { useAuth } from './AuthContext'
 import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
 import { useNavigate } from 'react-router-dom'
+import { useCoffeeData } from './useCoffeeData'
 import { useCoffeeData2 } from './useCoffeeData2'
 
 
@@ -28,6 +29,7 @@ export default function BeanSearch() {
     const [showFilters, setShowFilters] = useState(false)
     const [dataSource, setDataSource] = useState('cqi')
 
+    const { countryData } = useCoffeeData()
     const {reviews} = useCoffeeData2()
 
     const[filters, setFilters] = useState({
@@ -86,7 +88,7 @@ export default function BeanSearch() {
     useEffect(() => {
         if (!user) return
         const unsub = getFavorites(user.uid, (favs) => {
-            setFavorites(favs.map(f => `${f.country}_${f.region}`.replace(/\s+/g, '_')))
+            setFavorites(favs)
         })
         return () => unsub()
     }, [user])
@@ -95,9 +97,11 @@ export default function BeanSearch() {
         setPage(1);
     }, [query, filters, dataSource]);
 
-    const getBeanId = (bean) => `${bean["Country.of.Origin"]}_${bean["Region"]}`.replace(/\s+/g, '_')
-
-    const isFavorited = (bean) => favorites.includes(getBeanId(bean))
+    const getBeanId = (bean) => 
+    `${bean["Country.of.Origin"]}_${bean["Region"]}_${bean["Species"]}_${bean["Aroma"]}_${bean["Aftertaste"]}`
+        .replace(/\s+/g, '_')
+        .replace(/[^a-zA-Z0-9_]/g, '')
+    const isFavorited = (bean) => favorites.some(fav => fav.docId === getBeanId(bean))
 
     const Popup = ({ isOpen, onClose, children }) => {
         if (!isOpen) return null;
@@ -132,12 +136,11 @@ export default function BeanSearch() {
         if (!user){
             setIsOpen(true);
         } else if (isFavorited(bean)) {
-            await removeFromFavorites(user.uid, {
-                country: bean["Country.of.Origin"],
-                region: bean["Region"]
-            })
+            const favObj = favorites.find(fav => fav.docId === getBeanId(bean))
+            await removeFromFavorites(user.uid, favObj)
         } else {
-            await saveFavorite(user.uid, bean)
+            const countryStats = countryData.find(c => c.name === bean["Country.of.Origin"]);
+            await saveFavorite(user.uid, bean, countryStats)
         }
     }
 

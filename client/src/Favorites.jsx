@@ -106,14 +106,14 @@ export default function Favorites() {
                                                     type="button"
                                                     className="btn btn-sm text-dark p-0 border-0 mb-1"
                                                     style={{ fontSize: '1.8rem', lineHeight: '0.8' }}
-                                                    onClick={() => removeFromFavorites(user.uid, { country: fav.country, region: fav.region })}
+                                                    onClick={() => removeFromFavorites(user.uid, fav)}
                                                     title="Remove"
                                                 >
                                                     &times;
                                                 </button>
                                                 <StarRating
                                                     rating={fav.rating || 0}
-                                                    onRate={(stars) => updateFavoriteRating(user.uid, fav.country, fav.region, stars)}
+                                                    onRate={(stars) => updateFavoriteRating(user.uid, fav, stars)}
                                                 />
                                             </div>
                                         </div>
