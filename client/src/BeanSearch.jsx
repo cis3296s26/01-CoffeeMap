@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import Papa from 'papaparse'
 import { useAuth } from './AuthContext'
-import { getFavorites, saveFavorite, removeFromFavorites } from './favoriteDB'
+import { getFavorites, saveFavorite, removeFromFavorites, normalizeBeanId } from './favoriteDB'
 import { useNavigate } from 'react-router-dom'
 import { useCoffeeData } from './useCoffeeData'
 import { useCoffeeData2 } from './useCoffeeData2'
@@ -98,11 +98,9 @@ export default function BeanSearch() {
         setPage(1);
     }, [query, filters, dataSource]);
 
-    const getBeanId = (bean) => 
-    `${bean["Country.of.Origin"]}_${bean["Region"]}_${bean["Species"]}_${bean["Aroma"]}_${bean["Aftertaste"]}`
-        .replace(/\s+/g, '_')
-        .replace(/[^a-zA-Z0-9_]/g, '')
-    const isFavorited = (bean) => favorites.some(fav => fav.docId === getBeanId(bean))
+    const getBeanId = (bean) => normalizeBeanId(bean)
+        
+    const isFavorited = (bean) => favorites.some(fav => fav.id === getBeanId(bean))
 
     const Popup = ({ isOpen, onClose, children }) => {
         if (!isOpen) return null;
@@ -137,11 +135,10 @@ export default function BeanSearch() {
         if (!user){
             setIsOpen(true);
         } else if (isFavorited(bean)) {
-            const favObj = favorites.find(fav => fav.docId === getBeanId(bean))
+            const favObj = favorites.find(fav => fav.id === getBeanId(bean))
             await removeFromFavorites(user.uid, favObj)
         } else {
-            const countryStats = countryData.find(c => c.name === bean["Country.of.Origin"]);
-            await saveFavorite(user.uid, bean, countryStats)
+            await saveFavorite(user.uid, bean)
         }
     }
 

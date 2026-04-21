@@ -3,10 +3,12 @@ import { useAuth } from './AuthContext';
 import { getFavorites, removeFromFavorites, updateFavoriteRating } from './favoriteDB';
 import StarRating from './StarRating';
 import { useNavigate } from 'react-router-dom';
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Tooltip } from 'recharts';
+
+
 
 export default function Favorites() {
     const { user } = useAuth();
-    const navigate = useNavigate();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ratingFilter, setRatingFilter] = useState(0);
@@ -89,51 +91,102 @@ export default function Favorites() {
             ) : (
                 <>
                     <div className="row g-4">
-                        {currentItems.map((fav, index) => (
-                            <div className="col-md-6 col-xl-4" key={index}>
-                                <div className="card shadow-sm border-0 h-100">
-                                    <div className="card-body d-flex flex-column">
-                                        
-                                        <div className="d-flex justify-content-between align-items-start mb-2">
+                        {currentItems.map((fav, index) => {
+                            const chartData = [
+                                { subject: 'Aroma', A: Number(fav.aroma) || 0 },
+                                { subject: 'Flavor', A: Number(fav.flavor) || 0 },
+                                { subject: 'Aftertaste', A: Number(fav.aftertaste) || 0 },
+                                { subject: 'Acidity', A: Number(fav.acidity) || 0 },
+                                { subject: 'Body', A: Number(fav.body) || 0 },
+                                { subject: 'Balance', A: Number(fav.balance) || 0 },
+                                { subject: 'Uniformity', A: Number(fav.uniformity) || 0 },
+                                { subject: 'Clean Cup', A: Number(fav.cleanCup) || 0 },
+                                { subject: 'Sweetness', A: Number(fav.sweetness) || 0 },
+                                { subject: 'Cupper Points', A: Number(fav.cupperPoints) || 0 },
+                            ];
+
+                            return (
+                                <div className="col-md-6" key={fav.id}>
+                                    <div style={{border:"2px solid black", margin:"15px", padding:"15px", borderRadius:"12px", backgroundColor:"white", height:"100%"}}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                             <div>
-                                                <h5 className="card-title mb-1">{fav.country || 'Unknown'}</h5>
-                                                <p className="text-muted mb-0">{fav.region || 'Unknown'}</p>
+                                                <h2 style={{ marginBottom: '4px' }}>{fav.country}</h2>
+                                                <p style={{ color: '#666', marginBottom: '12px' }}>{fav.region || 'Unknown'}</p>
                                             </div>
-                                            
-                                            {/* Top right interactive area for X and Stars */}
-                                            <div className="d-flex flex-column align-items-end">
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-sm text-dark p-0 border-0 mb-1"
-                                                    style={{ fontSize: '1.8rem', lineHeight: '0.8' }}
-                                                    onClick={() => removeFromFavorites(user.uid, fav)}
-                                                    title="Remove"
-                                                >
-                                                    &times;
-                                                </button>
+
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                 <StarRating
                                                     rating={fav.rating || 0}
-                                                    onRate={(stars) => updateFavoriteRating(user.uid, fav, stars)}
+                                                    onRate={async (stars) => {
+                                                        await updateFavoriteRating(user.uid, fav.country, fav.region, fav.species, fav.aroma, fav.aftertase, stars);
+                                                        if (ratingFilter !== 0 && ratingFilter !== stars) {
+                                                            setRatingFilter(0);
+                                                            setPage(1);
+                                                        }
+                                                    }}
                                                 />
+                                                <button
+                                                    onClick={() => removeFromFavorites(user.uid, fav)}
+                                                    style={{
+                                                        border: '1px solid #ccc',
+                                                        background: '#fff',
+                                                        padding: '6px 12px',
+                                                        borderRadius: '8px',
+                                                        color: '#333',
+                                                        cursor: 'pointer',
+                                                        fontSize: '0.95rem',
+                                                        lineHeight: 1.2
+                                                    }}
+                                                    title="Remove"
+                                                >
+                                                    Remove
+                                                </button>
                                             </div>
                                         </div>
 
-                                        <div className="mb-3">
-                                            <span className="badge text-bg-dark">{fav.species || 'Unknown'}</span>
+                                        <div style={{ marginBottom: '12px' }}>
+                                            <span
+                                                style={{
+                                                    display: 'inline-block',
+                                                    backgroundColor: '#212529',
+                                                    color: 'white',
+                                                    padding: '4px 12px',
+                                                    borderRadius: '10px',
+                                                    fontSize: '0.9rem',
+                                                    fontWeight: '600'
+                                                }}
+                                            >
+                                                {fav.species || 'Unknown'}
+                                            </span>
                                         </div>
 
-                                        <div className="small mb-3">
-                                            <p className="mb-1"><b>Aroma:</b> {fav.aroma || 'N/A'}</p>
-                                            <p className="mb-1"><b>Flavor:</b> {fav.flavor || 'N/A'}</p>
-                                            <p className="mb-1"><b>Acidity:</b> {fav.acidity || 'N/A'}</p>
-                                            <p className="mb-1"><b>Sweetness:</b> {fav.sweetness || 'N/A'}</p>
-                                            <p className="mb-0"><b>Score:</b> {fav.score || 'N/A'}</p>
+                                        <div style={{ width: '100%', height: 320 }}>
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <RadarChart data={chartData}>
+                                                    <PolarGrid />
+                                                    <PolarAngleAxis dataKey="subject" />
+                                                    <PolarRadiusAxis domain={[0, 10]} tickCount={6} />
+                                                    <Radar
+                                                        name="Bean Metrics"
+                                                        dataKey="A"
+                                                        stroke="#8B4513"
+                                                        fill="#8B4513"
+                                                        fillOpacity={0.25}
+                                                    />
+                                                </RadarChart>
+                                            </ResponsiveContainer>
                                         </div>
 
+                                        <div style={{ marginTop: '16px' }}>
+                                            <p><b>Total Cup Points:</b> {Number(fav.score || 0).toFixed(2)}</p>
+                                            <p><b>Moisture:</b> {Number(fav.moisture || 0).toFixed(2)}</p>
+                                            <p><b>Category One Defects:</b> {fav.categoryOneDefects ?? 0}</p>
+                                            <p><b>Category Two Defects:</b> {fav.categoryTwoDefects ?? 0}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {/* Bottom of page numbers (pagination) */}
