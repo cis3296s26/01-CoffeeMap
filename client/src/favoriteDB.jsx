@@ -8,13 +8,23 @@ export async function saveFavorite(userId, bean, countryStats = {}){
         country: bean["Country.of.Origin"] ?? '',
         region: bean["Region"] ?? '',
         species: bean["Species"] ?? '',
+        variety: bean["Variety"] ?? '',
+        producer: bean["Producer"] ?? '',
+        farmName: bean["Farm.Name"] ?? '',
+        processingMethod: bean["Processing.Method"] ?? '',
         aroma: bean["Aroma"] ?? '',
         flavor: bean["Flavor"] ?? '',
-        acidity: bean["Acidity"] ?? '',
-        sweetness: bean["Sweetness"] ?? '',
         aftertaste: bean["Aftertaste"] ?? '',
-        score: bean["Total.Cup.Points"] ?? '',
-    }
+        acidity: bean["Acidity"] ?? '',
+        body: bean["Body"] ?? '',
+        balance: bean["Balance"] ?? '',
+        uniformity: bean["Uniformity"] ?? '',
+        cupCleanliness: bean["Cup Cleanliness"] ?? bean["Clean.Cup"] ?? '',
+        sweetness: bean["Sweetness"] ?? '',
+        moisture: bean["Moisture"] ?? '',
+        defects: bean["Defects"] ?? '',
+        score: bean["Total.Cup.Points"] ?? ''
+    };
     const beanId = `${bean["Country.of.Origin"]}_${bean["Region"]}_${bean["Species"]}_${bean["Aroma"]}_${bean["Aftertaste"]}`
         .replace(/\s+/g, '_')
         .replace(/[^a-zA-Z0-9_]/g, '');

@@ -90,47 +90,38 @@ export default function Favorites() {
                 <>
                     <div className="row g-4">
                         {currentItems.map((fav, index) => (
-                            <div className="col-md-6 col-xl-4" key={index}>
-                                <div className="card shadow-sm border-0 h-100">
-                                    <div className="card-body d-flex flex-column">
-                                        
-                                        <div className="d-flex justify-content-between align-items-start mb-2">
-                                            <div>
-                                                <h5 className="card-title mb-1">{fav.country || 'Unknown'}</h5>
-                                                <p className="text-muted mb-0">{fav.region || 'Unknown'}</p>
-                                            </div>
-                                            
-                                            {/* Top right interactive area for X and Stars */}
-                                            <div className="d-flex flex-column align-items-end">
-                                                <button
-                                                    type="button"
-                                                    className="btn btn-sm text-dark p-0 border-0 mb-1"
-                                                    style={{ fontSize: '1.8rem', lineHeight: '0.8' }}
-                                                    onClick={() => removeFromFavorites(user.uid, fav)}
-                                                    title="Remove"
-                                                >
-                                                    &times;
-                                                </button>
-                                                <StarRating
-                                                    rating={fav.rating || 0}
-                                                    onRate={(stars) => updateFavoriteRating(user.uid, fav, stars)}
-                                                />
-                                            </div>
-                                        </div>
+                            <div key={index} style={{border:"2px solid black", margin:"15px", padding:"15px", borderRadius:"12px", backgroundColor:"white"}}>
+                                <p><b>Country:</b> {fav.country}</p>
+                                <p><b>Region:</b> {fav.region || 'Unknown'}</p>
+                                <p><b>Species:</b> {fav.species || 'N/A'}</p>
 
-                                        <div className="mb-3">
-                                            <span className="badge text-bg-dark">{fav.species || 'Unknown'}</span>
-                                        </div>
+                                {fav.variety && <p><b>Variety:</b> {fav.variety}</p>}
+                                {fav.producer && <p><b>Producer:</b> {fav.producer}</p>}
+                                {fav.farmName && <p><b>Farm:</b> {fav.farmName}</p>}
+                                {fav.processingMethod && <p><b>Processing Method:</b> {fav.processingMethod}</p>}
 
-                                        <div className="small mb-3">
-                                            <p className="mb-1"><b>Aroma:</b> {fav.aroma || 'N/A'}</p>
-                                            <p className="mb-1"><b>Flavor:</b> {fav.flavor || 'N/A'}</p>
-                                            <p className="mb-1"><b>Acidity:</b> {fav.acidity || 'N/A'}</p>
-                                            <p className="mb-1"><b>Sweetness:</b> {fav.sweetness || 'N/A'}</p>
-                                            <p className="mb-0"><b>Score:</b> {fav.score || 'N/A'}</p>
-                                        </div>
+                                <p><b>Aroma:</b> {fav.aroma || 'N/A'}</p>
+                                <p><b>Flavor:</b> {fav.flavor || 'N/A'}</p>
+                                <p><b>Aftertaste:</b> {fav.aftertaste || 'N/A'}</p>
+                                <p><b>Acidity:</b> {fav.acidity || 'N/A'}</p>
+                                <p><b>Body:</b> {fav.body || 'N/A'}</p>
+                                <p><b>Balance:</b> {fav.balance || 'N/A'}</p>
+                                <p><b>Uniformity:</b> {fav.uniformity || 'N/A'}</p>
+                                <p><b>Cup Cleanliness:</b> {fav.cupCleanliness || 'N/A'}</p>
+                                <p><b>Sweetness:</b> {fav.sweetness || 'N/A'}</p>
+                                <p><b>Moisture:</b> {fav.moisture || 'N/A'}</p>
+                                <p><b>Defects:</b> {fav.defects || 'N/A'}</p>
+                                <p><b>Score:</b> {fav.score || 'N/A'}</p>
 
-                                    </div>
+                                <div style={{ marginTop: '8px' }}>
+                                    <StarRating
+                                        rating={fav.rating || 0}
+                                        onRate={(stars) => updateFavoriteRating(user.uid, fav.country, fav.region, stars)}
+                                    />
+                                    <br />
+                                    <button onClick={() => removeFromFavorites(user.uid, { country: fav.country, region: fav.region })}>
+                                        Remove
+                                    </button>
                                 </div>
                             </div>
                         ))}
