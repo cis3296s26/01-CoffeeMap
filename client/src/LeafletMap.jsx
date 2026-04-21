@@ -1,3 +1,4 @@
+import GlobeMap from './GlobeMap';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useCoffeeData } from './useCoffeeData';
 import { useCoffeeData2 } from './useCoffeeData2';
@@ -46,8 +47,7 @@ function LeafletMap() {
     }
 
     return (
-        <div className="h-100 d-flex flex-column">
-            <div className="text-center mb-3">
+        <div style={{ minheight: "100vh", display: "flex", flexDirection: "column" }}>            <div className="text-center mb-3">
                 <input
                     type='text'
                     placeholder='Search country...'
@@ -161,6 +161,9 @@ function LeafletMap() {
                         );
                     })}
                 </MapContainer>
+            </div>
+            <div style={{ flex: 1 }}>
+                <GlobeMap countryData={filtered} />
             </div>
         </div>
     );

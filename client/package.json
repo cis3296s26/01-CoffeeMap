@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
+    "cesium": "^1.129.0",
     "firebase": "^12.10.0",
     "leaflet": "^1.9.4",
     "papaparse": "^5.5.3",
