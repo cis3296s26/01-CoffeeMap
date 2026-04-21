@@ -224,16 +224,44 @@ function processData(data) {
     
     return {
       name: countryName,
-        coords: coords,
-        sampleCount: country.samples.length,
-        avgScore: calcAvg(country.scores),
-        ...averageMetrics,
-        ...averageDefectNumber,
+      coords: coords,
+      sampleCount: country.samples.length,
+      avgScore: calcAvg(country.scores),
+      ...averageMetrics,
+      ...averageDefectNumber,
       varieties: Array.from(country.varieties),
-      processingMethods: Array.from(country.processingMethods)
+      processingMethods: Array.from(country.processingMethods),
+
+      samples: country.samples.map((row, index) => ({
+        id: `${countryName}_${index}`,
+        country: row['Country.of.Origin'] || '',
+        region: row['Region'] || '',
+        farmName: row['Farm.Name'] || '',
+        producer: row['Producer'] || '',
+        company: row['Company'] || '',
+        variety: row['Variety'] || '',
+        species: row['Species'] || '',
+        processingMethod: row['Processing.Method'] || '',
+        altitude: row['Altitude'] || '',
+        harvestYear: row['Harvest.Year'] || '',
+        gradingDate: row['Grading.Date'] || '',
+        owner: row['Owner'] || '',
+        aroma: row['Aroma'] || '',
+        flavor: row['Flavor'] || '',
+        aftertaste: row['Aftertaste'] || '',
+        acidity: row['Acidity'] || '',
+        body: row['Body'] || '',
+        balance: row['Balance'] || '',
+        uniformity: row['Uniformity'] || '',
+        cupCleanliness: row['Cup Cleanliness'] || row['Clean.Cup'] || '',
+        sweetness: row['Sweetness'] || '',
+        moisture: row['Moisture'] || '',
+        defects: row['Defects'] || '',
+        totalCupPoints: row['Total.Cup.Points'] || '',
+      })),
     };
-  }).filter(country => country !== null); //remove countries without coords
-  
+  }).filter(country => country !== null);
+
   console.log('Processed countries:', countryArray.length);
   return countryArray;
 }
