@@ -30,6 +30,7 @@ export function useCoffeeData() {
           Sweetness: firstValidValue(bean, ["Sweetness"]),
           Moisture: firstValidValue(bean, ["Moisture"]),
           Defects: sumDefects(bean),
+          "Cupper Points": firstValidValue(bean, ["Cupper.Points"]),
         }));
         Papa.parse(robusta_csv, {
           download: true,

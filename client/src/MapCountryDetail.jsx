@@ -68,15 +68,6 @@ export default function CountryDetail() {
                 </ResponsiveContainer>
             </div>
 
-            <div style={{ marginTop: '20px' }}>
-                {chartData.map((item) => (
-                    <p key={item.name}>
-                        <b>{item.name}:</b>{" "} 
-                        {Number.isFinite(item.value) ? item.value : 'N/A'}
-                    </p>
-                ))}
-            </div>
-
             <h2 style={{ marginTop: '24px' }}>Defect Penalty</h2>
             <p>
                 <b>Average Defects:</b>{" "}
