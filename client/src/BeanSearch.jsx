@@ -99,10 +99,11 @@ export default function BeanSearch() {
     }, [query, filters, dataSource]);
 
     const getBeanId = (bean) => 
-    `${bean["Country.of.Origin"]}_${bean["Region"]}_${bean["Species"]}_${bean["Aroma"]}_${bean["Aftertaste"]}`
+    `${bean["Country.of.Origin"] ?? ""}_${bean["Region"] || "Unknown"}_${bean["Species"] ?? ""}_${bean["Aroma"] ?? bean["Fragrance...Aroma"] ?? ""}_${bean["Aftertaste"] ?? ""}`
         .replace(/\s+/g, '_')
         .replace(/[^a-zA-Z0-9_]/g, '')
-    const isFavorited = (bean) => favorites.some(fav => fav.docId === getBeanId(bean))
+        
+    const isFavorited = (bean) => favorites.some(fav => fav.id === getBeanId(bean))
 
     const Popup = ({ isOpen, onClose, children }) => {
         if (!isOpen) return null;
@@ -137,11 +138,10 @@ export default function BeanSearch() {
         if (!user){
             setIsOpen(true);
         } else if (isFavorited(bean)) {
-            const favObj = favorites.find(fav => fav.docId === getBeanId(bean))
+            const favObj = favorites.find(fav => fav.id === getBeanId(bean))
             await removeFromFavorites(user.uid, favObj)
         } else {
-            const countryStats = countryData.find(c => c.name === bean["Country.of.Origin"]);
-            await saveFavorite(user.uid, bean, countryStats)
+            await saveFavorite(user.uid, bean)
         }
     }
 
