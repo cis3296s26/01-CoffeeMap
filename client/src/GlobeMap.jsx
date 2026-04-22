@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 
+Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIxYzY2OTJjZC1hYWUwLTQ2MTAtYmQ5ZS00MmUzZjc0ZjQzZDMiLCJpZCI6NDIxODEwLCJpYXQiOjE3NzY4NjAzNjZ9.KHUvngWOczOWaxffl0WzjGiMx0mwLTEKoEyxUxRbbKw";
+
 function GlobeMap({ countryData }) {
   const ref = useRef();
 
@@ -34,17 +36,17 @@ function GlobeMap({ countryData }) {
     return () => viewer.destroy();
   }, [countryData]);
 
-  return (
+    return (
     <div
-      ref={ref}
-      style={{
+        ref={ref}
+        style={{
         height: "100%",
         width: "100%",
         position: "relative",
         overflow: "hidden"
-      }}
+        }}
     />
-  );
+    );
 }
 
 export default GlobeMap;
