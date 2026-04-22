@@ -1,5 +1,5 @@
 import {describe, it, expect, test, vi, beforeEach} from 'vitest';
-import {applyFilters} from './src/BeanSearch'
+import {applyFilters} from './src/BeanSearch.jsx'
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import { signInWithEmailAndPassword } from 'firebase/auth';

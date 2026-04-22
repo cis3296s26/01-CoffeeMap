@@ -32,8 +32,9 @@ export default function LogIn(){
                             <h2 className="text-center mb-4">Log In</h2>
             
                             <div className="mb-3">
-                                <label className="form-label">Email</label>
+                                <label className="form-label" htmlFor='email'>Email</label>
                                 <input
+                                id='email'
                                     type='email'
                                     className="form-control"
                                     value={email}
@@ -42,10 +43,11 @@ export default function LogIn(){
                             </div>
 
                             <div className="mb-4">
-                                <label className="form-label">Password</label>
+                                <label className="form-label" htmlFor='password'>Password</label>
                                 {/*Use an input-group to attach the button to the input field */}
                                 <div className="input-group">
                                     <input
+                                        id='password'
                                         //Change the type based on the state
                                         type={showPassword ? 'text' : 'password'}
                                         className="form-control"
