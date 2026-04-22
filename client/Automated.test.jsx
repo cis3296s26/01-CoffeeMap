@@ -1,15 +1,20 @@
 import {describe, it, expect, test, vi, beforeEach} from 'vitest';
-import {applyFilters} from './src/BeanSearch'
+import {applyFilters} from './src/BeanSearch.jsx'
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import LogIn from './src/LogIn';
+import Favorites from './src/Favorites.jsx';
+import { getFavorites } from './src/favoriteDB.jsx';
+import { useAuth } from './src/AuthContext.jsx';
 
 const sampleBeans = [
     {"Country.of.Origin": "Ethiopia", "Region": "Yirgacheffe", "Aroma": "8.5", "Species": "Arabica"},
     {"Country.of.Origin": "Colombia", "Region": "Huila", "Aroma": "7.0", "Species": "Arabica"},
 ]
 
+
+//--------Tests for BeanSearch.jsx--------
 describe('applyFilters', () => {
     //Check if the function returns true when no filters are applied
     it('returns true when no filters are applied', () => {
@@ -27,6 +32,9 @@ describe('applyFilters', () => {
     })
 })
 
+
+
+//---------Tests for LogIn.jsx--------
 //mock firebase so real authentication is not used
 vi.mock('./firebase', () => ({ auth: {} }));
 vi.mock('firebase/auth', () => ({
@@ -78,4 +86,37 @@ describe('LogIn', () => {
 
         expect(await screen.findByText('Invalid email or password.')).toBeInTheDocument();
     });
+})
+
+//---------Tests for Favorites.jsx--------
+//mock firebase functions so real database is not used
+vi.mock('./src/favoriteDB', () => ({
+    getFavorites: vi.fn()
+}))
+
+vi.mock('./src/AuthContext', () => ({
+    useAuth: vi.fn()
+    
+}))
+describe('Favorites', () => {
+
+    //Check if the component shows the login message when there is no user
+    it('Shows login message when no favorites are found', () => {
+        useAuth.mockReturnValue({user: null})
+        render(<Favorites />)
+        expect(screen.getByText('please log in to view your favorite coffee beans.')).toBeInTheDocument();
+        
+       
+    })
+
+    //Check if the component shows the warning message when there are no favorites
+    it('Shows warning message when there is no favorites', () => {
+        useAuth.mockReturnValue({user: {UserId: '123'}})
+        getFavorites.mockImplementation((userId, callback) => {
+            callback([]);
+            return () => {};
+        })
+        render(<Favorites />)
+        expect(screen.getByText("you haven't added any favorite coffee beans yet...")).toBeInTheDocument();
+    })
 })
