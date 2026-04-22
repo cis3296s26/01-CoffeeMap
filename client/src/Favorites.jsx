@@ -118,7 +118,7 @@ export default function Favorites() {
                                                 <StarRating
                                                     rating={fav.rating || 0}
                                                     onRate={async (stars) => {
-                                                        await updateFavoriteRating(user.uid, fav.country, fav.region, fav.species, fav.aroma, fav.aftertase, stars);
+                                                        await updateFavoriteRating(user.uid, fav.country, fav.region, fav.species, fav.aroma, fav.aftertaste, stars);
                                                         if (ratingFilter !== 0 && ratingFilter !== stars) {
                                                             setRatingFilter(0);
                                                             setPage(1);
