@@ -4,7 +4,7 @@ function CoffeeImageAPI({ id }) {
     const coffeeUrl = `https://coffee.alexflipnote.dev/random?sig=${id}`;
 
     return (
-        <div className="col-6 col-md-3 mb-4">
+        <div className="col-md-4 mb-4">
             <div className="card shadow-sm border-0 h-100">
                 <img 
                     src={coffeeUrl} 
@@ -19,7 +19,6 @@ function CoffeeImageAPI({ id }) {
 //Random coffee images from the Coffee API
 export default function About() {
     const [seeds] = useState([
-        Math.random(), 
         Math.random(), 
         Math.random(), 
         Math.random()
