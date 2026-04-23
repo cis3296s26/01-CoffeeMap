@@ -1,5 +1,5 @@
 # Coffee Map
-Coffee Map is a website that serves as a centralized resource hub for coffee drinkers interested in making personalized and educated coffee bean purchases. Users can access the service as an informational guide on sources and flavor profiles by searching for beans by branded bag using the search bar or by country using the interactive map. Users can become members of the Coffee Map community by creating an account while enables additional personalized features, allowing individuals to log coffee beans they've already tried and bookmark ones that are of interest. 
+Coffee Map is an interactive website that serves as a centralized resource hub for coffee drinkers interested in making personalized and informed coffee bean purchases. Users can access the service as an informational guide on sources and flavor profiles by searching for beans using the search bar or the interactive map. Coffee Map integrates quantitative quality metrics from the Coffee Quality Institute and qualitative insights from retail coffee reviews which allows users to explore beans by origin, species, and flavor. Users can create an account to favorite and rate coffee beans for a more personalized experience.
 
 
 <img width="2165" height="1485" alt="image" src="https://github.com/user-attachments/assets/f743b381-40df-45aa-854c-d2dac03c1af3" />
