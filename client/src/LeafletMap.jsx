@@ -1,3 +1,4 @@
+import GlobeMap from './GlobeMap';
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import { useCoffeeData } from './useCoffeeData';
 import { useCoffeeData2 } from './useCoffeeData2';
@@ -10,6 +11,7 @@ function LeafletMap() {
     const { reviews, loading: reviewsLoading, error: reviewsError } = useCoffeeData2()
     const [search, setSearch] = useState('');
     const navigate = useNavigate();
+    const [view, setView] = useState("leaflet");
 
     const filtered = countryData.filter(country =>
         country.name.toLowerCase().includes(search.toLowerCase()) &&
@@ -46,8 +48,7 @@ function LeafletMap() {
     }
 
     return (
-        <div className="h-100 d-flex flex-column">
-            <div className="text-center mb-3">
+        <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>            <div className="text-center mb-3">
                 <input
                     type='text'
                     placeholder='Search country...'
@@ -57,12 +58,41 @@ function LeafletMap() {
                     style={{ maxWidth: '350px' }}
                 />
             </div>
+        
+
+
+    <div className="text-center mb-2">
+    <button
+        onClick={() => setView("leaflet")}
+        className="btn btn-sm me-2"
+        style={{
+        backgroundColor: view === "leaflet" ? "#1e000e" : "#6c757d",
+        color: "white"
+        }}
+    >
+        2D Map
+    </button>
+
+    <button
+        onClick={() => setView("globe")}
+        className="btn btn-sm"
+        style={{
+        backgroundColor: view === "globe" ? "#1e000e" : "#6c757d",
+        color: "white"
+        }}
+    >
+        Globe
+    </button>
+    </div>
 
             <p className="text-center mb-3">
                 Showing {filtered.length} of {countryData.length} coffee-producing countries from CQI database
             </p>
-            <div style={{ flex: 1, minHeight: 0}}>
-                <MapContainer
+
+            <div style={{ flex: 1, minHeight: 0 }}>
+
+                {view === "leaflet" ? (
+                    <MapContainer
                     center={[10, -20]}
                     zoom={2.5}
                     style={{ height: '100%', width: '100%' }}
@@ -160,7 +190,13 @@ function LeafletMap() {
                         </CircleMarker>
                         );
                     })}
-                </MapContainer>
+                    </MapContainer>
+                ) : (
+                    <GlobeMap 
+                        countryData={filtered} 
+                        reviewsByCountry={reviewsByCountry}/>
+                )}
+
             </div>
         </div>
     );

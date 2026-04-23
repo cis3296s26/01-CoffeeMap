@@ -51,7 +51,7 @@ function HomePage() {
                         </span>
                     </div>
 
-                    <div style={{ height: '560px', width: '100% '}}>
+                    <div style={{ height: '560px', width: '100%', overflow: 'hidden' }}>
                         <LeafletMap />
                     </div>
                 </div>
