@@ -13,7 +13,8 @@ https://github.com/aidanross430/CIS3296-coffeemap-proofofconcept/tree/main
 ## Installation
 ### Development Environment
 
-For MacOS:
+#### For MacOS:
+
 Create a virtual environment for this project. Navigate to the root directory folder of the project in terminal and activate your created virtual environment if not active already:
 ```
 source .venv/bin/activate
@@ -45,7 +46,8 @@ npm run dev
 To open the webpage in an external browser, press: o + 
 We recommend creating a .gitignore file for the installations.
 
-For Windows:
+#### For Windows:
+
 Install dependencies npm install
 ```
 cd client
