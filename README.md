@@ -59,8 +59,24 @@ npm run dev
 ```
 Open: http://localhost:5173/
 
+For Testing:
 
+```Automated tests: 
 
+Install 
+
+npm install vitest --save-dev 
+
+npm install --save-dev @testing-library/user-event 
+
+npm install --save-dev @testing-library/jest-dom 
+
+npm install --save-dev @testing-library/react 
+
+Run (test) 
+
+npx vitest
+```
 ## How to contribute
 
 Follow this project board to know the latest status of the project: https://github.com/orgs/cis3296s26/projects/34/views/1
