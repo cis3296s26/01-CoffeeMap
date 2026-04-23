@@ -61,9 +61,10 @@ Open: http://localhost:5173/
 
 For Testing:
 
-```Automated tests: 
+Automated tests: 
 
 Install 
+```
 
 npm install vitest --save-dev 
 
@@ -71,10 +72,11 @@ npm install --save-dev @testing-library/user-event
 
 npm install --save-dev @testing-library/jest-dom 
 
-npm install --save-dev @testing-library/react 
+npm install --save-dev @testing-library/react
+```
 
-Run (test) 
-
+Run (test): 
+```
 npx vitest
 ```
 ## How to contribute
