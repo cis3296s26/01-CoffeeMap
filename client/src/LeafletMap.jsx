@@ -192,7 +192,9 @@ function LeafletMap() {
                     })}
                     </MapContainer>
                 ) : (
-                    <GlobeMap countryData={filtered} />
+                    <GlobeMap 
+                        countryData={filtered} 
+                        reviewsByCountry={reviewsByCountry}/>
                 )}
 
             </div>
