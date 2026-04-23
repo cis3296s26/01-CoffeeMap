@@ -20,7 +20,7 @@ export default function Favorites() {
     // For pagination of favorites, show 9 items per page and 
     // have buttons to navigate between pages
     const [page, setPage] = useState(1);
-    const itemsPerPage = 9;
+    const itemsPerPage = 21;
     const totalPages = Math.ceil(filteredFavorites.length / itemsPerPage);
     const currentItems = filteredFavorites.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 

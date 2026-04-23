@@ -64,7 +64,7 @@ function LeafletMap() {
             <div style={{ flex: 1, minHeight: 0}}>
                 <MapContainer
                     center={[10, -20]}
-                    zoom={2}
+                    zoom={2.5}
                     style={{ height: '100%', width: '100%' }}
                 maxBounds={[
                     [-90, -180],
