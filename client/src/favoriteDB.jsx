@@ -48,7 +48,7 @@ export async function saveFavorite(userId, bean){
     const aroma = getAroma(bean);
     const aftertaste = bean["Aftertaste"] ?? "";
 
-    const beanId = normalizeBeanId(country, region, species, aroma, aftertaste);
+    const beanId = normalizeBeanId(bean);
     
     const beanData = {
         id: beanId,

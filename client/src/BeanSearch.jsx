@@ -46,7 +46,7 @@ export default function BeanSearch() {
     })
     const { user } = useAuth()
     const [page, setPage] = useState(1)
-    const itemsPerPage = 9
+    const itemsPerPage = 21
     const [favorites, setFavorites] = useState([])
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false);
