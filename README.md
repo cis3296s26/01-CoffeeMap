@@ -26,6 +26,7 @@ https://github.com/aidanross430/CIS3296-coffeemap-proofofconcept/tree/main
 
 ## Environment
 OS: Mac, Windows
+
 Database: Firebase
 
 ## Installation
