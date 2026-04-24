@@ -1,15 +1,32 @@
-# Coffee Map
+# Overview
+
+## Coffee Map
 Coffee Map is an interactive website that serves as a centralized resource hub for coffee drinkers interested in making personalized and informed coffee bean purchases. Users can access the service as an informational guide on sources and flavor profiles by searching for beans using the search bar or the interactive map. Coffee Map integrates quantitative quality metrics from the Coffee Quality Institute and qualitative insights from retail coffee reviews which allows users to explore beans by origin, species, and flavor. Users can create an account to favorite and rate coffee beans for a more personalized experience.
 
 
 <img width="2165" height="1485" alt="image" src="https://github.com/user-attachments/assets/f743b381-40df-45aa-854c-d2dac03c1af3" />
 
 
-## Vision Statement
-FOR coffee enthusiasts looking to purchase or try new beans WHO want to learn about coffee bean sources, the COFFEE MAP is a web-based service THAT maps and tracks bean sources alongside useful tasting metrics and harvesting schedules for users to reference when purchasing coffee. UNLIKE existing databases or harvest calendars, OUR PRODUCT will combine the overwhelming amount of available information into a single, easy-to-use resource catered to the user. 
+## Vision
+
+For coffee enthusiasts looking to purchase or try new beans who want to learn about coffee bean sources, Coffee Map is a web-based service that maps and tracks bean sources alongside useful tasting metrics and harvesting schedules for users to reference when purchasing coffee. Unlike existing databases or harvest calendars, our product combines the overwhelming amount of available information into a single, easy-to-use resource catered to the user.
+
+## What does it do?
+Through Coffee Map, you will be able to interact with a map that highlights coffee-producing countries and explore the kinds of varieties available from these countries, with information about the flavor profile, grading, and origin of beans. You can also browse retail coffee reviews to discover specific roasters. With this information, whether you are a local café-goer or an aspiring business owner, you will be taking steps towards a better cup of coffee.
+
+## Features
+- Interactive world map of coffee-producing countries
+- Bean search with filters by country, region, species, and quality scores
+- Country detail pages with averaged quality metrics and harvesting info
+- Coffee reviews dataset with roaster and rating
+- User accounts with favorites and personal star ratings
 
 ## Original Proof of Concept
 https://github.com/aidanross430/CIS3296-coffeemap-proofofconcept/tree/main 
+
+## Environment
+OS: Mac, Windows
+Database: Firebase
 
 ## Installation
 ### Development Environment
